@@ -1,9 +1,10 @@
-import type {NFT as NFTType } from "@thirdweb-dev/sdk";
-import { SimpleGrid, Skeleton, Text } from "@chakra-ui/react";
-import React from "react";
-import NFT from "./NFT";
+import type { NFT as NFTType } from "@thirdweb-dev/sdk";
 import Link from "next/link";
-import { NFT_COLLECTION_ADDRESS } from "../const/addresses";
+import React from "react";
+import { NFT_COLLECTION_ADDRESS } from "../../const/addresses";//указать адрес коллекции в constant
+import Skeleton from "../Skeleton/Skeleton";
+import NFT from "./NFT";
+import styles from "../../styles/Buy.module.css";
 
 type Props = {
     isLoading: boolean;
@@ -16,13 +17,15 @@ export default function NFTGrid({
                                     isLoading,
                                     data,
                                     overrideOnclickBehavior,
-                                    emptyText = "No NFTs found",
+                                    emptyText = "No NFTs found for this collection.",
                                 }: Props) {
     return (
-        <SimpleGrid columns={4} spacing={6} w={"100%"} padding={2.5} my={5}>
+        <div className={styles.nftGridContainer}>
             {isLoading ? (
                 [...Array(20)].map((_, index) => (
-                    <Skeleton key={index} height={"312px"} width={"100%"} />
+                    <div key={index} className={styles.nftContainer}>
+                        <Skeleton key={index} width={"100%"} height="312px" />
+                    </div>
                 ))
             ) : data && data.length > 0 ? (
                 data.map((nft) =>
@@ -30,21 +33,23 @@ export default function NFTGrid({
                         <Link
                             href={`/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
                             key={nft.metadata.id}
+                            className={styles.nftContainer}
                         >
                             <NFT nft={nft} />
                         </Link>
                     ) : (
                         <div
                             key={nft.metadata.id}
+                            className={styles.nftContainer}
                             onClick={() => overrideOnclickBehavior(nft)}
                         >
                             <NFT nft={nft} />
                         </div>
-                    ))
+                    )
+                )
             ) : (
-                <Text>{emptyText}</Text>
+                <p>{emptyText}</p>
             )}
-        </SimpleGrid>
-
-    )
-};
+        </div>
+    );
+}
