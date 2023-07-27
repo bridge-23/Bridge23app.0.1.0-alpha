@@ -15,6 +15,7 @@ import { CONTRACT_ADDRESS } from "../const/addresses";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { useState } from "react";
+// import {ClaimdCards} from "../Components/ClaimCards"
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -75,11 +76,11 @@ const Home: NextPage = () => {
           {!isContractMetadataLoading && (
               <div className={styles.heroSection}>
                 <div className={styles.collectionImage}>
-                  <MediaRenderer src={contractMetadata?.image} />
+                  <MediaRenderer src={contractMetadata.image} />
                 </div>
                 <div>
-                  <h1>{contractMetadata?.name}</h1>
-                  <p>{contractMetadata?.description}</p>
+                  <h1>{contractMetadata.name}</h1>
+                  <p>{contractMetadata.description}</p>
                   {!isActiveClaimPhaseLoading ? (
                       <div>
                         <p>Claim Phase: {activeClaimPhase?.metadata?.name}</p>
@@ -135,6 +136,14 @@ const Home: NextPage = () => {
                   <div>
                   </div>
                 </div>
+                {/*<div><ClaimCard*/}
+                {/*    contractMetadata={contractMetadata}*/}
+                {/*    activeClaimPhase={activeClaimPhase}*/}
+                {/*    totalClaimSupply={totalClaimSupply?.toNumber()} // Ensure to convert to a number if needed*/}
+                {/*    totalSupply={totalSupply?.toNumber()} // Ensure to convert to a number if needed*/}
+                {/*    claimIneligibilityReasons={claimIneligibilityReasons}*/}
+                {/*    contractAddress={CONTRACT_ADDRESS}*/}
+                {/*/> <div/>*/}
               </div>
           )}
         </main>
