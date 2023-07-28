@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ThirdwebProvider activeChain={activeChain} clientId="0f7b5a725f342d3d2ffe12e6303b0f4b">
+    <ThirdwebProvider activeChain={activeChain} clientId="2867a6c88b51123785769fee002655e9">
       <Navbar />
       <Component {...pageProps} />
     </ThirdwebProvider>

@@ -1,9 +1,14 @@
 import { ThirdwebNftMedia, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
 import styles from '../../styles/Home.module.css'
 import { CONTRACT_ADDRESS } from '../../const/addresses';
+/*import { ThirdwebSDK } from "@thirdweb-dev/sdk";*/
 
 export default function Profile() {
     const address = useAddress();
+
+/*    const sdk = new ThirdwebSDK("mumbai", {
+        clientId: "0f7b5a725f342d3d2ffe12e6303b0f4b",
+    });*/
 
     const truncateAddress = (address: string) => {
         return `${address.slice(0, 6)}...${address.slice(-4)}`;

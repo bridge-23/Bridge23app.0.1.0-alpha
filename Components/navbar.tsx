@@ -18,6 +18,13 @@ export default function Navbar() {
                         </Link>
                     )}
                 </div>
+                <div className={styles.navLinks}>
+                    {address && (
+                        <Link href={`profile/${address}`}>
+                            <p>My items</p>
+                        </Link>
+                    )}
+                </div>
                 <ConnectWallet />
             </div>
         </div>
