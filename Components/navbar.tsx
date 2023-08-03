@@ -14,7 +14,7 @@ export default function Navbar() {
                 <div className={styles.navLinks}>
                     {address && (
                         <Link href={`profile/${address}`}>
-                            <p>My items</p>
+                            <p>My rewards</p>
                         </Link>
                     )}
                 </div>

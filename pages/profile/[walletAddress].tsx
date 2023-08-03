@@ -1,10 +1,14 @@
-import { useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
+import { ThirdwebNftMedia, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
 import styles from '../../styles/Home.module.css'
-import { BURN_ADDRESS } from '../../consts/parameters';
-import NFTCard from "../../components/NFT/NftCard";
+import { CONTRACT_ADDRESS } from '../../const/addresses';
+/*import { ThirdwebSDK } from "@thirdweb-dev/sdk";*/
 
 export default function Profile() {
     const address = useAddress();
+
+/*    const sdk = new ThirdwebSDK("mumbai", {
+        clientId: "0f7b5a725f342d3d2ffe12e6303b0f4b",
+    });*/
 
     const truncateAddress = (address: string) => {
         return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -12,7 +16,7 @@ export default function Profile() {
 
     const {
         contract
-    } = useContract(BURN_ADDRESS);
+    } = useContract(CONTRACT_ADDRESS);
 
     const {
         data: ownedNFTs,
@@ -25,16 +29,21 @@ export default function Profile() {
                 <div>
                     <div>
                         <h1>Profile</h1>
-                        <p>Bridge id: {truncateAddress(address || "")}</p>
+                        <p>Address: {truncateAddress(address || "")}</p>
                     </div>
                     <hr />
                     <div>
-                        <h3>My Items:</h3>
+                        <h3>My NFTs:</h3>
                         <div className={styles.grid}>
                             {!isOwnedNFTsLoading ? (
                                 ownedNFTs?.length! > 0 ? (
                                     ownedNFTs?.map((nft) => (
-                                        <NFTCard key={nft.metadata.id} metadata={nft.metadata} />
+                                        <div key={nft.metadata.id} className={styles.NFTCard}>
+                                            <ThirdwebNftMedia
+                                                metadata={nft.metadata}
+                                            />
+                                            <h3>{nft.metadata.name}</h3>
+                                        </div>
                                     ))
                                 ) : (
                                     <p>No NFTs owned.</p>
