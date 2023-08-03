@@ -1,6 +1,7 @@
-import { ThirdwebNftMedia, useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
+import { useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
 import styles from '../../styles/Home.module.css'
-import { CONTRACT_ADDRESS } from '../../const/addresses';
+import { BURN_ADDRESS } from '../../consts/parameters';
+import NFTCard from "../../components/NFT/NftCard";
 
 export default function Profile() {
     const address = useAddress();
@@ -11,7 +12,7 @@ export default function Profile() {
 
     const {
         contract
-    } = useContract(CONTRACT_ADDRESS);
+    } = useContract(BURN_ADDRESS);
 
     const {
         data: ownedNFTs,
@@ -24,21 +25,16 @@ export default function Profile() {
                 <div>
                     <div>
                         <h1>Profile</h1>
-                        <p>Address: {truncateAddress(address || "")}</p>
+                        <p>Bridge id: {truncateAddress(address || "")}</p>
                     </div>
                     <hr />
                     <div>
-                        <h3>My NFTs:</h3>
+                        <h3>My Items:</h3>
                         <div className={styles.grid}>
                             {!isOwnedNFTsLoading ? (
                                 ownedNFTs?.length! > 0 ? (
                                     ownedNFTs?.map((nft) => (
-                                        <div key={nft.metadata.id} className={styles.NFTCard}>
-                                            <ThirdwebNftMedia
-                                                metadata={nft.metadata}
-                                            />
-                                            <h3>{nft.metadata.name}</h3>
-                                        </div>
+                                        <NFTCard key={nft.metadata.id} metadata={nft.metadata} />
                                     ))
                                 ) : (
                                     <p>No NFTs owned.</p>

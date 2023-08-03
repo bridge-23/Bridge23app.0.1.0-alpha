@@ -1,4 +1,4 @@
-import useDebounce from "../Hooks/UseDebounce";
+import useDebounce from "../hooks/UseDebounce";
 import { FC, useEffect, useState } from "react";
 
 interface IProps {

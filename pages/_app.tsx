@@ -1,8 +1,10 @@
 import type { AppProps } from "next/app";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import "../styles/globals.css";
-import Navbar from "../Components/navbar";
-import { useEffect } from 'react';
+import Navbar from "../components/Navbar";
+import {useEffect, useState} from 'react';
+import {Footer} from '../components';
+import {BigNumber} from "ethers";
 
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
@@ -10,6 +12,11 @@ import { useEffect } from 'react';
 const activeChain = "mumbai";
 
 function MyApp({ Component, pageProps }: AppProps) {
+    const [page, setPage] = useState(1);
+    const nftsPerPage = 10; // Example value, replace with your logic
+    const totalCount = BigNumber.from(100); // Example value, replace with your logic
+    const loading = false; // Example value, replace with your logic
+
   useEffect(() => {
     const clientId = process.env.CLIENT_ID;
     const secretKey = process.env.SECRET_KEY;
@@ -22,7 +29,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider activeChain={activeChain} clientId="0f7b5a725f342d3d2ffe12e6303b0f4b">
       <Navbar />
+
       <Component {...pageProps} />
+
+        <Footer
+            page={page}
+            setPage={setPage}
+            nftsPerPage={nftsPerPage}
+            totalCount={totalCount}
+            loading={loading}
+        />
     </ThirdwebProvider>
   );
 }
