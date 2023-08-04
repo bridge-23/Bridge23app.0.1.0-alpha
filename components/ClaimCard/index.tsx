@@ -2,22 +2,41 @@ import React from 'react';
 import {
     MediaRenderer,
     Web3Button,
+ /*   useContractMetadata,
+    useContract,
+    useAddress,*/
 } from "@thirdweb-dev/react";
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS } from "../../consts/parameters";
 import styles from "../../styles/ClaimCard.module.css";
 import router from 'next/router';
 
+type ContractMetadata = {
+    name?: string| number | null;
+    description?: string;
+    image?: string;
+}; // Вернуть все фк и попробывать по примеру нфт кард
+
+type ActiveClaimPhase = {
+    metadata?:  { name?: string };
+    price?: string;
+};
+
 type ClaimCardProps = {
-    contractMetadata: {
-        name?: string;
+    contractMetadata: ContractMetadata;
+/*    contractMetadata: {
+        name?: string | undefined;
+        description?: string | undefined;
+        image?: string | undefined;
+        /!*name?: string;
         description?: string;
-        image?: string;
-    };
-    activeClaimPhase: {
+        image?: string;*!/
+    };*/
+    activeClaimPhase: ActiveClaimPhase;
+/*    activeClaimPhase: {
         metadata?: { name?: string };
         price?: string;
-    };
+    };*/
     totalSupply?: number;
     totalClaimSupply?: number;
     claimIneligibilityReasons?: string[];
@@ -25,13 +44,17 @@ type ClaimCardProps = {
 };
 
 const ClaimCard: React.FC<ClaimCardProps> = ({
-                                                 contractMetadata,
+                                                 contractMetadata = {},
                                                  activeClaimPhase,
                                                  totalSupply,
                                                  totalClaimSupply,
                                                  claimIneligibilityReasons,
                                                  address,
                                              }) => {
+/*  const address = useAddress();
+    const { contract } = useContract(CONTRACT_ADDRESS);
+    const { data: contractMetadata, isLoading } = useContractMetadata(contract);*/
+
     const maxClaimQuantity = 2;
     const [claimQuantity, setClaimQuantity] = React.useState(1);
 

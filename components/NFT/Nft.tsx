@@ -6,7 +6,6 @@ import Link from 'next/link'
 interface INFTCardProps {
     nft: NFT;
 }
-
 export const NFTCard: FC<INFTCardProps> = ({ nft }) => {
     const [hover, setHover] = useState<boolean>(false);
 
