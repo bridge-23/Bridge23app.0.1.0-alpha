@@ -1,4 +1,5 @@
 import { ThirdwebNftMedia } from '@thirdweb-dev/react';
+//import { NFTBalance } from '@/hooks/useNFTBalance';
 import styles from '../../styles/Home.module.css';
 import React from "react";
 
@@ -16,6 +17,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
         <div className={styles.NFTCard}>
             <ThirdwebNftMedia metadata={metadata} />
             <h3>{metadata.name}</h3>
+            <h2>{metadata.id}</h2>
         </div>
     );
 };

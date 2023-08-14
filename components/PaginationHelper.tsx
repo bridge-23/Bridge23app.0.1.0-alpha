@@ -1,5 +1,6 @@
-import useDebounce from "../hooks/UseDebounce";
+import useDebounce from "../hooks/useDebounce";
 import { FC, useEffect, useState } from "react";
+import styles from "../styles/PaginationHelper.module.css";
 
 interface IProps {
     page: number;
@@ -26,16 +27,16 @@ const PaginationHelper: FC<IProps> = ({
         } else {
             setPage(1);
         }
-    }, [debouncedSearchTerm]);
+    }, [debouncedSearchTerm, setPage]);
 
     return (
-        <div className="flex items-center gap-2 md:ml-auto">
+        <div className={styles.paginationContainer}>
             {isSearching || loading ? (
-                <div className="h-6 w-6 animate-spin rounded-full border-b-2 border-white/50"></div>
+                <div className={styles.spinner}></div>
             ) : (
                 <>
                     <button
-                        className="rounded-lg bg-white/5 px-4 py-2 text-white shadow-2xl disabled:opacity-50"
+                        className={page === 1 ? `${styles.paginationButton} ${styles.paginationButtonDisabled}` : styles.paginationButton}
                         onClick={() => setPage(page - 1)}
                         disabled={page === 1}
                     >
@@ -56,13 +57,12 @@ const PaginationHelper: FC<IProps> = ({
                     </button>
                     <input
                         type="number"
-                        className="w-16 rounded-lg bg-white/5 p-2 text-white shadow-2xl focus:border-0 focus:outline-none focus:ring-0 active:border-0 active:outline-none active:ring-0"
+                        className={styles.paginationInput}
                         onChange={(e) => setPageInput(Number(e.target.value))}
                         value={pageInput}
                     />
-
                     <button
-                        className="rounded-lg bg-white/5 px-4 py-2 text-white shadow-2xl"
+                        className={page === noOfPages ? `${styles.paginationButton} ${styles.paginationButtonDisabled}` : styles.paginationButton}
                         onClick={() => setPage(page + 1)}
                         disabled={page === noOfPages}
                     >

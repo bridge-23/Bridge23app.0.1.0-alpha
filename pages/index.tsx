@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import {
   MediaRenderer,
@@ -50,12 +50,11 @@ const Home: NextPage = () => {
     data: totalSupply,
     isLoading: isTotalSupplyLoading,
   } = useTotalCount(contract);
+
   const {
     data: totalClaimSupply,
     isLoading: isTotalClaimSupplyLoading,
   } = useTotalCirculatingSupply(contract);
-
-
 
   const [claimQuantity, setClaimQuantity] = useState(1);
   const increment = () => {
