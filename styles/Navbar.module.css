@@ -1,0 +1,42 @@
+.navbarcontainer {
+    padding: 0 2rem;
+    max-width: 100vw;
+    margin: 0 auto;
+}
+
+.navbar {
+    background-color: #08192d;
+    color: #fff;
+    padding: 1rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100vw;
+}
+
+.navLinks {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+}
+.navLinks a, .navButton {
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;  /* This makes it clear to users that it's clickable */
+    background: none; /* To remove the default background of a button */
+    border: none;     /* To remove the default border of a button */
+    padding: 0;       /* To remove any default padding */
+}
+
+.navLinks a:hover, .navButton:hover {
+    color: #0ea5e9;
+}
+
+.active {
+    color: #0ea5e9;
+}

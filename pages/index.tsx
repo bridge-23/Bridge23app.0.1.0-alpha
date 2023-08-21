@@ -4,9 +4,16 @@ import { useState } from "react";
 
 const Home: NextPage = () => {
   return (
-  <p> Heloo this is Bridge 23</p>
-  )
+      <div className={styles.container}>
+        <img src="/images/homecover.jpg" alt="Bridge 23" className={styles.centeredImage} />
+        <div className={styles.textWrapper}>
+          <h1 className={styles.title}>Bridge 23 Geography</h1>
+          <p>Bridge 23 nextGen POS system for upgraded customer experience.</p>
+        </div>
+      </div>
+  );
 };
+
 
 export default Home;
 

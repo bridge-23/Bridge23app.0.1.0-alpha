@@ -1,7 +1,6 @@
 import { BigNumber } from "ethers";
-import type { FC } from "react";
+import styles from "../styles/Footer.module.css";
 import { PaginationHelper } from "./PaginationHelper";
-import styles from "../styles/Home.module.css";
 
 interface IProps {
     page: number;
@@ -11,13 +10,13 @@ interface IProps {
     loading: boolean;
 }
 
-export const Footer: FC<IProps> = ({
-                                       page,
-                                       setPage,
-                                       nftsPerPage,
-                                       totalCount,
-                                       loading,
-                                   }) => {
+function Footer({
+                    page,
+                    setPage,
+                    nftsPerPage,
+                    totalCount,
+                    loading,
+                }: IProps) {
     if (!totalCount) return null;
     const noOfPages = Math.ceil(totalCount.toNumber() / nftsPerPage);
     const start = (page - 1) * nftsPerPage;
@@ -25,20 +24,20 @@ export const Footer: FC<IProps> = ({
 
     return (
         <div className={styles.container}>
-        <div
-            className={styles.footer}>
+            <div className={styles.footer}>
+                <h3 className="text-2xl font-bold text-[#646D7A]">
+                    {end} / {totalCount.toNumber().toLocaleString()}
+                </h3>
 
-            <h3 className="text-2xl font-bold text-[#646D7A]">
-                {end} / {totalCount.toNumber().toLocaleString()}
-            </h3>
-
-            <PaginationHelper
-                page={page}
-                noOfPages={noOfPages}
-                setPage={setPage}
-                loading={loading}
-            />
-        </div>
+                <PaginationHelper
+                    page={page}
+                    noOfPages={noOfPages}
+                    setPage={setPage}
+                    loading={loading}
+                />
+            </div>
         </div>
     );
-};
+}
+
+export default Footer;

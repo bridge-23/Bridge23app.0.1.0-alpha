@@ -1,5 +1,5 @@
 import {useAddress, useContract, useOwnedNFTs} from '@thirdweb-dev/react';
-import styles from '../../styles/Home.module.css'
+import styles from '../../styles/Profile.module.css'
 import { REWARD_CONTRACT } from '../../consts/parameters';
 import NFTCard from "../../components/NFT/NFTCard";
 import {NextPage} from "next";

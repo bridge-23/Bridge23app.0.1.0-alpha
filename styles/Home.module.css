@@ -1,7 +1,13 @@
 .container {
-  padding: 0 2rem;
-  max-width: -webkit-fill-available;
-  margin: 0 auto;
+  display: flex; /* enable flex layout */
+  align-items: center; /* center items vertically */
+  justify-content: center; /* center items horizontally, though this might be unnecessary based on your final design */
+  gap: 2rem; /* provides space between the image and the text */
+}
+
+.centeredImage {
+  max-width: 40%; /* adjust as necessary */
+  height: auto;
 }
 
 .main {
@@ -118,96 +124,4 @@
 }
 .logo img {
   filter: invert(1);
-}
-
-.navbar {
-  background-color: #08192d;
-  color: #fff;
-  padding: 1rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: -webkit-fill-available;
-}
-.navLinks {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.navLinks a {
-  color: #fff;
-  text-decoration: none;
-  margin-right: 1rem;
-  margin-left: 1rem;
-  transition: all 0.2s ease-in-out;
-}
-.navLinks a:hover {
-  color: #0ea5e9;
-}
-
-.active {
-  color: #0ea5e9;
-}
-
-.footer {
-  background-color: #08192d;
-  color: #fff;
-  padding: 1rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.heroSection {
-  background-color: #1b2129;
-  color: #fff;
-  padding: 2rem 2rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 20px;
-}
-.collectionImage {
-  border-radius: 20px;
-  overflow: hidden;
-  margin-right: 2rem;
-}
-.claimContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-.claimValue {
-  font-size: 2rem;
-}
-.claimInput {
-  color: #fff;
-  padding: 1rem 1rem;
-  border-radius: 4px;
-  border: none;
-  margin: 0px 0.25rem;
-  width: 30%;
-}
-.claimBtn {
-  background-color: #fff;
-  color: #333;
-  padding: 1rem 1rem;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-}
-
-.NFTCard {
-  background-color: #1b2129;
-  color: #fff;
-  padding: 2rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 20px;
-  max-width: 32%;
-  margin: 0.5%;
 }

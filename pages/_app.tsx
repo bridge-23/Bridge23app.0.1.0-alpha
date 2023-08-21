@@ -2,7 +2,7 @@ import type { AppProps } from "next/app";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import "../styles/globals.css";
 import Navbar from "../components/Navbar";
-import {Footer} from '../components';
+//import Footer from "../components/Footer";
 import {useEffect, useState} from 'react';
 import {BigNumber} from "ethers";
 
@@ -20,10 +20,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     //const clientId = process.env.CLIENT_ID;
     //const secretKey = process.env.SECRET_KEY;
-
     // Use the clientId and secretKey as needed in your application logic.
     // For example, you can pass them as props to other components or use them in API calls.
-
   }, []);
 
   return (
@@ -32,13 +30,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         <Component {...pageProps} />
 
-        <Footer
-            page={page}
-            setPage={setPage}
-            nftsPerPage={nftsPerPage}
-            totalCount={totalCount}
-            loading={loading}
-        />
     </ThirdwebProvider>
   );
 }

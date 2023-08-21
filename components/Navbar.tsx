@@ -1,19 +1,26 @@
 import { ConnectWallet, useAddress } from '@thirdweb-dev/react'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Navbar.module.css'
 import Link from 'next/link'
+import { useState } from 'react';
 
 export default function Navbar() {
     const address = useAddress();
+    const [showModal, setShowModal] = useState(false);  // State to handle modal visibility
+/*    const handleShowModal = () => {
+        setShowModal(true);
+        setTimeout(() => {
+            setShowModal(false);
+        }, 300); // Close the modal after 3 seconds
+    }*/
+    // i want add auto close modal after 3 seconds but not work
 
     return (
-        <div className={styles.container}>
+        <div className={styles.navbarcontainer}>
             <div className={styles.navbar}>
                 <div className={styles.navLinks}>
-                    {address && (
                         <Link href="/">
                             <p>Home</p>
                         </Link>
-                    )}
                 </div>
                 <div className={styles.navLinks}>
                     {address && (
@@ -22,67 +29,79 @@ export default function Navbar() {
                         </Link>
                     )}
                 </div>
+
+{/*                <div className={styles.navLinks}>
+                    {address && (
                 <Link href='/claim'>
                     <p>Claim rewards</p>
                 </Link>
-                <div className={styles.navLinks}>
+                )}
+                </div>*/}
+
+{/*                <div className={styles.navLinks}>
                     {address && (
                         <Link href={'/rewards'}>
                             <p>My rewards</p>
                         </Link>
                     )}
-                </div>
+                </div>*/}
+
+                {address && (
+                    <button onClick={() => setShowModal(true)} className={styles.navButton}>Claim Rewards</button>
+                )}
+
+                {address && (
+                    <button onClick={() => setShowModal(true)} className={styles.navButton}>My Rewards</button>
+                    )}
+
                 <ConnectWallet />
+
             </div>
-        </div>
-    )
-}
 
+            {/* Modal code */}
+            {showModal && (
+                <div style={{
+                    display: 'flex',  // Use flexbox
+                    flexDirection: 'column',  // Stack children vertically
+                    justifyContent: 'center',  // Center children vertically
+                    alignItems: 'center',  // Center children horizontally
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '400px',
+                    height: '200px',
+                    backgroundColor: '#FFEB3B',
+                    padding: '20px',
+                    boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                    zIndex: 1000,
+                    color: 'black',
+                    fontSize: '56px',
+                    fontWeight: 'bold',
+                    border: '2px solid blue'
+                }}>
+                    <p>Coming Soon</p>
 
-/*import { useRouter } from 'next/router';
-import { ConnectWallet, useAddress } from '@thirdweb-dev/react';
-import styles from '../styles/Home.module.css';
-import Link from 'next/link';
-
-export default function Navbar() {
-    const address = useAddress();
-    const router = useRouter();
-
-    // Function to determine if a link is active
-    const isActive = (href) => router.pathname === href;
-
-    return (
-        <div className={styles.container}>
-            <div className={styles.navbar}>
-                <div className={isActive(`https://www.bridge23.tech/`) ? styles.active : styles.navLinks}>
-                    {address && (
-                        <Link href={`https://www.bridge23.tech/`}>
-                            <p>Home</p>
-                        </Link>
-                    )}
+                    <button
+                        onClick={() => setShowModal(false)}
+                        style={{
+                            padding: '20px 40px',  // Increase padding for larger button size
+                            fontSize: '24px',  // Increase font size
+                            borderRadius: '8px',  // Optional: rounded corners
+                            border: '2px solid black',  // Optional: adjust border width
+                            cursor: 'pointer',  // Change cursor to pointer on hover
+                            transition: '0.2s ease',  // Optional: Smoothens hover effects
+                            backgroundColor: 'white',  // Optional: button background color
+                            color: 'black'  // Optional: button text color
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e0e0e0'}  // Optional: hover effect to darken button
+                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'white'}  // Resetting the hover effect
+                    >
+                        Close
+                    </button>
                 </div>
-                <div className={isActive(`/profile/${address}`) ? styles.active : styles.navLinks}>
-                    {address && (
-                        <Link href={`profile/${address}`}>
-                            <p>Profile</p>
-                        </Link>
-                    )}
-                </div>
-                <Link href="/" className={isActive('/') ? styles.active : ''}>
-                    <p>index.tsx rewards</p>
-                </Link>
-                <div className={isActive(`/profile/${address}`) ? styles.active : styles.navLinks}>
-                    {address && (
-                        <Link href={'Rewards'}>
-                            <p>My rewards</p>
-                        </Link>
-                    )}
-                </div>
-                <ConnectWallet />
-            </div>
+            )}
         </div>
     );
-}*/
-
-
+}
 
