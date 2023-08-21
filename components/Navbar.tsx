@@ -10,7 +10,7 @@ export default function Navbar() {
             <div className={styles.navbar}>
                 <div className={styles.navLinks}>
                     {address && (
-                        <Link href={`https://www.bridge23.tech/`}>
+                        <Link href="/">
                             <p>Home</p>
                         </Link>
                     )}
@@ -22,7 +22,7 @@ export default function Navbar() {
                         </Link>
                     )}
                 </div>
-                <Link href="/">
+                <Link href='/claim'>
                     <p>Claim rewards</p>
                 </Link>
                 <div className={styles.navLinks}>

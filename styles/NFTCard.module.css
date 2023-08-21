@@ -1,0 +1,77 @@
+.NFTCard {
+    background-color: #1b2129;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 25px;
+    max-width: 30%;
+    margin: 1%;
+    width: auto;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+}
+
+.mediaContainer {
+    position: relative;
+    padding: 5px;
+    display: flex;
+    justify-content: center; /* centers horizontally */
+    align-items: center;     /* centers vertically */
+    width: 100%;
+    height: auto;
+    overflow: hidden; /* This ensures that the image doesn't spill outside if it's larger than the container */
+}
+
+.mediaContainer img {
+    padding: 5px;
+    max-width: 100%;
+    height: auto;
+}
+
+.NFTCard h3 {
+    border-bottom: 1px solid #ffffff; /* Adjust the color as needed */
+    padding-bottom: 10px; /* Space between text and line */
+    margin-bottom: 10px; /* Space below the line */
+}
+
+/* Remove the border for the last h3 to avoid an extra line at the bottom */
+.NFTCard h3:last-child {
+    border-bottom: none;
+}
+
+.nftCountBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 10px;
+    border-radius: 25px;  /* rounded corners */
+    color: white;
+    font-weight: bold;
+    z-index: 10;
+}
+
+@media (max-width: 768px) {
+    .NFTCard {
+        max-width: 90%;
+        width: auto;
+    }
+
+    .mediaContainer {
+        padding: 2px;
+    }
+
+    .mediaContainer img {
+        padding: 10px;
+    }
+
+    .NFTCard h3 {
+        font-size: 16px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+}
+

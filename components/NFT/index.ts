@@ -1,3 +1,3 @@
-export * from "./NftCard";
+export * from "./NFTCard";
 export * from "./HistoryCard";
 export * from "./Nft";

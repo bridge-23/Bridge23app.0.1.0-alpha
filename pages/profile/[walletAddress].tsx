@@ -1,21 +1,30 @@
-import { useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
+import {useAddress, useContract, useOwnedNFTs} from '@thirdweb-dev/react';
 import styles from '../../styles/Home.module.css'
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import NFTCard from "../../components/NFT/NftCard";
+import NFTCard from "../../components/NFT/NFTCard";
 import {NextPage} from "next";
+import React from "react";
 
 const Profile: NextPage = () =>  {
     const address = useAddress();
 
+    const { contract} = useContract(REWARD_CONTRACT);
+
+    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,} = useOwnedNFTs(contract, address);
+
+    const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
+        if (nft.type === "ERC721") {
+            return accumulator + 1;  // For each ERC721 token, count as 1
+        } else if (nft.type === "ERC1155" && nft.quantityOwned) {
+            return accumulator + Number(nft.quantityOwned); // Convert to Number and add
+        }
+        return accumulator; // Continue the accumulation
+    }, 0) || 0;
+
+
     const truncateAddress = (address: string) => {
         return `${address.slice(0, 6)}...${address.slice(-4)}`;
     };
-
-    const { contract} = useContract(REWARD_CONTRACT);
-
-    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,
-
-    } = useOwnedNFTs(contract, address);
 
     return (
         <div className={styles.container}>
@@ -27,12 +36,19 @@ const Profile: NextPage = () =>  {
                     </div>
                     <hr />
                     <div>
-                        <h3>My Items:  156</h3>
+                        <h3>Total NFTs Owned: {totalNFTs}</h3>
+                        <hr />
                         <div className={styles.grid}>
                             {!isOwnedNFTsLoading ? (
                                 ownedNFTs?.length! > 0 ? (
                                     ownedNFTs?.map((nft) => (
-                                        <NFTCard key={nft.metadata.id} metadata={nft.metadata} />
+                                        <NFTCard
+                                            key={nft.metadata.id}
+                                            metadata={{
+                                                ...nft.metadata,
+                                                quantityOwned: nft.quantityOwned
+                                            }}
+                                        />
                                     ))
                                 ) : (
                                     <p>No NFTs owned.</p>
