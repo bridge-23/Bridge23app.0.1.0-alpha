@@ -16,7 +16,7 @@ const Profile: NextPage = () =>  {
         if (nft.type === "ERC721") {
             return accumulator + 1;  // For each ERC721 token, count as 1
         } else if (nft.type === "ERC1155" && nft.quantityOwned) {
-            return accumulator + Number(nft.quantityOwned); // Convert to Number and add
+            return accumulator + (nft.quantityOwned ? Number(nft.quantityOwned) : 0);
         }
         return accumulator; // Continue the accumulation
     }, 0) || 0;
@@ -46,7 +46,7 @@ const Profile: NextPage = () =>  {
                                             key={nft.metadata.id}
                                             metadata={{
                                                 ...nft.metadata,
-                                                quantityOwned: nft.quantityOwned
+                                                quantityOwned: nft.quantityOwned ? Number(nft.quantityOwned) : 0
                                             }}
                                         />
                                     ))
