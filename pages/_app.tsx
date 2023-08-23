@@ -6,16 +6,13 @@ import Navbar from "../components/Navbar";
 import {useEffect, useState} from 'react';
 import {BigNumber} from "ethers";
 
-// This is the chain your dApp will work on.
-// Change this to the chain your app is built for.
-// You can also import additional chains from `@thirdweb-dev/chains` and pass them directly.
 const activeChain = "mumbai";
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const [page, setPage] = useState(1);
+    /*const [page, setPage] = useState(1);
     const nftsPerPage = 50; // Example value
     const totalCount = BigNumber.from(100); // Example value, replace with your logic
-    const loading = false; // Example value, replace with your logic
+    const loading = false; // Example value, replace with your logic*/
 
   useEffect(() => {
     //const clientId = process.env.CLIENT_ID;
