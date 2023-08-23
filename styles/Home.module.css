@@ -3,11 +3,17 @@
   align-items: center; /* center items vertically */
   justify-content: center; /* center items horizontally, though this might be unnecessary based on your final design */
   gap: 2rem; /* provides space between the image and the text */
+  background-color: #ffffff;
+  color: #020202;
+  margin: 0 auto;
+  padding: 1rem 1rem;
 }
 
 .centeredImage {
   max-width: 40%; /* adjust as necessary */
   height: auto;
+  margin: 0 auto;
+  padding: 1rem 1rem;
 }
 
 .main {
@@ -47,7 +53,7 @@
   width: 230px;
 }
 
-.description {
+.c {
   margin-top: 3rem;
   margin-bottom: 2rem;
   line-height: 1.5;
@@ -108,13 +114,6 @@
   margin-left: 0.5rem;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
-}
-
 .card,
 .footer {
   border-color: #222;
@@ -125,3 +124,31 @@
 .logo img {
   filter: invert(1);
 }
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  /* Stack text above the image on mobile */
+  .container {
+    flex-direction: column-reverse;  /* This will stack children in reverse order. Adjust based on your markup */
+  }
+
+  /* Make sure centered image fits and is not cut off */
+  .centeredImage {
+    max-width: 90%; /* or another suitable value that ensures the image isn't too wide for mobile screens */
+    margin: 0 auto;  /* center the image horizontally */
+  }
+
+  .card {
+    max-width: 100%;
+    text-align: center;  /* center the text within cards on mobile */
+  }
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
+

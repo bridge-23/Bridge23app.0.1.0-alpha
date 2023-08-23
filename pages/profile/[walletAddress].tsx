@@ -32,6 +32,7 @@ const Profile: NextPage = () =>  {
                 <div>
                     <div>
                         <h1>Profile</h1>
+                        <hr />
                         <p>Bridge id: {truncateAddress(address || "")}</p>
                     </div>
                     <hr />
@@ -70,3 +71,24 @@ const Profile: NextPage = () =>  {
 }
 
 export default Profile;
+
+/*
+export const getServerSideProps = async (context) => {
+    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,} = useOwnedNFTs(contract, address);
+
+    const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
+        if (nft.type === "ERC721") {
+            return accumulator + 1;  // For each ERC721 token, count as 1
+        } else if (nft.type === "ERC1155" && nft.quantityOwned) {
+            return accumulator + (nft.quantityOwned ? Number(nft.quantityOwned) : 0);
+        }
+        return accumulator; // Continue the accumulation
+    }, 0) || 0;
+
+    return {
+        props: {
+            totalNFTs,
+            ownedNFTs // if you want to pass this as well
+        }
+    };
+};*/
