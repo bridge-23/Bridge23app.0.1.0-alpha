@@ -8,7 +8,8 @@ const Home: NextPage = () => {
 
           <div className={styles.container}>
           <h1 className={styles.title}>JOIN TODAY - DO YOUR PURCHASES COUNT!</h1>
-
+          </div>
+            <div className={styles.container}>
                 <p>Bridge 23 is a nextGen POS system for upgraded customer experience. It is a blockchain based POS system that allows merchants to accept crypto payments and rewards customers with crypto.</p>
             </div>
 
