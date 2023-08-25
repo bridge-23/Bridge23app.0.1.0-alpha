@@ -75,5 +75,13 @@
 
     .hamburger {
         display: block;
+        font-size: 2rem;  /* Adjust this value to your liking */
+        background-color: #ffffff;
+        border: 1px;
+        cursor: pointer;
+        color: #020202;
+        border-radius: 15px;
+        border: 1px solid #000;
     }
+
 }
