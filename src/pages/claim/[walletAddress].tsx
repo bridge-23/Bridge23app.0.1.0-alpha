@@ -173,9 +173,10 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                         <p>Quantity: {item.quantity}</p>
                     </div>
                 ))}
+                <div>Total: {cartTotal}</div>
             <div className={styles.container}>
                 <button onClick={exchangeTokensHandler} className={styles.button}>
-                    Exchange Tokens
+                    Claim Rewards
                 </button>
             </div>
             </div>

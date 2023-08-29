@@ -48,10 +48,18 @@ export default function Navbar() {
                         </div>
 
                         <div className={styles.navLinks}>
+                            {address && (
+                                <Link href={`claim/${address}`}>
+                                    <p>Claim Rewards</p>
+                                </Link>
+                            )}
+                        </div>
+
+{/*                        <div className={styles.navLinks}>
                     {address && (
                         <button onClick={() => setShowModal(true)} className={styles.navButton}>Claim Rewards</button>
                     )}
-                        </div>
+                        </div>*/}
 
 
                     </div>

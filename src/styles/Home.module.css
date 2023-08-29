@@ -2,11 +2,11 @@
   display: flex; /* enable flex layout */
   align-items: center; /* center items vertically */
   justify-content: center; /* center items horizontally, though this might be unnecessary based on your final design */
-  gap: 2rem; /* provides space between the image and the text */
   background-color: #ffffff;
   color: #020202;
   margin: 0 auto;
   padding: 1rem 1rem;
+  flex-direction: column;
 }
 
 .centeredImage {
