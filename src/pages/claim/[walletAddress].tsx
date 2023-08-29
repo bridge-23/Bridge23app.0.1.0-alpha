@@ -4,11 +4,12 @@ import { REWARD_CONTRACT } from '../../consts/parameters';
 import styles from '../../styles/ClaimPage.module.css';
 import Select from 'react-select';
 import type { NextPage } from "next";
+import { ActionMeta } from 'react-select';
 
 type ContractMetadata = {
     name?: string| number | null;
     description?: string;
-    image?: string;
+    image?: any;
 };
 
 const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
@@ -38,40 +39,44 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     const [quantityOptions, setQuantityOptions] = useState<IQuantityOption[]>([]);
     const [cart, setCart] = useState<ICart[]>([]);
     const [cartTotal, setCartTotal] = useState<number>(0);
-    const tokenId = '0';
+    //const tokenId = '0';
     const { data: nft, isLoading, error } = useNFT(rewardContract, 0);
     const [contractMetadata, setContractMetadata] = useState<ContractMetadata>({});
-
 
     useEffect(() => {
         if (nft) {
             setContractMetadata({
                 name: nft.metadata.name,
-                description: nft.metadata.description,
-                image: nft.metadata.image
+                description: nft.metadata.description || '',
+                image: nft.metadata.image,
             });
         }
     }, [nft]);
 
+    const nftOptions = (ownedNFTs?.map(nft => {
+        if (nft.metadata && nft.metadata.id && nft.quantityOwned) {
+            return {
+                value: parseInt(nft.metadata.id),
+                label: `ID: ${nft.metadata.id}, Quantity: ${nft.quantityOwned}`,
+                maxQuantity: parseInt(nft.quantityOwned),
+            };
+        }
+    }).filter(Boolean) || []) as INftOption[];
 
-    const nftOptions = ownedNFTs?.map(nft => ({
-        value: parseInt(nft.metadata.id),
-        label: `ID: ${nft.metadata.id}, Quantity: ${nft.quantityOwned}`,
-        maxQuantity: parseInt(nft.quantityOwned)
-    })) || [];
-
-
-    const handleNftChange = (selectedOption: { value: number, label: string, maxQuantity: number }) => {
-        setSelectedNft(selectedOption);
-        const maxQuantity = selectedOption.maxQuantity;
-        const options = Array.from({ length: maxQuantity }, (_, i) => ({ value: i + 1, label: (i + 1).toString() }));
-        setQuantityOptions(options);
-        setSelectedQuantity(options[0]);
+    const handleNftChange = (selectedOption: INftOption | null, _actionMeta: any) => {
+        if (selectedOption) {
+            setSelectedNft(selectedOption);
+            const maxQuantity = selectedOption.maxQuantity;
+            const options = Array.from({ length: maxQuantity }, (_, i) => ({ value: i + 1, label: (i + 1).toString() }));
+            setQuantityOptions(options);
+            setSelectedQuantity(options[0]);
+        }
     };
 
-    const handleQuantityChange = (selectedOption: { value: number, label: string }) => {
+    const handleQuantityChange = (selectedOption: IQuantityOption | null, actionMeta: ActionMeta<IQuantityOption>) => {
         setSelectedQuantity(selectedOption);
     };
+
 
     const addToCartHandler = () => {
         if (!selectedNft || !selectedQuantity) {
@@ -91,9 +96,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         ]);
         setCartTotal(newTotal);
     };
-
-
-
     const exchangeTokensHandler = async () => {
         if (cart.length === 0) {
             return alert('Your cart is empty.');
@@ -123,7 +125,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
             <div className={styles.heroSection}>
                 <div className={styles.collectionImage}>
                     {!isLoading && !error && nft ? (
-                        <MediaRenderer src={nft.metadata.image} />
+                        <MediaRenderer src={contractMetadata?.image} />
                     ) : (
                         <div>Loading...</div>
                     )}
@@ -185,7 +187,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         </div>
     );
 };
-
 export default Claim;
 
 
