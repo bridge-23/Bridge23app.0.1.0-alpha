@@ -1,4 +1,5 @@
 import type { AppProps } from "next/app";
+import React from 'react';
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import "../styles/globals.css";
 import Navbar from "../components/Navbar";
