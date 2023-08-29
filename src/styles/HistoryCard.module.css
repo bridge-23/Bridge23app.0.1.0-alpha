@@ -1,0 +1,45 @@
+.historyCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    border: 2px solid #030303;
+    padding: 1rem;
+    border-radius: 25px;
+}
+
+.historyCard.large {
+    flex-direction: row;
+}
+
+.textSmall {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #646D7A;
+}
+
+.textMedium {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #646D7A;
+}
+
+.textWhite {
+    color: #ffffff;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.flex {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.link {
+    text-decoration: none;
+}

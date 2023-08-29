@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    grid-template-columns: 3fr 1fr;
+    gap: 2rem;
+    background-color: #d2d0d0;
+    color: #020202;
+    margin: 0 auto;
+    padding: 5rem 5rem;
+    border-radius: 25px;
+    border: 1px solid #000;
+}
+
+
+.button {
+    display: flex;
+    padding: 20px 40px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: 0.2s ease;
+    background-color: white;
+    color: black;
+}

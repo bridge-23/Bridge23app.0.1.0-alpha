@@ -121,6 +121,8 @@
     border-radius: 20px;
     overflow: hidden;
     margin-right: 2rem;
+    width: 300px;
+    height: 300px;
 }
 .claimContainer {
     display: flex;

@@ -4,9 +4,12 @@ import "../styles/globals.css";
 import Navbar from "../components/Navbar";
 //import Footer from "../components/Footer";
 import {useEffect, useState} from 'react';
-import {BigNumber} from "ethers";
+//import {BigNumber} from "ethers";
+import '@sendbird/uikit-react/dist/index.css';
+//import dynamic from 'next/dynamic';
 
 const activeChain = "mumbai";
+//const SendbirdApp = dynamic(() => import('@sendbird/uikit-react/App'), { ssr: false });
 
 function MyApp({ Component, pageProps }: AppProps) {
     /*const [page, setPage] = useState(1);

@@ -46,7 +46,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
                 </div>
                 <ThirdwebNftMedia metadata={metadata} />
             </div>
-            <h3>Name: {truncateName(metadata.name)}</h3>
+            <h3> {truncateName(metadata.name)} </h3>
             <h3>Token id: {metadata.id}</h3>
         </div>
     );

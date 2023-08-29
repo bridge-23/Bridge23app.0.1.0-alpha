@@ -4,4 +4,4 @@ export const blockExplorer = "https://mumbai.polygonscan.com/";
 export  const REWARD_CONTRACT ='0x480d6A3A7a1300586a0628c73C3B18e8b609B572';
 
 //export  const OWNER_ADDRESS ='0x852C133d411b756A3a5b79d4EF4a4cA780f013D8';
-//export const chain = "mumbai";
+export const chain = "mumbai";

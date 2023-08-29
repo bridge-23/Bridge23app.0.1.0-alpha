@@ -1,16 +1,15 @@
-import {useAddress, useContract/*, useNFTBalance, useContract, useOwnedNFTs, useWallet*/} from '@thirdweb-dev/react';
-import styles from '../../styles/Home.module.css'
+import {useAddress, useContract, /*useContractEvents  useWallet*/} from '@thirdweb-dev/react';
+import styles from '../../styles/Admin.module.css';
 import {NextPage} from "next";
 import { REWARD_CONTRACT } from '../../consts/parameters';
 
+
 const Admin: NextPage = () => {
     const address = useAddress();
-    const {contract: rewardContract} = useContract(REWARD_CONTRACT);
+    const { contract: rewardContract } = useContract(REWARD_CONTRACT);
+
     const ownerAddress = "0x852C133d411b756A3a5b79d4EF4a4cA780f013D8";
 
-/*    const truncateAddress = (address: string) => {
-        return `${address.slice(0, 6)}...${address.slice(-4)}`;
-    };*/
 // Здесь добавлять правила для обмена токенов
     const addExchangeRuleHandler = async () => {
         const _anyTokenAmounts = 100; // Replace with appropriate value
@@ -27,6 +26,7 @@ const Admin: NextPage = () => {
             }
 
             alert("Exchange rule added successfully!");
+
         } catch (error) {
             console.error("Error adding exchange rule:", error);
             alert("Failed to add exchange rule. Please try again.");
@@ -34,15 +34,18 @@ const Admin: NextPage = () => {
     };
 
     return (
-        <div className={styles.container} style={{marginTop: "3rem"}}>
-            {/* ...existing content... */}
-            {address === ownerAddress && (
-                <button onClick={addExchangeRuleHandler}>
-                    Add Exchange Rule
-                </button>
-            )}
+        <div className={styles.container}>
+                {/* Button */}
+                {address === ownerAddress && (
+                    <button className={styles.button} onClick={addExchangeRuleHandler}>
+                        Add Exchange Rule
+                    </button>
+                )}
         </div>
+
+
     )
+
 }
 
 export default Admin;
