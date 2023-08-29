@@ -198,9 +198,13 @@
 }
 
 .cartItem {
+    background-color: #ffffff;
     display: flex;
     align-items: center;;
     gap: 5px;
+    border: 1px solid #000;
+    border-radius: 25px;
+    padding: 8px;
 }
 
 .cartItem:last-child {

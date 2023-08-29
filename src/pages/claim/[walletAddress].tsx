@@ -176,6 +176,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                     </div>
                 ))}
                 <div>Total: {cartTotal}</div>
+                <p>Add 100 tokens for the claim rewards in your cart.</p>
             <div className={styles.container}>
                 <button onClick={exchangeTokensHandler} className={styles.button}>
                     Claim Rewards
