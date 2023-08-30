@@ -1,8 +1,20 @@
-import { ThirdwebNftMedia,useNFTBalance,useAddress,useContract } from '@thirdweb-dev/react';
-//import { NFTBalance } from '@/hooks/useNFTBalance';
-import styles from '../../styles/NFTCard.module.css';
-import React from "react";
+import React from 'react';
+import { ThirdwebNftMedia, useNFTBalance, useAddress, useContract } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
+import { makeStyles } from '@mui/styles';
+import { Card, CardContent, Typography, CircularProgress } from'@mui/material';
+
+const useStyles = makeStyles({
+    root: {
+        minWidth: 275,
+    },
+    title: {
+        fontSize: 14,
+    },
+    pos: {
+        marginBottom: 12,
+    },
+});
 
 type NFTCardProps = {
     metadata: {
@@ -14,12 +26,13 @@ type NFTCardProps = {
 };
 
 const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
+    const classes = useStyles();
     const address = useAddress();
     const { contract } = useContract(REWARD_CONTRACT);
     const { data: ownerBalance, isLoading, error } = useNFTBalance(contract, address, metadata.id);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <CircularProgress />;
     }
 
     if (error) {
@@ -38,19 +51,25 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
     };
 
     return (
-        <div className={styles.NFTCard}>
-
-            <div className={styles.mediaContainer}>
-                <div className={styles.nftCountBadge}>
-                    <h3>X{ownerBalance?.toString()}</h3>
-                </div>
-                <ThirdwebNftMedia metadata={metadata} />
-            </div>
-            <h3> {truncateName(metadata.name)} </h3>
-            <h3>Token id: {metadata.id}</h3>
-        </div>
+        <Card className={classes.root} variant="outlined">
+            <CardContent>
+                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                    {truncateName(metadata.name)}
+                </Typography>
+                <Typography variant="h5" component="h2">
+                    X{ownerBalance?.toString()}
+                </Typography>
+                <Typography className={classes.pos} color="textSecondary">
+                    Token id: {metadata.id}
+                </Typography>
+                <Typography variant="body2" component="p">
+                    <ThirdwebNftMedia metadata={metadata} />
+                </Typography>
+            </CardContent>
+        </Card>
     );
 };
+
 
 export default NFTCard;
 

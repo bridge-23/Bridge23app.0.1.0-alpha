@@ -1,10 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import {useAddress, useContract, useOwnedNFTs, MediaRenderer,useNFT} from '@thirdweb-dev/react';
+import {
+    useAddress,
+    useContract,
+    useOwnedNFTs,
+    MediaRenderer,
+    useNFT,
+} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import styles from '../../styles/ClaimPage.module.css';
-import Select from 'react-select';
+import {
+    Container,
+    Grid,
+    Card,
+    CardHeader,
+    CardContent,
+    CardMedia,
+    Typography,
+    Button,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+} from '@mui/material';
 import type { NextPage } from "next";
-import { ActionMeta } from 'react-select';
+
 
 type ContractMetadata = {
     name?: string| number | null;
@@ -32,7 +51,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
 
     const address = useAddress();
     const { contract: rewardContract } = useContract(REWARD_CONTRACT);
-
     const { data: ownedNFTs } = useOwnedNFTs(rewardContract, address);
     const [selectedNft, setSelectedNft] = useState<INftOption | null>(null);
     const [selectedQuantity, setSelectedQuantity] = useState<IQuantityOption | null>(null);
@@ -61,9 +79,13 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                 maxQuantity: parseInt(nft.quantityOwned),
             };
         }
-    }).filter(Boolean) || []) as INftOption[];
+        return null;
+    }).filter((option): option is INftOption => option !== null) || []) as INftOption[];
 
-    const handleNftChange = (selectedOption: INftOption | null, _actionMeta: any) => {
+
+    const handleNftChange = (event: SelectChangeEvent<number>) => {
+        const selectedOptionIndex = event.target.value as number;
+        const selectedOption = nftOptions[selectedOptionIndex];
         if (selectedOption) {
             setSelectedNft(selectedOption);
             const maxQuantity = selectedOption.maxQuantity;
@@ -73,9 +95,12 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         }
     };
 
-    const handleQuantityChange = (selectedOption: IQuantityOption | null, actionMeta: ActionMeta<IQuantityOption>) => {
+    const handleQuantityChange = (event: SelectChangeEvent<number>) => {
+        const selectedOptionIndex = event.target.value as number;
+        const selectedOption = quantityOptions[selectedOptionIndex];
         setSelectedQuantity(selectedOption);
     };
+
 
 
     const addToCartHandler = () => {
@@ -121,73 +146,81 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     };
 
     return (
-        <div className={styles.container} >
-            <div className={styles.heroSection}>
-                <div className={styles.collectionImage}>
-                    {!isLoading && !error && nft ? (
-                        <MediaRenderer src={contractMetadata?.image} />
-                    ) : (
-                        <div>Loading...</div>
-                    )}
-                </div>
-                <div className={styles.infocontainer}>
-
-                <div className={styles.metadata}>
-                    <h1>{contractMetadata?.name}</h1>
-                    <p>{contractMetadata?.description}</p>
-                </div>
-
-                <div className={styles.claimContainer}>
-                    <div className={styles.Btn}>
-                <label htmlFor="nftSelect">Select NFT:</label>
-                <Select
-                    id="nftSelect"
-                    value={selectedNft}
-                    onChange={handleNftChange}
-                    options={nftOptions}
-                />
-            </div>
-
-
-            <div className={styles.Btn}>
-                <label htmlFor="quantitySelect">Quantity:</label>
-                <Select
-                    id="quantitySelect"
-                    value={selectedQuantity}
-                    onChange={handleQuantityChange}
-                    options={quantityOptions}
-                />
-            </div>
-                </div>
-                <div className={styles.container}>
-                    <button onClick={addToCartHandler} className={styles.button}>
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-                </div>
-
-            <div className={styles.cartContainer}>
-                <h2>Cart</h2>
-                {cart.map((item, index) => (
-                    <div key={index} className={styles.cartItem}>
-                        <p>ID: {item.id}</p>
-                        <p>Quantity: {item.quantity}</p>
-                    </div>
-                ))}
-                <div>Total: {cartTotal}</div>
-                <p>Add 100 tokens for the claim rewards in your cart.</p>
-            <div className={styles.container}>
-                <button onClick={exchangeTokensHandler} className={styles.button}>
-                    Claim Rewards
-                </button>
-            </div>
-            </div>
-
-
-        </div>
+        <Container>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                    <Card>
+                        <CardContent>
+                            <Typography variant="h5">{contractMetadata?.name}</Typography>
+                            <Typography variant="body2">{contractMetadata?.description}</Typography>
+                        </CardContent>
+                        <CardMedia>
+                            {!isLoading && !error && nft ? (
+                                <MediaRenderer src={contractMetadata?.image} />
+                            ) : (
+                                <div>Loading...</div>
+                            )}
+                        </CardMedia>
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel id="nftSelect-label">Select NFT</InputLabel>
+                            <Select
+                                labelId="nftSelect-label"
+                                id="nftSelect"
+                                value={selectedNft ? nftOptions.indexOf(selectedNft) : ""}
+                                onChange={handleNftChange}
+                            >
+                                {nftOptions.map((option, index) => (
+                                    <MenuItem key={option.value} value={index}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel id="quantitySelect-label">Quantity</InputLabel>
+                            <Select
+                                labelId="quantitySelect-label"
+                                id="quantitySelect"
+                                value={selectedQuantity ? quantityOptions.indexOf(selectedQuantity) : ""}
+                                onChange={handleQuantityChange}
+                            >
+                                {quantityOptions.map((option, index) => (
+                                    <MenuItem key={option.value} value={index}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <Button variant="contained" color="primary" onClick={addToCartHandler}>
+                            Add to Cart
+                        </Button>
+                    </Card>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Card>
+                        <CardHeader title="Cart" />
+                        <CardContent>
+                            {cart.map((item, index) => (
+                                <div key={index}>
+                                    <Typography variant="body2">ID: {item.id}</Typography>
+                                    <Typography variant="body2">Quantity: {item.quantity}</Typography>
+                                </div>
+                            ))}
+                            <Typography variant="body2">Total: {cartTotal}</Typography>
+                            <Typography variant="body2">
+                                Add 100 tokens for the claim rewards in your cart.
+                            </Typography>
+                            <Button variant="contained" color="primary" onClick={exchangeTokensHandler}>
+                                Claim Rewards
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+        </Container>
     );
 };
+
 export default Claim;
 
 

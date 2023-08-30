@@ -11,6 +11,13 @@
     "deploy": "next build && next export && npnpmx thirdweb@latest upload out"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.14.7",
+    "@mui/material": "^5.14.7",
+    "@mui/styled-engine-sc": "^5.14.7",
+    "@mui/styles": "^5.14.7",
+    "@react-buddy/ide-toolbox-next": "^2.4.1",
+    "@react-buddy/palette-mui": "^5.0.1",
     "@sendbird/chat": "^4.9.9",
     "@sendbird/uikit-react": "^3.6.7",
     "@thirdweb-dev/react": "^3",
@@ -20,7 +27,8 @@
     "react": "^18.2",
     "react-dom": "^18.2",
     "react-select": "^5.7.4",
-    "sendbird": "^3.1.33"
+    "sendbird": "^3.1.33",
+    "styled-components": "^6.0.7"
   },
   "devDependencies": {
     "@types/node": "^18.11.11",

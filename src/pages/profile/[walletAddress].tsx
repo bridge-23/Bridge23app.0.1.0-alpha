@@ -1,15 +1,14 @@
-import {useAddress, useContract, useOwnedNFTs} from '@thirdweb-dev/react';
-import styles from '../../styles/Profile.module.css'
+import React from 'react';
+import { useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import NFTCard from "../../components/NFT/NFTCard";
+import NFTCard from '../../components/NFT/NFTCard';
+import { Container, Grid, Typography, CircularProgress, Divider } from '@mui/material';
 import {NextPage} from "next";
-import React from "react";
+
 
 const Profile: NextPage = () =>  {
     const address = useAddress();
-
     const { contract} = useContract(REWARD_CONTRACT);
-
     const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,} = useOwnedNFTs(contract, address);
 
     const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
@@ -27,48 +26,49 @@ const Profile: NextPage = () =>  {
     };
 
     return (
-        <div className={styles.container}>
+        <Container>
             {address ? (
                 <div>
-                    <div>
-                        <h1>Profile</h1>
-                        <hr />
-                        <p>Bridge id: {truncateAddress(address || "")}</p>
-                    </div>
-                    <hr />
-                    <div>
-                        <h3>Total NFTs Owned: {totalNFTs}</h3>
-                        <hr />
-                        <div className={styles.grid}>
-                            {!isOwnedNFTsLoading ? (
-                                ownedNFTs?.length! > 0 ? (
-                                    ownedNFTs?.map((nft) => (
+                    <Typography variant="h3" gutterBottom>
+                        Profile
+                    </Typography>
+                    <Divider />
+                    <Typography variant="h6">
+                        Bridge id: {truncateAddress(address || '')}
+                    </Typography>
+                    <Divider />
+                    <Typography variant="h6">Total NFTs Owned: {totalNFTs}</Typography>
+                    <Divider />
+                    <Grid container spacing={3}>
+                        {!isOwnedNFTsLoading ? (
+                            ownedNFTs?.length! > 0 ? (
+                                ownedNFTs?.map((nft) => (
+                                    <Grid item xs={12} sm={6} md={4} key={nft.metadata.id}>
                                         <NFTCard
-                                            key={nft.metadata.id}
                                             metadata={{
                                                 ...nft.metadata,
-                                                quantityOwned: nft.quantityOwned ? Number(nft.quantityOwned) : 0
+                                                quantityOwned: nft.quantityOwned ? Number(nft.quantityOwned) : 0,
                                             }}
                                         />
-                                    ))
-                                ) : (
-                                    <p>No NFTs owned.</p>
-                                )
+                                    </Grid>
+                                ))
                             ) : (
-                                <p>Loading...</p>
-                            )}
-                        </div>
-                    </div>
+                                <Typography>No NFTs owned.</Typography>
+                            )
+                        ) : (
+                            <CircularProgress />
+                        )}
+                    </Grid>
                 </div>
             ) : (
-                <div className={styles.main}>
-                    <p>Connect your wallet to view your profile.</p>
+                <div>
+                    <Typography variant="h6">Connect your wallet to view your profile.</Typography>
                 </div>
             )}
-            <hr />
-        </div>
-    )
-}
+            <Divider />
+        </Container>
+    );
+};
 
 export default Profile;
 
