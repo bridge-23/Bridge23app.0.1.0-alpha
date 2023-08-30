@@ -47,7 +47,11 @@ export default function Navbar() {
 
                 </div>
 
+                <div className={styles.web3container}>
+
                 <ConnectWallet theme={"light"}/>
+
+                </div>
 
             </div>
         </div>

@@ -1,8 +1,16 @@
 .navbarcontainer {
+    position: relative;
     padding: 0 2rem;
     max-width: 100vw;
     margin: 0 auto;
     background-color: #ffffff;
+}
+
+.web3container {
+    padding: 0 2rem;
+    max-width: 100vw;
+    margin: 0 auto;
+    background-color: #e3e1e1;
 }
 
 .navbar {
@@ -17,10 +25,12 @@
 }
 
 .navLinksContainer {
+    background-color: #e3e1e1;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    margin-right: auto;
 }
 
 .navLinks {
@@ -53,23 +63,20 @@
 }
 
 @media (max-width: 768px) {
-    .navLinksContainer {
+    .navbarcontainer {
         position: relative;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: #e3e1e1;
-        color: #020202;
         padding: 0 2rem;
-        border-radius: 25px;
-        border: 1px solid #000;
-        flex-direction: column;
-        display: none;
-        margin: 0 6% 0 6%;
+        max-width: 100vw;
+        margin: 0 auto;
+        background-color: #ffffff;
+    }
+
+    .navLinksContainer {
+    display: none;
     }
 
     .navOpen {
-        display: flex;
+        display: block;
     }
 
     .hamburger {
