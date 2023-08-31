@@ -2,7 +2,7 @@ import React from 'react';
 import { ThirdwebNftMedia, useNFTBalance, useAddress, useContract } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
 import { makeStyles } from '@mui/styles';
-import { Card, CardContent, Typography, CircularProgress } from'@mui/material';
+import { Badge, Card, CardContent, Typography, CircularProgress } from'@mui/material';
 
 const useStyles = makeStyles({
     root: {
@@ -51,21 +51,47 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
     };
 
     return (
-        <Card className={classes.root} variant="outlined">
+        <Card sx={{ maxWidth: 345 }}>
             <CardContent>
+
+                <Badge
+                    anchorOrigin={{
+                        horizontal: 'left',
+                        vertical: 'top',
+                    }}
+                    badgeContent={<Typography variant="h5">{ownerBalance?.toString()}</Typography>}
+                    color="secondary"
+                    sx={{
+                        '.MuiBadge-badge': {
+                            backgroundColor: 'grey',
+                            color: 'white',
+                            fontSize: '1.5em',
+                            top: '10px',
+                            left: '10px',
+                        },
+                    }}
+                >
+                    <Typography variant="body2" component="p">
+
+                        <ThirdwebNftMedia metadata={metadata} />
+
+                    </Typography>
+                </Badge>
+
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     {truncateName(metadata.name)}
                 </Typography>
-                <Typography variant="h5" component="h2">
+
+{/*                <Typography variant="h5" component="h2">
                     X{ownerBalance?.toString()}
-                </Typography>
+                </Typography>*/}
+
                 <Typography className={classes.pos} color="textSecondary">
                     Token id: {metadata.id}
                 </Typography>
-                <Typography variant="body2" component="p">
-                    <ThirdwebNftMedia metadata={metadata} />
-                </Typography>
+
             </CardContent>
+
         </Card>
     );
 };

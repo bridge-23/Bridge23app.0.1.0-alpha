@@ -28,26 +28,26 @@ export default function Navbar() {
                 <Menu anchorEl={anchorEl} open={isNavOpen} onClose={handleMenuClose}>
                     <MenuItem onClick={handleMenuClose}>
                         <Link href="/">
-                            <Typography>Home</Typography>
+                            <Typography style={{ color: 'black' }}>Home</Typography>
                         </Link>
                     </MenuItem>
                     {address && (
                         <MenuItem onClick={handleMenuClose}>
                             <Link href={`/profile/${address}`}>
-                                <Typography>Profile</Typography>
+                                <Typography style={{ color: 'black' }}>Profile</Typography>
                             </Link>
                         </MenuItem>
                     )}
                     {address && (
                         <MenuItem onClick={handleMenuClose}>
                             <Link href={`/claim/${address}`}>
-                                <Typography>Claim Rewards</Typography>
+                                <Typography style={{ color: 'black'}}>Claim Rewards</Typography>
                             </Link>
                         </MenuItem>
                     )}
                 </Menu>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Logo
+                    Bridge 23
                 </Typography>
                 <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                     <Button color="inherit">
@@ -57,14 +57,14 @@ export default function Navbar() {
                     </Button>
                     {address && (
                         <Button color="inherit">
-                            <Link href={`profile/${address}`}>
+                            <Link href={`/profile/${address}`}>
                                 <Typography>Profile</Typography>
                             </Link>
                         </Button>
                     )}
                     {address && (
                         <Button color="inherit">
-                            <Link href={`claim/${address}`}>
+                            <Link href={`/claim/${address}`}>
                                 <Typography>Claim Rewards</Typography>
                             </Link>
                         </Button>

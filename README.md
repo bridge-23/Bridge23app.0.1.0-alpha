@@ -1,40 +1,66 @@
-## Getting Started
+# Bridge23 App
 
-Create a project using this example:
+## Overview
+Bridge23 app is a next-gen tokenizing platform that allows users to tokenize their assets and trade them on the Thirdweb DEX. The app is built using Next.js and React.
+
+## Dependencies
+
+Here are the key dependencies used in this project:
+
+- **Next.js**: A popular React framework for building web applications. [More info](https://nextjs.org/)
+- **@thirdweb-dev/react & @thirdweb-dev/sdk**: Packages for integrating with Thirdweb. [More info](https://thirdweb.com/)
+- **@sendbird/chat & @sendbird/uikit-react**: Packages for integrating chat features using Sendbird. [More info](https://sendbird.com/)
+- **@mui/material & @mui/icons-material**: Material-UI is a popular React UI framework. [More info](https://mui.com/)
+- **Styled-components**: A library for styling React components. [More info](https://styled-components.com/)
+
+For a complete list of dependencies, refer to the `package.json` file.
+@fontsource/roboto: ^5.0.8
+@mui/icons-material: ^5.14.7
+@mui/material: ^5.14.7
+@mui/styled-engine-sc: ^5.14.7
+@mui/styles: ^5.14.7
+@react-buddy/ide-toolbox-next: ^2.4.1
+@react-buddy/palette-mui: ^5.0.1
+@sendbird/chat: ^4.9.9
+@sendbird/uikit-react: ^3.6.7
+@thirdweb-dev/react: ^3
+@thirdweb-dev/sdk: ^3
+ethers: ^5
+next: ^13
+react: ^18.2
+react-dom: ^18.2
+react-select: ^5.7.4
+sendbird: ^3.1.33
+styled-components: ^6.0.7
+Dev Dependencies
+@types/node: ^18.11.11
+@types/react: ^18.2.21
+eslint: ^8.29.0
+eslint-config-next: ^13
+typescript: ^4.9.4
+Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+License
+MIT
+
+## Installation
+
+Clone the repository and run:
 
 ```bash
-npx thirdweb create --template next-typescript-starter
-```
+npm install
 
-You can start editing the page by modifying `pages/[walletAddress].tsx`. The page auto-updates as you edit the file.
-
-On `pages/_app.tsx`, you'll find our `ThirdwebProvider` wrapping your app, this is necessary for our [hooks](https://portal.thirdweb.com/react) and
-[UI Components](https://portal.thirdweb.com/ui-components) to work.
-
-## Environment Variables
-
-To run this project, you will need to add environment variables. Check the `.env.example` file for all the environment variables required and add it to `.env.local` file or set them up on your hosting provider.
-
-## Deploy to IPFS
-
-Deploy a copy of your application to IPFS using the following command:
+## Running the application
+To run the application in development mode, use:
 
 ```bash
-yarn deploy
-```
+npm run dev
 
-## Learn More
+To build and start the application in production mode, use:
 
-To learn more about thirdweb and Next.js, take a look at the following resources:
-
-- [thirdweb React Documentation](https://docs.thirdweb.com/react) - learn about our React SDK.
-- [thirdweb TypeScript Documentation](https://docs.thirdweb.com/typescript) - learn about our JavaScript/TypeScript SDK.
-- [thirdweb Portal](https://docs.thirdweb.com) - check our guides and development resources.
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Templates](https://thirdweb.com/templates)
-
-You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
-
-## Join our Discord!
-
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
+```bash
+npm run build
+npm run start
