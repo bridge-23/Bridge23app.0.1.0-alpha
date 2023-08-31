@@ -4,7 +4,7 @@ import { Container, Typography } from "@mui/material";
 const Home: NextPage = () => {
     return (
         <Container>
-            <Typography variant="h1" align="center">
+            <Typography variant="h3" align="center">
                 JOIN TODAY - DO YOUR SPENT COUNT!
             </Typography>
             <Typography variant="body1">

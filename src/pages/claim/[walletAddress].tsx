@@ -30,6 +30,7 @@ import {
     TableHead,
     TableRow,
     Paper,
+    NativeSelect
 } from '@mui/material';
 import type { NextPage } from "next";
 
@@ -57,6 +58,8 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         id: number;
         quantity: number;
     }
+
+
 
     const address = useAddress();
     const { contract: rewardContract } = useContract(REWARD_CONTRACT);
@@ -92,9 +95,11 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     }).filter((option): option is INftOption => option !== null) || []) as INftOption[];
 
 
-    const handleNftChange = (event: SelectChangeEvent<number>) => {
-        const selectedOptionIndex = event.target.value as number;
-        const selectedOption = nftOptions[selectedOptionIndex];
+
+
+    const handleNftChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedOptionValue = parseInt(event.target.value);
+        const selectedOption = nftOptions.find(option => option.value === selectedOptionValue);
         if (selectedOption) {
             setSelectedNft(selectedOption.value);
             const maxQuantity = selectedOption.maxQuantity;
@@ -103,11 +108,12 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
             setSelectedQuantity(options[0]);
         }
     };
-    const handleQuantityChange = (event: SelectChangeEvent<number>) => {
-        const selectedOptionIndex = event.target.value as number;
-        const selectedOption = quantityOptions[selectedOptionIndex];
-        setSelectedQuantity(selectedOption);
+    const handleQuantityChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        const selectedOptionValue = parseInt(event.target.value as string);
+        const selectedOption = quantityOptions.find(option => option.value === selectedOptionValue);
+        setSelectedQuantity(selectedOption || null);
     };
+
     const addToCartHandler = () => {
         if (selectedNft === "" || selectedQuantity === null) {
             return alert('Please select an NFT and quantity.');
@@ -179,25 +185,22 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
 
                                     </CardContent>
 
+                                    <CardContent>
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
 
-                                        <InputLabel id="nftSelect-label">Select NFT</InputLabel>
-
-                                        <Select
-                                            labelId="nftSelect-label"
-                                            id="nftSelect"
+                                        <NativeSelect
+                                            inputProps={{
+                                                id: "nftSelect"
+                                            }}
                                             value={selectedNft}
-                                            onChange={handleNftChange}
+                                            onChange={(event) => handleNftChange(event as React.ChangeEvent<HTMLSelectElement>)}
                                         >
-                                            {nftOptions.map((option, index) => (
-
-                                                <MenuItem key={option.value} value={index}>
-
+                                            {nftOptions.map((option) => (
+                                                <option key={option.value} value={option.value}>
                                                     {option.label}
-
-                                                </MenuItem>
+                                                </option>
                                             ))}
-                                        </Select>
+                                        </NativeSelect>
                                     </FormControl>
 
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
@@ -207,26 +210,28 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                         <Select
                                             labelId="quantitySelect-label"
                                             id="quantitySelect"
-                                            value={selectedQuantity ? quantityOptions.indexOf(selectedQuantity) : ""}
-                                            onChange={handleQuantityChange}
+                                            value={selectedQuantity ? selectedQuantity.value : ""}
+                                            onChange={(event) => handleQuantityChange(event as React.ChangeEvent<{ value: unknown }>)}
                                         >
-                                            {quantityOptions.map((option, index) => (
-                                                <MenuItem key={option.value} value={index}>
+                                            {quantityOptions.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
                                             ))}
                                         </Select>
 
                                     </FormControl>
+                                    </CardContent>
 
                                 </CardActionArea>
 
+                            <CardContent>
                                 <CardActions>
                                     <Button variant="contained" color="primary" onClick={addToCartHandler}>
                                         Add to Cart
                                     </Button>
                                 </CardActions>
-
+                            </CardContent>
                             </Grid>
 
                         </Grid>
@@ -235,8 +240,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
 
                 </Grid>
                 <Grid item xs={12} md={6}>
-
-
 
                     <Card>
                         <CardHeader title="Cart"
@@ -251,8 +254,8 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {cart.map((item, index) => (
-                                            <TableRow key={index}>
+                                        {cart.map((item) => (
+                                            <TableRow key={item.id}>
                                                 <TableCell component="th" scope="row">
                                                     {item.id}
                                                 </TableCell>
@@ -260,6 +263,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                             </TableRow>
                                         ))}
                                     </TableBody>
+
                                 </Table>
                             </TableContainer>
                         </CardContent>
