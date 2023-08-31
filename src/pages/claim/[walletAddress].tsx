@@ -20,7 +20,6 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    SelectChangeEvent,
     CardActionArea,
     CardActions,
     Table,
@@ -30,9 +29,12 @@ import {
     TableHead,
     TableRow,
     Paper,
-    NativeSelect
+    NativeSelect,
+    Snackbar,
+    IconButton,
 } from '@mui/material';
 import type { NextPage } from "next";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 type ContractMetadata = {
@@ -72,6 +74,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     //const tokenId = '0';
     const { data: nft, isLoading, error } = useNFT(rewardContract, 0);
     const [contractMetadata, setContractMetadata] = useState<ContractMetadata>({});
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
         if (nft) {
@@ -106,6 +109,10 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
             const options = Array.from({ length: maxQuantity }, (_, i) => ({ value: i + 1, label: (i + 1).toString() }));
             setQuantityOptions(options);
             setSelectedQuantity(options[0]);
+        } else {
+            setSelectedNft("");
+            setQuantityOptions([]);
+            setSelectedQuantity(null);
         }
     };
     const handleQuantityChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -114,32 +121,63 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         setSelectedQuantity(selectedOption || null);
     };
 
+
     const addToCartHandler = () => {
         if (selectedNft === "" || selectedQuantity === null) {
-            return alert('Please select an NFT and quantity.');
+            return setErrorMessage('Please select an NFT and quantity.');
         }
+
         const currentCartTotal = cart.reduce((total, item) => total + item.quantity, 0);
         const newTotal = currentCartTotal + selectedQuantity.value;
 
         if (newTotal > 100) {
-            return alert('Total quantity in cart cannot exceed 100.');
+            return setErrorMessage('Total quantity in cart cannot exceed 100.');
         }
 
-        setCart([
-            ...cart,
-            { id: selectedNft, quantity: selectedQuantity.value }
-        ]);
+        const existingItemIndex = cart.findIndex(item => item.id === selectedNft);
+
+        const selectedOption = nftOptions.find(option => option.value === selectedNft);
+        const maxQuantity = selectedOption ? selectedOption.maxQuantity : 0;
+
+        if (existingItemIndex !== -1) {
+            const updatedQuantity = cart[existingItemIndex].quantity + selectedQuantity.value;
+            if (updatedQuantity > maxQuantity) {
+                return setErrorMessage('Cannot add more than owned quantity.');
+            }
+
+            const updatedCart = [...cart];
+            updatedCart[existingItemIndex].quantity = updatedQuantity;
+            setCart(updatedCart);
+        } else {
+            setCart([
+                ...cart,
+                { id: selectedNft, quantity: selectedQuantity.value }
+            ]);
+        }
+
         setCartTotal(newTotal);
+        setSelectedNft("");
+        setSelectedQuantity(null);
+    };
+
+    const calculateCartTotal = () => {
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        setCartTotal(total);
+    }
+
+    const deleteFromCartHandler = (id: number) => {
+        setCart(cart.filter(item => item.id !== id));
+        calculateCartTotal();
     };
 
 
     const exchangeTokensHandler = async () => {
         if (cart.length === 0) {
-            return alert('Your cart is empty.');
+            return setErrorMessage('Your cart is empty.');
         }
 
         if (cartTotal < 100) {
-            return alert('Total quantity in cart must be 100.');
+            return setErrorMessage('Total quantity in cart must be 100.');
         }
 
         const ids = cart.map(item => item.id);
@@ -153,15 +191,21 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
             alert("Tokens exchanged successfully!");
         } catch (error) {
             console.error("Error exchanging tokens:", error);
-            alert("Failed to exchange tokens. Please try again.");
+            setErrorMessage("Failed to exchange tokens. Please try again.");
         }
     };
 
     return (
         <Container style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop:'20px' }}>
+            <Snackbar
+                open={errorMessage !== null}
+                autoHideDuration={6000}
+                onClose={() => setErrorMessage(null)}
+                message={errorMessage}
+            />
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                    <Card >
+                    <Card style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop:'20px' }}>
 
                         <CardHeader title={contractMetadata?.name} />
 
@@ -176,6 +220,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                     )}
                                 </CardMedia>
                             </Grid>
+
                             <Grid item md={6}>
                                 <CardActionArea>
 
@@ -200,6 +245,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                                     {option.label}
                                                 </option>
                                             ))}
+
                                         </NativeSelect>
                                     </FormControl>
 
@@ -241,7 +287,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
 
-                    <Card>
+                    <Card style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop:'20px' }}>
                         <CardHeader title="Cart"
                                     subheader="Add 100 tokens for the claim rewards in your cart." />
                         <CardContent>
@@ -251,6 +297,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                         <TableRow>
                                             <TableCell>ID</TableCell>
                                             <TableCell align="right">Quantity</TableCell>
+                                            <TableCell align="right">Action</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -259,24 +306,30 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                                 <TableCell component="th" scope="row">
                                                     {item.id}
                                                 </TableCell>
-                                                <TableCell align="right">{item.quantity}</TableCell>
+                                                <TableCell align="right">
+                                                    {item.quantity}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    <IconButton onClick={() => deleteFromCartHandler(item.id)}>
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
-
                                 </Table>
                             </TableContainer>
                         </CardContent>
 
                         <CardContent>
                             <Typography variant="h5">Total: {cartTotal}</Typography>
-                        </CardContent>
 
                         <CardActions>
                             <Button variant="contained" color="primary" onClick={exchangeTokensHandler}>
                                 Claim Rewards
                             </Button>
                         </CardActions>
+                    </CardContent>
 
                     </Card>
                 </Grid>
