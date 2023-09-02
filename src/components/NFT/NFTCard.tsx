@@ -2,14 +2,19 @@ import React from 'react';
 import { ThirdwebNftMedia, useNFTBalance, useAddress, useContract } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
 import { makeStyles } from '@mui/styles';
-import { Badge, Card, CardContent, Typography, CircularProgress } from'@mui/material';
+import { Badge, Card, CardContent, Typography, CircularProgress, Skeleton } from '@mui/material';
 
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
     },
     title: {
-        fontSize: 14,
+        fontSize: 16, // Increase the font size for the title
+        fontWeight: 'bold', // Make the title bold
+    },
+    subtitle: {
+        fontSize: 14, // Decrease the font size for the subtitle
+        color: 'gray', // Add a gray color to the subtitle
     },
     pos: {
         marginBottom: 12,
@@ -31,14 +36,6 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
     const { contract } = useContract(REWARD_CONTRACT);
     const { data: ownerBalance, isLoading, error } = useNFTBalance(contract, address, metadata.id);
 
-    if (isLoading) {
-        return <CircularProgress />;
-    }
-
-    if (error) {
-        return <div>Error</div>;
-    }
-
     const truncateName = (name: string | number | null | undefined): string => {
         if (typeof name === 'string') {
             return name.length > 10 ? `${name.slice(0, 8)}...${name.slice(-2)}` : name;
@@ -53,13 +50,18 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
     return (
         <Card sx={{ maxWidth: 345 }}>
             <CardContent>
-
                 <Badge
                     anchorOrigin={{
                         horizontal: 'left',
                         vertical: 'top',
                     }}
-                    badgeContent={<Typography variant="h5">{ownerBalance?.toString()}</Typography>}
+                    badgeContent={
+                        isLoading ? (
+                            <Skeleton variant="text" width={40} height={24} />
+                        ) : (
+                            <Typography variant="h5">{ownerBalance?.toString()}</Typography>
+                        )
+                    }
                     color="secondary"
                     sx={{
                         '.MuiBadge-badge': {
@@ -71,33 +73,33 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
                         },
                     }}
                 >
-                    <Typography variant="body2" component="p">
-
+                    {isLoading ? (
+                        <Skeleton variant="rectangular" width={200} height={200} />
+                    ) : (
                         <ThirdwebNftMedia metadata={metadata} />
-
-                    </Typography>
+                    )}
                 </Badge>
-
+            </CardContent>
+        <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
-                    {truncateName(metadata.name)}
+                    {isLoading ? (
+                        <Skeleton variant="text" width={100} />
+                    ) : (
+                        truncateName(metadata.name)
+                    )}
                 </Typography>
-
-{/*                <Typography variant="h5" component="h2">
-                    X{ownerBalance?.toString()}
-                </Typography>*/}
-
-                <Typography className={classes.pos} color="textSecondary">
+        </CardContent>
+        <CardContent>
+                <Typography className={classes.subtitle} color="textSecondary">
                     Token id: {metadata.id}
                 </Typography>
-
             </CardContent>
-
         </Card>
     );
 };
 
-
 export default NFTCard;
+
 
 
 // <h3>Total owned: {ownerBalance?.toString()} </h3> {/* Convert BigNumber to string */}

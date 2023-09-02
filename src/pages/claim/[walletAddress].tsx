@@ -76,6 +76,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     const [contractMetadata, setContractMetadata] = useState<ContractMetadata>({});
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+
     useEffect(() => {
         if (nft) {
             setContractMetadata({
@@ -96,9 +97,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         }
         return null;
     }).filter((option): option is INftOption => option !== null) || []) as INftOption[];
-
-
-
 
     const handleNftChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOptionValue = parseInt(event.target.value);
@@ -160,15 +158,19 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         setSelectedQuantity(null);
     };
 
-    const calculateCartTotal = () => {
+/*    const calculateCartTotal = () => {
         const total = cart.reduce((sum, item) => sum + item.quantity, 0);
         setCartTotal(total);
-    }
+    }*/
 
     const deleteFromCartHandler = (id: number) => {
-        setCart(cart.filter(item => item.id !== id));
-        calculateCartTotal();
+        const updatedCart = cart.filter(item => item.id !== id);
+        setCart(updatedCart);
+
+        const updatedCartTotal = updatedCart.reduce((sum, item) => sum + item.quantity, 0);
+        setCartTotal(updatedCartTotal);
     };
+
 
 
     const exchangeTokensHandler = async () => {
@@ -188,7 +190,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
             if (tx && tx.wait) {
                 await tx.wait();
             }
-            alert("Tokens exchanged successfully!");
+            setErrorMessage("Tokens exchanged successfully!");
         } catch (error) {
             console.error("Error exchanging tokens:", error);
             setErrorMessage("Failed to exchange tokens. Please try again.");
@@ -196,7 +198,8 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     };
 
     return (
-        <Container style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop:'20px' }}>
+        <Container style={{ padding: '24px'}}>
+
             <Snackbar
                 open={errorMessage !== null}
                 autoHideDuration={6000}
@@ -205,6 +208,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
             />
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
+
                     <Card style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop:'20px' }}>
 
                         <CardHeader title={contractMetadata?.name} />
@@ -249,6 +253,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                         </NativeSelect>
                                     </FormControl>
 
+
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
 
                                         <InputLabel id="quantitySelect-label">Quantity</InputLabel>
@@ -287,7 +292,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
 
-                    <Card style={{ paddingLeft: '20px', paddingRight: '20px', paddingTop:'20px' }}>
+                    <Card style={{ padding: '24px'}}>
                         <CardHeader title="Cart"
                                     subheader="Add 100 tokens for the claim rewards in your cart." />
                         <CardContent>
