@@ -1,40 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-    useAddress,
-    useContract,
-    useOwnedNFTs,
-    MediaRenderer,
-    useNFT,
-} from '@thirdweb-dev/react';
+import { useAddress, useContract, useOwnedNFTs, MediaRenderer, useNFT} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import {
-    Container,
-    Grid,
-    Card,
-    CardHeader,
-    CardContent,
-    CardMedia,
-    Typography,
-    Button,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    CardActionArea,
-    CardActions,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    NativeSelect,
-    Snackbar,
-    IconButton,
-} from '@mui/material';
+import { Card, CardHeader, CardMedia, CardActionArea, CardContent, CardActions, Grid, Typography, FormControl, NativeSelect, InputLabel, Select, MenuItem, Button, Container, Snackbar, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
 import type { NextPage } from "next";
 import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 
 type ContractMetadata = {
@@ -60,8 +30,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         id: number;
         quantity: number;
     }
-
-
 
     const address = useAddress();
     const { contract: rewardContract } = useContract(REWARD_CONTRACT);
@@ -236,7 +204,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
 
                                     <CardContent>
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-
                                         <NativeSelect
                                             inputProps={{
                                                 id: "nftSelect"
@@ -249,15 +216,12 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                                     {option.label}
                                                 </option>
                                             ))}
-
                                         </NativeSelect>
                                     </FormControl>
 
 
                                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-
                                         <InputLabel id="quantitySelect-label">Quantity</InputLabel>
-
                                         <Select
                                             labelId="quantitySelect-label"
                                             id="quantitySelect"
@@ -270,7 +234,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                                                 </MenuItem>
                                             ))}
                                         </Select>
-
                                     </FormControl>
                                     </CardContent>
 

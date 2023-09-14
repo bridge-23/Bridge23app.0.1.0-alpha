@@ -1,16 +1,20 @@
+//../src/components/Navbar.tsx
 import React, { useState } from 'react';
-import { useAddress, useLogin, Web3Button, ConnectWallet } from '@thirdweb-dev/react';
-import { AppBar, Toolbar, IconButton, Typography, Button, Menu, MenuItem, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
+import { useAddress, ConnectWallet, useAuth } from '@thirdweb-dev/react';
+import { AppBar, Toolbar, IconButton, Typography, Button, Box, CardActions, Fab} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Fab from '@mui/material/Fab';
 import styled from 'styled-components';
-import Link from 'next/link';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
+
+import initializeFirebaseClient from "../lib/initFirebase";
+import { getDoc, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { signInWithCustomToken, signOut } from "firebase/auth";
+import useFirebaseUser from "../lib/useFirebaseUser";
+
+import Link from 'next/link';
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -23,48 +27,40 @@ const StyledFab = styled(Fab)({
 
 export default function Navbar() {
     const address = useAddress();
-    const { login, isLoading } = useLogin();
-    const [isNavOpen, setIsNavOpen] = useState(false);
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const { user } = useFirebaseUser();
+    const {auth, db} = initializeFirebaseClient();
 
-    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-        setIsNavOpen(!isNavOpen);
+    console.log("Address:", address);
+    console.log("User:", user);
+
+    const logUserAction = async (action: 'login' | 'logout', uid: string) => {
+        try {
+            const logRef = doc(db, 'logins', uid);
+            await setDoc(logRef, {
+                action: action,
+                timestamp: serverTimestamp()
+            }, { merge: true });
+        } catch (error) {
+            console.error("Error logging user action:", error);
+        }
     };
 
-    const handleMenuClose = () => {
-        setAnchorEl(null);
-        setIsNavOpen(false);
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            if (user && user.uid) {
+                logUserAction('logout', user.uid);
+                console.log(`User with ID: ${user.uid} has logged out at ${new Date().toISOString()}`);
+            }
+        } catch (error) {
+            console.error("Error during sign out:", error);
+        }
     };
 
     return (
         <>
             <AppBar position="static" sx={{ display: { xs: 'none', sm: 'block' } }}>
                 <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleMenuOpen}>
-                        <MenuIcon />
-                    </IconButton>
-                    <Menu anchorEl={anchorEl} open={isNavOpen} onClose={handleMenuClose}>
-                        <MenuItem onClick={handleMenuClose}>
-                            <Link href="/">
-                                <Typography style={{ color: 'black' }}>Home</Typography>
-                            </Link>
-                        </MenuItem>
-                        {address && (
-                            <MenuItem onClick={handleMenuClose}>
-                                <Link href={`/profile/${address}`}>
-                                    <Typography style={{ color: 'black' }}>Profile</Typography>
-                                </Link>
-                            </MenuItem>
-                        )}
-                        {address && (
-                            <MenuItem onClick={handleMenuClose}>
-                                <Link href={`/claim/${address}`}>
-                                    <Typography style={{ color: 'black' }}>Claim Rewards</Typography>
-                                </Link>
-                            </MenuItem>
-                        )}
-                    </Menu>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Bridge 23
                     </Typography>
@@ -74,28 +70,45 @@ export default function Navbar() {
                                 <Typography>Home</Typography>
                             </Link>
                         </Button>
-                        {address && (
+
+                        {user && (
                             <Button color="inherit">
                                 <Link href={`/profile/${address}`}>
                                     <Typography>Profile</Typography>
                                 </Link>
                             </Button>
                         )}
-                        {address && (
+                        {user && (
                             <Button color="inherit">
                                 <Link href={`/claim/${address}`}>
                                     <Typography>Claim Rewards</Typography>
                                 </Link>
                             </Button>
                         )}
+                        {user && (
+                            <Button color="inherit">
+                                <Link href={`/chat`}>
+                                    <Typography>Chat</Typography>
+                                </Link>
+                            </Button>
+                        )}
                     </Box>
 
-                    <ConnectWallet theme={"light"}/>
-
+                    { user && (
+                        <CardActions>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={handleSignOut}
+                            >
+                                Sign Out
+                            </Button>
+                        </CardActions>
+                    )}
                 </Toolbar>
             </AppBar>
 
-            <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0, display: { xs: 'block', sm: 'none' } }}>
+            <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none' } }}>
 
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
@@ -105,27 +118,29 @@ export default function Navbar() {
                         </IconButton>
                     </Link>
 
-                    {address && (
-                    <Link href={`/profile/${address}`}>
-                        <IconButton color="inherit" aria-label="open drawer">
-                            <AccountBalanceWalletIcon />
-                        </IconButton>
-                    </Link>
+                    {user && (
+                        <Link href={`/profile/${address}`}>
+                            <IconButton color="inherit" aria-label="open drawer">
+                                <AccountBalanceWalletIcon />
+                            </IconButton>
+                        </Link>
                     )}
 
-                    {address && (
-                     <StyledFab color="secondary" aria-label="add">
-                        <CenterFocusStrongIcon />
-                     </StyledFab>
+                    {user && (
+                        <StyledFab color="secondary" aria-label="add">
+                            <a href="/chat" target="_blank" rel="noopener noreferrer">
+                                <CenterFocusStrongIcon />
+                            </a>
+                        </StyledFab>
                     )}
 
-                    {address && (
-                    <Link href={`/claim/${address}`}>
-                        <IconButton color="inherit" aria-label="open drawer">
-                            <CardGiftcardIcon />
-                        </IconButton>
-                    </Link>
-                        )}
+                    {user && (
+                        <Link href={`/claim/${address}`}>
+                            <IconButton color="inherit" aria-label="open drawer">
+                                <CardGiftcardIcon />
+                            </IconButton>
+                        </Link>
+                    )}
 
                     <IconButton color="inherit">
                         <SearchIcon />
@@ -144,13 +159,6 @@ export default function Navbar() {
 
 
 
-{/*                <div className={styles.navLinks}>
-                    {address && (
-                        <Link href={'/rewards'}>
-                            <p>My rewards</p>
-                        </Link>
-                    )}
-                </div>*/}
 
 
 

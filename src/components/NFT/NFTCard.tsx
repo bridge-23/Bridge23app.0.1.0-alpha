@@ -2,11 +2,11 @@ import React from 'react';
 import { ThirdwebNftMedia, useNFTBalance, useAddress, useContract } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
 import { makeStyles } from '@mui/styles';
-import { Badge, Card, CardContent, Typography, CircularProgress, Skeleton } from '@mui/material';
+import { Badge, Card, CardContent, Typography, Skeleton } from '@mui/material';
 
 const useStyles = makeStyles({
     root: {
-        minWidth: 275,
+        minWidth: 225,
     },
     title: {
         fontSize: 16, // Increase the font size for the title
@@ -34,7 +34,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
     const classes = useStyles();
     const address = useAddress();
     const { contract } = useContract(REWARD_CONTRACT);
-    const { data: ownerBalance, isLoading, error } = useNFTBalance(contract, address, metadata.id);
+    const { data: ownerBalance, isLoading, error: _error } = useNFTBalance(contract, address, metadata.id);
 
     const truncateName = (name: string | number | null | undefined): string => {
         if (typeof name === 'string') {
@@ -48,19 +48,19 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
     };
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
-            <CardContent>
+        <Card sx={{ maxWidth: 300, border: '2px solid black'}}>
+            {isLoading ? (
+                <Skeleton variant="rectangular" width={300} height={300} />
+            ) : (
                 <Badge
                     anchorOrigin={{
                         horizontal: 'left',
                         vertical: 'top',
                     }}
                     badgeContent={
-                        isLoading ? (
-                            <Skeleton variant="text" width={40} height={24} />
-                        ) : (
-                            <Typography variant="h5">{ownerBalance?.toString()}</Typography>
-                        )
+                        <Typography variant="h5">
+                            {ownerBalance?.toString()}
+                        </Typography>
                     }
                     color="secondary"
                     sx={{
@@ -68,19 +68,21 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
                             backgroundColor: 'grey',
                             color: 'white',
                             fontSize: '1.5em',
-                            top: '10px',
-                            left: '10px',
+                            top: '15px',
+                            left: '15px',
                         },
                     }}
                 >
-                    {isLoading ? (
-                        <Skeleton variant="rectangular" width={200} height={200} />
-                    ) : (
-                        <ThirdwebNftMedia metadata={metadata} />
-                    )}
+                    <div style={{ height: '300', width: '300', borderBottom: '2px solid black'  }}>
+                        <ThirdwebNftMedia
+                            metadata={metadata}
+                            /*height={200}*/
+                        />
+                    </div>
                 </Badge>
-            </CardContent>
-        <CardContent>
+            )}
+
+            <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     {isLoading ? (
                         <Skeleton variant="text" width={100} />
@@ -88,8 +90,8 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
                         truncateName(metadata.name)
                     )}
                 </Typography>
-        </CardContent>
-        <CardContent>
+            </CardContent>
+            <CardContent>
                 <Typography className={classes.subtitle} color="textSecondary">
                     Token id: {metadata.id}
                 </Typography>
@@ -97,6 +99,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ metadata }) => {
         </Card>
     );
 };
+
 
 export default NFTCard;
 

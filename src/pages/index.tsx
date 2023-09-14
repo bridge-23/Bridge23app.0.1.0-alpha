@@ -1,39 +1,104 @@
+//..src/pages/index.tsx
 import { NextPage } from "next";
-import { Container, Typography, Grid, Card, Button } from "@mui/material";
-import { ConnectWallet } from "@thirdweb-dev/react";
-import React from "react";
+import React, { useState } from "react";
+import {Container, Typography, Grid, Card, Button, CardContent, CircularProgress, Modal} from "@mui/material";
+import {useContract, useTotalCirculatingSupply} from "@thirdweb-dev/react";
+import { REWARD_CONTRACT } from '../consts/parameters';
+import LoginComponent from "../components/LoginComponent";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles({
+    modalContent: {
+        position: 'relative',
+        width: '80vw',
+        maxHeight: '80vh',
+        overflowY: 'auto',
+        padding: '20px',
+        backgroundColor: 'white',
+    },
+    closeButton: {
+        position: 'absolute',
+        bottom: '10px',
+        right: '10px',
+    },
+});
 
 const Home: NextPage = () => {
+    const { contract } = useContract(REWARD_CONTRACT);
+    const { data, isLoading, error } = useTotalCirculatingSupply(contract, 0);
+    const classes = useStyles();
+    const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+
+    const handleOpen = () => {
+        setLoginModalOpen(true);
+    };
+
+    const handleClose = () => {
+        setLoginModalOpen(false);
+    };
+
     return (
         <Container style={{ padding: '24px' }}>
+
             <Typography variant="h3" align="center">
-                JOIN TODAY - MAKE YOUR SPEND COUNT!
+                JOIN TODAY + MAKE YOUR SPEND COUNT
+            </Typography>
+            <Typography variant="h6" gutterBottom align="center">
+                Total Claim rewards
             </Typography>
 
-            <Typography variant="body1">
-                Bridge 23 is a next-gen POS system for an upgraded customer experience. It is a blockchain-based POS system that allows merchants to accept crypto payments and rewards customers with crypto.
-            </Typography>
+            {isLoading && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </div>
+            )}
+
+            {/*                            {error && (
+                                <p style={{ color: 'red' }}>
+                                    Error: {error.message}
+                                </p>
+                            )}*/}
+
+            {data && !isLoading && (
+                <Typography variant="h4" align="center">
+                    {data.toString()}
+                </Typography>
+            )}
 
             <Grid container justifyContent="center" style={{ marginTop: '24px' }}>
                 <Card style={{ padding: '24px' }}>
+
                     <Grid container direction="column" alignItems="center">
                         <Typography variant="h5" align="center">
-                            Connect Your Wallet
+                            Connect Your Wallet for get your Bridge id!
                         </Typography>
-                        <Typography variant="body2" align="center" style={{ marginBottom: '16px' }}>
-                            Sign in to start using Bridge 23 and manage your crypto assets.
-                        </Typography>
-                        <ConnectWallet theme="light" />
+
+                        <CardContent>
+
+                                <Button variant="outlined" color="primary" onClick={handleOpen}>
+                                    Join
+                                </Button>
+
+                            <Modal
+                                open={isLoginModalOpen}
+                                onClose={handleClose}
+                                aria-labelledby="login-modal-title"
+                                aria-describedby="login-modal-description"
+                            >
+                                <div className={classes.modalContent}>
+                                        <LoginComponent />
+                                </div>
+                            </Modal>
+
+                        </CardContent>
                     </Grid>
                 </Card>
-            </Grid>
 
-            {/* Optional: Add more content or sections here */}
+            </Grid>
         </Container>
     );
 };
 
 export default Home;
-
 
 
