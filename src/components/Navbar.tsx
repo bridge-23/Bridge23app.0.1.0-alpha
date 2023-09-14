@@ -94,7 +94,7 @@ export default function Navbar() {
                         )}
                     </Box>
 
-                    { user && (
+                    { user ? (
                         <CardActions>
                             <Button
                                 variant="contained"
@@ -104,6 +104,8 @@ export default function Navbar() {
                                 Sign Out
                             </Button>
                         </CardActions>
+                    ) : (
+                        <ConnectWallet theme={"light"}/>
                     )}
                 </Toolbar>
             </AppBar>

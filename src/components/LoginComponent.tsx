@@ -95,25 +95,28 @@ export default function LoginComponent() {
                     Sign in to start using Bridge 23 and manage your crypto assets.
                 </Typography>
 
-                    <CardActions>
-                        {!user ? (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => signIn()}
-                            >
-                                Sign in with Wallet
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleSignOut}
-                            >
-                                Sign Out
-                            </Button>
-                        )}
-                    </CardActions>
+                <CardActions>
+                    {!user ? (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => signIn()}
+                        >
+                            Sign in with Wallet
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleSignOut}
+                        >
+                            Sign Out
+                        </Button>
+                    )}
+                </CardActions>
+
+                <ConnectWallet theme={"light"} />
+
             </Grid>
         </Card>
     );
