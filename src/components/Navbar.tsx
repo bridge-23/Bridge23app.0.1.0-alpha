@@ -1,7 +1,7 @@
 //../src/components/Navbar.tsx
 import React, { useState } from 'react';
 import { useAddress, ConnectWallet, useAuth } from '@thirdweb-dev/react';
-import { AppBar, Toolbar, IconButton, Typography, Button, Box, CardActions, Fab} from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Button, Box, Fab} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import styled from 'styled-components';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';

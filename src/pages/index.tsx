@@ -1,12 +1,14 @@
 //..src/pages/index.tsx
 import { NextPage } from "next";
-import {Container, Typography, Grid, Card, Button, CardContent, CircularProgress, Modal} from "@mui/material";
+import {Container, Typography, Grid, Card, Button, CardContent, CircularProgress} from "@mui/material";
 import {useContract, useTotalCirculatingSupply} from "@thirdweb-dev/react";
 import { REWARD_CONTRACT } from '../consts/parameters';
 import { useRouter } from 'next/router';
+import useFirebaseUser from "../lib/useFirebaseUser";
 
 const Home: NextPage = () => {
     const router = useRouter();
+    const { user } = useFirebaseUser();
 
     const goToLoginPage = () => {
         router.push('/login');  // assuming your login page route is '/login'
@@ -43,8 +45,8 @@ const Home: NextPage = () => {
             )}
 
             <Grid container justifyContent="center" style={{ marginTop: '24px' }}>
+                {!user && (
                 <Card style={{ padding: '24px' }}>
-
                     <Grid container direction="column" alignItems="center">
                         <Typography variant="h5" align="center">
                             Connect Your Wallet for get your Bridge id!
@@ -58,7 +60,7 @@ const Home: NextPage = () => {
                         </CardContent>
                     </Grid>
                 </Card>
-
+                )}
             </Grid>
         </Container>
     );

@@ -9,6 +9,8 @@ type UserProfileProps = {
 };
 
 const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs, truncateAddress }) => {
+    const rewards = (totalNFTs / 100) * 5;  // Calculate the rewards
+
     return (
         <Card>
             <CardHeader
@@ -26,6 +28,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs, truncateA
                 </Typography>
                 <Typography variant="h6">
                     Total NFTs Owned: {totalNFTs}
+                </Typography>
+                <Typography variant="h6">
+                    Available Rewards: {rewards} $ {/* Display the calculated rewards */}
                 </Typography>
                 {/* You can add more profile features here */}
             </CardContent>
