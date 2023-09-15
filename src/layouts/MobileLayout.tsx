@@ -1,15 +1,18 @@
-//../src/layouts/MobileLayout.tsx
 import React, { useState } from 'react';
 import ChannelList from '@sendbird/uikit-react/ChannelList';
 import Channel from '@sendbird/uikit-react/Channel';
-import {GroupChannel} from "@sendbird/chat/groupChannel";
+import ChannelSettings from '@sendbird/uikit-react/ChannelSettings';
+import { ChannelSettingsProvider } from '@sendbird/uikit-react/ChannelSettings/context';
+import { GroupChannel } from "@sendbird/chat/groupChannel";
+import EditUserProfileUI from '@sendbird/uikit-react/EditUserProfile/components/EditUserProfileUI';
 
-const PANELS  = {
+const PANELS = {
     CHANNEL_LIST: 'CHANNEL_LIST',
-    CHANNEL:'CHANNEL',
-    CHANNEL_SETTINGS:'CHANNEL_SETTINGS',
-    MESSAGE_SEARCH:'MESSAGE_SEARCH',
-}
+    CHANNEL: 'CHANNEL',
+    CHANNEL_SETTINGS: 'CHANNEL_SETTINGS',
+    MESSAGE_SEARCH: 'MESSAGE_SEARCH',
+    EDIT_USER_PROFILE: 'EDIT_USER_PROFILE',
+};
 
 const MobileLayout: React.FC = () => {
     const [panel, setPanel] = useState(PANELS.CHANNEL_LIST);
@@ -39,12 +42,29 @@ const MobileLayout: React.FC = () => {
                 />
             }
             {
-                panel === PANELS.CHANNEL_SETTINGS && (
-                    <>Channel Settings...</>
-                )
+                panel === PANELS.CHANNEL_SETTINGS &&
+                <ChannelSettingsProvider channelUrl={currentChannel?.url || ''}>
+                    <ChannelSettings
+                        channelUrl={currentChannel?.url || ''}
+                        onCloseClick={() => {
+                            setPanel(PANELS.CHANNEL_LIST);
+                        }}
+                    />
+                </ChannelSettingsProvider>
+            }
+            {
+                panel === PANELS.EDIT_USER_PROFILE &&
+                <div>
+                    <button onClick={() => setPanel(PANELS.CHANNEL_LIST)}>Back to Channel List</button>
+                    <EditUserProfileUI
+                        // Other props and logic for the EditUserProfileUI.
+                    />
+                </div>
             }
         </div>
-    )
+    );
 }
 
 export default MobileLayout;
+
+
