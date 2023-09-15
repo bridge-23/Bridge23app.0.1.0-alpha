@@ -1,7 +1,6 @@
 // src/pages/chat/index.tsx
 import { useRouter } from 'next/router';
 import '@sendbird/uikit-react/dist/index.css';
-import SendbirdApp from "@sendbird/uikit-react/App";
 import useFirebaseUser from "../../lib/useFirebaseUser";
 import SendbirdProvider from "@sendbird/uikit-react/SendbirdProvider";
 import {useMediaQuery} from "@mui/material";
@@ -25,8 +24,9 @@ export default function Chat() {
         <SendbirdProvider appId={APP_ID} userId={user.uid} breakpoint={matches}>
             <div> {/* This wrapping div ensures there's only one child for SendbirdProvider */}
                 <main>
-                    {matches ? <MobileLayout /> : <DesktopLayout />}
-
+                    {matches
+                        ? <MobileLayout />
+                        : <DesktopLayout />}
                 </main>
             </div>
         </SendbirdProvider>

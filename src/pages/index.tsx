@@ -1,41 +1,18 @@
 //..src/pages/index.tsx
 import { NextPage } from "next";
-import React, { useState } from "react";
 import {Container, Typography, Grid, Card, Button, CardContent, CircularProgress, Modal} from "@mui/material";
 import {useContract, useTotalCirculatingSupply} from "@thirdweb-dev/react";
 import { REWARD_CONTRACT } from '../consts/parameters';
-import LoginComponent from "../components/LoginComponent";
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({
-    modalContent: {
-        position: 'relative',
-        width: '80vw',
-        maxHeight: '80vh',
-        overflowY: 'auto',
-        padding: '20px',
-        backgroundColor: 'white',
-    },
-    closeButton: {
-        position: 'absolute',
-        bottom: '10px',
-        right: '10px',
-    },
-});
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
+    const router = useRouter();
+
+    const goToLoginPage = () => {
+        router.push('/login');  // assuming your login page route is '/login'
+    }
     const { contract } = useContract(REWARD_CONTRACT);
     const { data, isLoading, error } = useTotalCirculatingSupply(contract, 0);
-    const classes = useStyles();
-    const [isLoginModalOpen, setLoginModalOpen] = useState(false);
-
-    const handleOpen = () => {
-        setLoginModalOpen(true);
-    };
-
-    const handleClose = () => {
-        setLoginModalOpen(false);
-    };
 
     return (
         <Container style={{ padding: '24px' }}>
@@ -74,22 +51,10 @@ const Home: NextPage = () => {
                         </Typography>
 
                         <CardContent>
-
-                                <Button variant="outlined" color="primary" onClick={handleOpen}>
-                                    Join
-                                </Button>
-
-                            <Modal
-                                open={isLoginModalOpen}
-                                onClose={handleClose}
-                                aria-labelledby="login-modal-title"
-                                aria-describedby="login-modal-description"
-                            >
-                                <div className={classes.modalContent}>
-                                        <LoginComponent />
-                                </div>
-                            </Modal>
-
+                            <Button variant="outlined" color="primary" onClick={goToLoginPage}>
+                                Join
+                            </Button>
+                            {/* ... rest of your component */}
                         </CardContent>
                     </Grid>
                 </Card>

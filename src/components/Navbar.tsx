@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useAddress, ConnectWallet, useAuth } from '@thirdweb-dev/react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Box, CardActions, Fab} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import LogoutIcon from '@mui/icons-material/Logout';
 import styled from 'styled-components';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import HomeIcon from '@mui/icons-material/Home';
@@ -40,6 +41,7 @@ export default function Navbar() {
                 action: action,
                 timestamp: serverTimestamp()
             }, { merge: true });
+            router.push('/');
         } catch (error) {
             console.error("Error logging user action:", error);
         }
@@ -95,19 +97,16 @@ export default function Navbar() {
                     </Box>
 
                     { user ? (
-                        <CardActions>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={handleSignOut}
-                            >
-                                Sign Out
-                            </Button>
-                        </CardActions>
-                    ) : (
-                        <ConnectWallet theme={"light"}/>
-                    )}
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleSignOut}
+                        >
+                            Sign Out
+                        </Button>
+                    ) : null }
                 </Toolbar>
+
             </AppBar>
 
             <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none' } }}>
@@ -116,14 +115,14 @@ export default function Navbar() {
 
                     <Link href="/">
                         <IconButton color="inherit" aria-label="open drawer">
-                            <HomeIcon />
+                            <HomeIcon fontSize="large"/>
                         </IconButton>
                     </Link>
 
                     {user && (
                         <Link href={`/profile/${address}`}>
                             <IconButton color="inherit" aria-label="open drawer">
-                                <AccountBalanceWalletIcon />
+                                <AccountBalanceWalletIcon fontSize="large" />
                             </IconButton>
                         </Link>
                     )}
@@ -131,7 +130,7 @@ export default function Navbar() {
                     {user && (
                         <StyledFab color="secondary" aria-label="add">
                             <a href="/chat" target="_blank" rel="noopener noreferrer">
-                                <CenterFocusStrongIcon />
+                                <CenterFocusStrongIcon fontSize="large"/>
                             </a>
                         </StyledFab>
                     )}
@@ -139,14 +138,16 @@ export default function Navbar() {
                     {user && (
                         <Link href={`/claim/${address}`}>
                             <IconButton color="inherit" aria-label="open drawer">
-                                <CardGiftcardIcon />
+                                <CardGiftcardIcon fontSize="large"/>
                             </IconButton>
                         </Link>
                     )}
 
-                    <IconButton color="inherit">
-                        <SearchIcon />
-                    </IconButton>
+                    { user && (
+                        <IconButton color="inherit" onClick={handleSignOut}>
+                            <LogoutIcon fontSize="large" />
+                        </IconButton>
+                    )}
 
                 </Toolbar>
             </AppBar>

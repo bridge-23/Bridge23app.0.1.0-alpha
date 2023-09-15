@@ -2,7 +2,11 @@
 import '../styles/globals.css'
 import type {AppProps} from "next/app";
 import React from 'react';
-import {ThirdwebProvider} from "@thirdweb-dev/react";
+import {  ThirdwebProvider,
+    ConnectWallet,
+    metamaskWallet,
+    coinbaseWallet,
+    walletConnect,} from "@thirdweb-dev/react";
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
@@ -32,13 +36,18 @@ function MyApp({Component, pageProps}: AppProps) {
     return (
         <ThemeProvider theme={theme}>
 
-            <ThirdwebProvider authConfig={{
+            <ThirdwebProvider
+                activeChain={activeChain}
+                clientId="a438ed0706431cf7f53ae4cdbee427a7"
+                supportedWallets={[
+                    metamaskWallet(),
+                    coinbaseWallet(),
+                    walletConnect(),
+                ]}
+                authConfig={{
                 authUrl: '/api/auth',
                 domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
-            }}
-                              activeChain={activeChain}
-                              clientId="a438ed0706431cf7f53ae4cdbee427a7"
-            >
+            }} >
                 <Navbar/>
 
                     <Component {...pageProps} />

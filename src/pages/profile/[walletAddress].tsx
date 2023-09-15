@@ -3,7 +3,12 @@ import { useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
 import NFTCard from '../../components/NFT/NFTCard';
 import UserProfileComponent from "../../components/UserProfile";
-import { Container, Grid, Typography, Skeleton, Box } from '@mui/material';
+import { Container, Grid, Typography, Skeleton, Box,     Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Avatar, } from '@mui/material';
 import { NextPage } from "next";
 
 const Profile: NextPage = () => {
@@ -37,28 +42,49 @@ const Profile: NextPage = () => {
                     </Box>
 
                     <Grid container spacing={3}>
-                        {!isOwnedNFTsLoading ? (
-                            ownedNFTs?.length! > 0 ? (
-                                ownedNFTs?.map((nft) => (
-                                    <Grid item xs={12} sm={6} md={4} key={nft.metadata.id}>
-                                        <NFTCard
-                                            metadata={{
-                                                ...nft.metadata,
-                                                quantityOwned: nft.quantityOwned ? Number(nft.quantityOwned) : 0,
-                                            }}
-                                        />
-                                    </Grid>
-                                ))
-                            ) : (
-                                <Typography>No NFTs owned.</Typography>
-                            )
-                        ) : (
-                            [1, 2, 3].map((index) => (
-                                <Grid item xs={12} sm={6} md={4} key={index}>
-                                    <Skeleton variant="rectangular" width={345} height={200} />
-                                </Grid>
-                            ))
-                        )}
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Item</TableCell>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Value</TableCell>
+                                    {/* ... Add more headers as needed ... */}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {!isOwnedNFTsLoading ? (
+                                    ownedNFTs?.length! > 0 ? (
+                                        ownedNFTs?.map((nft) => (
+                                            <TableRow key={nft.metadata.id}>
+                                                <TableCell>
+                                                    <Avatar
+                                                        src={nft.metadata.image || ''}
+                                                        variant="square"
+                                                        sx={{ width: 50, height: 50 }}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>{nft.metadata.name}</TableCell>
+                                                <TableCell>{nft.quantityOwned}</TableCell>
+                                                {/* ... Add more cells for other metadata ... */}
+                                            </TableRow>
+                                        ))
+                                    ) : (
+                                        <TableRow>
+                                            <TableCell colSpan={3} align="center">
+                                                No NFTs owned.
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={3} align="center">
+                                            <Skeleton variant="rectangular" width="100%" height={50} />
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+
                     </Grid>
                 </div>
             ) : (

@@ -1,4 +1,5 @@
-import {Button, CardActions, Typography, Card, Grid, Modal} from "@mui/material";
+//..src/components/LoginComponent.tsx
+import {Button, Typography, Card, Grid} from "@mui/material";
 import {ConnectWallet, useAddress, useAuth} from "@thirdweb-dev/react";
 import React from "react";
 import {signInWithCustomToken, signOut} from "firebase/auth";
@@ -46,7 +47,7 @@ export default function LoginComponent() {
             }
 
             if (user && user.uid) {
-                logUserAction('login', user.uid);
+                await logUserAction('login', user.uid);
                 console.log(`User with ID: ${user.uid} has logged in at ${new Date().toISOString()}`);
                 // Redirect to profile page after successful login
                 console.log("Redirecting to profile...");
@@ -74,7 +75,7 @@ export default function LoginComponent() {
         try {
             await signOut(auth);
             if (user && user.uid) {
-                logUserAction('logout', user.uid);
+                await logUserAction('logout', user.uid);
                 console.log(`User with ID: ${user.uid} has logged out at ${new Date().toISOString()}`);
             }
         } catch (error) {
@@ -95,27 +96,20 @@ export default function LoginComponent() {
                     Sign in to start using Bridge 23 and manage your crypto assets.
                 </Typography>
 
-                <CardActions>
-                    {!user ? (
+                <div>
+                    {address ? (
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => signIn()}
-                        >
-                            Sign in with Wallet
+                            onClick={() => signIn()}>Sign in with Wallet
                         </Button>
                     ) : (
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={handleSignOut}
-                        >
-                            Sign Out
-                        </Button>
+                        <ConnectWallet
+                            theme={"dark"}
+                            auth={{ loginOptional: false }}
+                        />
                     )}
-                </CardActions>
-
-                <ConnectWallet theme={"light"} />
+                </div>
 
             </Grid>
         </Card>
