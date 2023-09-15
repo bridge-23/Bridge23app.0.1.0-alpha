@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { useAddress, ConnectWallet, useAuth } from '@thirdweb-dev/react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Box, CardActions, Fab} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
 import styled from 'styled-components';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -14,6 +13,7 @@ import initializeFirebaseClient from "../lib/initFirebase";
 import { getDoc, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { signInWithCustomToken, signOut } from "firebase/auth";
 import useFirebaseUser from "../lib/useFirebaseUser";
+import { useRouter } from 'next/router';
 
 import Link from 'next/link';
 
@@ -30,6 +30,7 @@ export default function Navbar() {
     const address = useAddress();
     const { user } = useFirebaseUser();
     const {auth, db} = initializeFirebaseClient();
+    const router = useRouter();
 
     console.log("Address:", address);
     console.log("User:", user);
