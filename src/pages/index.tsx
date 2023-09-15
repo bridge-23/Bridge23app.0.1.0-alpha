@@ -15,6 +15,7 @@ const Home: NextPage = () => {
     }
     const { contract } = useContract(REWARD_CONTRACT);
     const { data, isLoading, error } = useTotalCirculatingSupply(contract, 0);
+    const displayData = data ? parseFloat(data.toString()) * 5 : null;
 
     return (
         <Container style={{ padding: '24px' }}>
@@ -40,7 +41,7 @@ const Home: NextPage = () => {
 
             {data && !isLoading && (
                 <Typography variant="h4" align="center">
-                    {data.toString()}
+                    ${displayData}
                 </Typography>
             )}
 

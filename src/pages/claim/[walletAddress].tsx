@@ -139,8 +139,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         setCartTotal(updatedCartTotal);
     };
 
-
-
     const exchangeTokensHandler = async () => {
         if (cart.length === 0) {
             return setErrorMessage('Your cart is empty.');

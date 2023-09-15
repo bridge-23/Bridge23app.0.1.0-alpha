@@ -23,8 +23,8 @@ export default function Chat() {
     return (
         <SendbirdProvider appId={APP_ID} userId={user.uid} breakpoint={matches}>
             <div> {/* This wrapping div ensures there's only one child for SendbirdProvider */}
-                <main>
-                    {matches
+                <main style={{ paddingBottom: '50px' }}>
+                {matches
                         ? <MobileLayout />
                         : <DesktopLayout />}
                 </main>

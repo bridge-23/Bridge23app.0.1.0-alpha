@@ -12,7 +12,7 @@ export const Head = () => {
             <title>Bridge 23</title>
 
             {/* Responsive Design */}
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
             {/* Description for SEO */}
             <meta name="description" content="Bridge 23 JOIN TODAY + MAKE YOUR SPEND COUNT" />

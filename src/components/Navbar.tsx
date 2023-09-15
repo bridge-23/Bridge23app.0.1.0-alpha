@@ -83,8 +83,8 @@ export default function Navbar() {
                         )}
                         {user && (
                             <Button color="inherit">
-                                <Link href={`/claim/${address}`}>
-                                    <Typography>Claim Rewards</Typography>
+                                <Link href={`/rewards`}>
+                                    <Typography>Rewards</Typography>
                                 </Link>
                             </Button>
                         )}
@@ -137,7 +137,7 @@ export default function Navbar() {
                     )}
 
                     {user && (
-                        <Link href={`/claim/${address}`}>
+                        <Link href={`/rewards`}>
                             <IconButton color="inherit" aria-label="open drawer">
                                 <CardGiftcardIcon fontSize="large"/>
                             </IconButton>
