@@ -1,21 +1,19 @@
 //../src/components/Navbar.tsx
-import React, { useState } from 'react';
-import { useAddress, ConnectWallet, useAuth } from '@thirdweb-dev/react';
+import React from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useAddress } from '@thirdweb-dev/react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Box, Fab} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import styled from 'styled-components';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
-
+import AddIcon from '@mui/icons-material/Add';
 import initializeFirebaseClient from "../lib/initFirebase";
-import { getDoc, doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { signInWithCustomToken, signOut } from "firebase/auth";
 import useFirebaseUser from "../lib/useFirebaseUser";
-import { useRouter } from 'next/router';
-
-import Link from 'next/link';
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -24,6 +22,10 @@ const StyledFab = styled(Fab)({
     left: 0,
     right: 0,
     margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+
 });
 
 export default function Navbar() {
@@ -112,7 +114,7 @@ export default function Navbar() {
 
             <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none'} }}>
 
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px' }}>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px', paddingLeft: '30px', paddingRight: '30px' }}>
 
                     <Link href="/">
                         <IconButton color="inherit" aria-label="open drawer">
@@ -130,8 +132,8 @@ export default function Navbar() {
 
                     {user && (
                         <StyledFab color="secondary" aria-label="add">
-                            <a href="/chat" target="_blank" rel="noopener noreferrer">
-                                <CenterFocusStrongIcon fontSize="large"/>
+                            <a href="/chat" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <AddIcon fontSize="large"/>
                             </a>
                         </StyledFab>
                     )}
