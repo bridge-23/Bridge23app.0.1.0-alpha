@@ -2,14 +2,15 @@
 import '../styles/globals.css'
 import type {AppProps} from "next/app";
 import React from 'react';
-import { ThirdwebProvider, ConnectWallet,coinbaseWallet, magicLink } from "@thirdweb-dev/react";
+import { ThirdwebProvider, magicLink } from "@thirdweb-dev/react";
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
 import theme from "../utils/theme";
-import SendbirdApp from "@sendbird/uikit-react";
+import SendbirdApp from "@sendbird/uikit-react"; //need for chat page to do fix
 import "@sendbird/uikit-react/dist/index.css";
 import initializeFirebaseClient from '../lib/initFirebase';
+import { Mumbai } from "@thirdweb-dev/chains";
 
 function MyApp({Component, pageProps}: AppProps) {
     useEffect(() => {
@@ -29,12 +30,12 @@ function MyApp({Component, pageProps}: AppProps) {
         <ThemeProvider theme={theme}>
 
             <ThirdwebProvider
+                supportedChains={[Mumbai]}
                 activeChain="mumbai"
                 clientId="a438ed0706431cf7f53ae4cdbee427a7"
                 supportedWallets={[
-                    coinbaseWallet(),
                     magicLink({
-                        apiKey: "pk_live_79B8B40D9ED4A257",
+                        apiKey:  process.env.NEXT_PUBLIC_MAGIC_API_KEY as string,
                         type: 'connect',
                     }),
                 ]}

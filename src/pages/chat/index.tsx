@@ -6,6 +6,7 @@ import SendbirdProvider from "@sendbird/uikit-react/SendbirdProvider";
 import {useMediaQuery} from "@mui/material";
 import MobileLayout from "../../layouts/MobileLayout";
 import DesktopLayout from "../../layouts/DesctopLayout"
+import LoadingComponent from '../../components/shared/LoadingComponent';
 
 export default function Chat() {
     const {user} = useFirebaseUser();
@@ -13,8 +14,8 @@ export default function Chat() {
     const APP_ID = process.env.NEXT_PUBLIC_SENDBIRD_APP_ID as string;
     const matches = useMediaQuery('(max-width:600px)');  // Assuming you've implemented useMediaQuery as per the guide.
 
-    if (!isReady || !user ) {
-        return <p>Loading...</p>;
+    if (!isReady || !user) {
+        return <LoadingComponent />;
     }
 
     // The function to initiate a connection to Sendbird
