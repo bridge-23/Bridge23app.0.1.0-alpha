@@ -1,20 +1,25 @@
 import React from 'react';
+import { NextPage } from "next";
 import { useAddress, useContract, useOwnedNFTs } from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import NFTCard from '../../components/NFT/NFTCard';
 import UserProfileComponent from "../../components/UserProfile";
-import { Container, Grid, Typography, Skeleton, Box,     Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Avatar, } from '@mui/material';
-import { NextPage } from "next";
+import { Container, Grid, Typography, Skeleton, Box, Table, TableBody, TableCell, TableHead, TableRow, Avatar } from '@mui/material';
+import LoadingComponent from '../../components/shared/LoadingComponent';
+import ErrorComponent from '../../components/shared/ErrorComponent';
+
 
 const Profile: NextPage = () => {
     const address = useAddress();
     const { contract } = useContract(REWARD_CONTRACT);
-    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading } = useOwnedNFTs(contract, address);
+
+    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,error: nftError } = useOwnedNFTs(contract, address);
+
+    if (isOwnedNFTsLoading) {
+        return <LoadingComponent />;
+    }
+    if (nftError) {
+        return <ErrorComponent message="Failed to fetch your NFTs!" />;
+    }
 
     const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
         if (nft.type === "ERC721") {

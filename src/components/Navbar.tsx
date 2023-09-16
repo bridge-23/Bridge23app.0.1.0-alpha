@@ -110,9 +110,9 @@ export default function Navbar() {
 
             </AppBar>
 
-            <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none' } }}>
+            <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none'} }}>
 
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '24px' }}>
 
                     <Link href="/">
                         <IconButton color="inherit" aria-label="open drawer">

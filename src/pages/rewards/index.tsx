@@ -1,8 +1,11 @@
+//..src/pages/rewards/index.tsx
 import {ThirdwebNftMedia, useAddress, useContract, useNFT} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import { ImageList, ImageListItem, ImageListItemBar, IconButton, Typography, ListSubheader, Container} from '@mui/material';
+import { ImageList, ImageListItem, ImageListItemBar, IconButton, Typography, ListSubheader, Container, LinearProgress, Box} from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import Alert from '@mui/lab/Alert';
 import { useRouter } from 'next/router';
+import React from "react";
 
 const RewardsPage: React.FC = () => {
     const router = useRouter();
@@ -13,11 +16,17 @@ const RewardsPage: React.FC = () => {
     const {data: nft1, isLoading: isLoading1, error: error1} = useNFT(rewardContract, 1);
 
     if (isLoading0 || isLoading1) {
-        return <Typography>Loading...</Typography>;
+        return <LinearProgress />;
     }
 
     if (error0 || error1) {
-        return <Typography>Error fetching the rewards: {JSON.stringify(error0 || error1)}</Typography>;
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <Alert severity="error">
+                    Error fetching the rewards: {JSON.stringify(error0 || error1)}
+                </Alert>
+            </Box>
+        );
     }
 
     const nfts = [nft0, nft1].filter(Boolean);

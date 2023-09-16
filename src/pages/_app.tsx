@@ -2,7 +2,7 @@
 import '../styles/globals.css'
 import type {AppProps} from "next/app";
 import React from 'react';
-import { ThirdwebProvider, ConnectWallet, metamaskWallet, coinbaseWallet, magicLink, useMagic} from "@thirdweb-dev/react";
+import { ThirdwebProvider, ConnectWallet,coinbaseWallet, magicLink } from "@thirdweb-dev/react";
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
