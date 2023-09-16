@@ -1,6 +1,5 @@
 import LoginComponent from '../../components/LoginComponent';
 
-
 function Index() {
     return (
         <div>

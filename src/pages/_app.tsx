@@ -2,11 +2,7 @@
 import '../styles/globals.css'
 import type {AppProps} from "next/app";
 import React from 'react';
-import {  ThirdwebProvider,
-    ConnectWallet,
-    metamaskWallet,
-    coinbaseWallet,
-    walletConnect,} from "@thirdweb-dev/react";
+import { ThirdwebProvider, ConnectWallet, metamaskWallet, coinbaseWallet, magicLink, useMagic} from "@thirdweb-dev/react";
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
@@ -14,9 +10,6 @@ import theme from "../utils/theme";
 import SendbirdApp from "@sendbird/uikit-react";
 import "@sendbird/uikit-react/dist/index.css";
 import initializeFirebaseClient from '../lib/initFirebase';
-
-const activeChain = "mumbai";
-
 
 function MyApp({Component, pageProps}: AppProps) {
     useEffect(() => {
@@ -27,7 +20,6 @@ function MyApp({Component, pageProps}: AppProps) {
         // For example, you can pass them as props to other components or use them in API calls.
         const { auth } = initializeFirebaseClient(); // Use the initialized Firebase auth
         const unsubscribe = auth.onAuthStateChanged(async user => {
-
         });
         // Cleanup the listener on component unmount
         return () => unsubscribe();
@@ -37,12 +29,14 @@ function MyApp({Component, pageProps}: AppProps) {
         <ThemeProvider theme={theme}>
 
             <ThirdwebProvider
-                activeChain={activeChain}
+                activeChain="mumbai"
                 clientId="a438ed0706431cf7f53ae4cdbee427a7"
                 supportedWallets={[
-                    metamaskWallet(),
                     coinbaseWallet(),
-                    walletConnect(),
+                    magicLink({
+                        apiKey: "pk_live_79B8B40D9ED4A257",
+                        type: 'connect',
+                    }),
                 ]}
                 authConfig={{
                 authUrl: '/api/auth',

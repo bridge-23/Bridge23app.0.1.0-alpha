@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 export default function LoginComponent() {
     const address = useAddress();
     const thirdwebAuth = useAuth();
-    const { user } = useFirebaseUser();
+    const {user} = useFirebaseUser();
     const {auth, db} = initializeFirebaseClient();
     const router = useRouter();
 
