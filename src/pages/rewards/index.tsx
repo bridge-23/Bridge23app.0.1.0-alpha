@@ -33,7 +33,7 @@ const RewardsPage: React.FC = () => {
     const nfts = [nft0, nft1, nft80].filter(Boolean);
 
     return (
-        <Container >
+        <div >
             <Typography variant="h3" align="center"> Rewards </Typography>
 
             <ImageList sx={{ width: 'max-content', height: 'max-content'}}>
@@ -65,7 +65,7 @@ const RewardsPage: React.FC = () => {
                     </ImageListItem>
                 ))}
             </ImageList>
-        </Container>
+        </div>
     );
 };
 

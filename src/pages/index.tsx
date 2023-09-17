@@ -8,12 +8,8 @@ import useFirebaseUser from "../lib/useFirebaseUser";
 import LoginComponent from "../components/LoginComponent";
 
 const Home: NextPage = () => {
-    const router = useRouter();
     const { user } = useFirebaseUser();
 
-    const goToLoginPage = () => {
-        router.push('/login');  // assuming your login page route is '/login'
-    }
     const { contract } = useContract(REWARD_CONTRACT);
     const { data, isLoading, error } = useTotalCirculatingSupply(contract, 0);
     const displayData = data ? parseFloat(data.toString()) * 5 : null;
