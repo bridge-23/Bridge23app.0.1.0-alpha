@@ -1,14 +1,15 @@
 import LoginComponent from '../../components/LoginComponent';
+import {Container} from "@mui/material";
 
 function Index() {
     return (
-        <div>
+        <Container>
             {/* ... any other components or content ... */}
 
             <LoginComponent />
 
             {/* ... any other components or content ... */}
-        </div>
+        </Container>
     );
 }
 

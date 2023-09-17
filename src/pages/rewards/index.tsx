@@ -39,6 +39,7 @@ const RewardsPage: React.FC = () => {
                 <ImageListItem key="Subheader" cols={2}>
                     <ListSubheader component="div">Cash back</ListSubheader>
                 </ImageListItem>
+
                 {nfts.map((nft: any) => (
                     <ImageListItem
                         key={nft.metadata.id}

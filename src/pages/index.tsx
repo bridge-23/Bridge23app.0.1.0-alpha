@@ -5,6 +5,7 @@ import {useContract, useTotalCirculatingSupply} from "@thirdweb-dev/react";
 import { REWARD_CONTRACT } from '../consts/parameters';
 import { useRouter } from 'next/router';
 import useFirebaseUser from "../lib/useFirebaseUser";
+import LoginComponent from "../components/LoginComponent";
 
 const Home: NextPage = () => {
     const router = useRouter();
@@ -21,7 +22,7 @@ const Home: NextPage = () => {
         <Container style={{ padding: '24px' }}>
 
             <Typography variant="h3" align="center">
-                JOIN TODAY + MAKE YOUR SPEND COUNT
+                JOIN TODAY + MAKE YOUR SPENDING COUNT
             </Typography>
             <Typography variant="h6" gutterBottom align="center">
                 Total Claim rewards
@@ -46,22 +47,9 @@ const Home: NextPage = () => {
             )}
 
             <Grid container justifyContent="center" style={{ marginTop: '24px' }}>
-                {!user && (
-                <Card style={{ padding: '24px' }}>
-                    <Grid container direction="column" alignItems="center">
-                        <Typography variant="h5" align="center">
-                            Connect Your Wallet for get your Bridge id!
-                        </Typography>
 
-                        <CardContent>
-                            <Button variant="outlined" color="primary" onClick={goToLoginPage}>
-                                Join
-                            </Button>
-                            {/* ... rest of your component */}
-                        </CardContent>
-                    </Grid>
-                </Card>
-                )}
+                {!user && (<LoginComponent />)}
+
             </Grid>
         </Container>
     );
