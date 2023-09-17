@@ -2,7 +2,7 @@
 import '../styles/globals.css'
 import type {AppProps} from "next/app";
 import React from 'react';
-import { ThirdwebProvider, magicLink,metamaskWallet, coinbaseWallet, smartWallet } from "@thirdweb-dev/react";
+import { ThirdwebProvider, magicLink,metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
@@ -36,12 +36,14 @@ function MyApp({Component, pageProps}: AppProps) {
                 supportedWallets={[
                     metamaskWallet(),
                     coinbaseWallet(),
+                    walletConnect(),
                     smartWallet({
                         factoryAddress: "0x47FF79DAF778598301eb0e75aEe0a0c1Ea208B2c",
                         gasless: true,
                         personalWallets: [
                             metamaskWallet(),
                             coinbaseWallet(),
+                            walletConnect(),
                         ],
                     }),
                     magicLink({
