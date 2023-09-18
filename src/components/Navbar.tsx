@@ -71,11 +71,18 @@ export default function Navbar() {
                     </Typography>
                     <Box sx={{ display: 'flex' }}>
                         <Button color="inherit">
+                            <Link href="/">
+                                <Typography>Home</Typography>
+                            </Link>
+                        </Button>
+
+                        {user && (
+                        <Button color="inherit">
                             <Link href={`/dashboard/${address}`}>
                                 <Typography>Dashboard</Typography>
                             </Link>
                         </Button>
-
+                        )}
                         {user && (
                             <Button color="inherit">
                                 <Link href={`/transactions/${address}`}>

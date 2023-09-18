@@ -1,6 +1,6 @@
 //..src/pages/index.tsx
 import { NextPage } from "next";
-import {Container, Typography, Grid, Card, Button, CardContent, CircularProgress, LinearProgress} from "@mui/material";
+import {Container, Typography, Grid, CircularProgress} from "@mui/material";
 import {useContract, useTotalCirculatingSupply} from "@thirdweb-dev/react";
 import { REWARD_CONTRACT } from '../consts/parameters';
 import { useRouter } from 'next/router';

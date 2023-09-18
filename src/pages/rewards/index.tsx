@@ -1,4 +1,4 @@
-//..src/pages/rewards/index.tsx
+//..src/pages/rewards/[walletAddress].tsx
 import {useAddress, useContract, useNFT} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
 import { ImageList, ImageListItem, ImageListItemBar,Avatar, IconButton, Typography, ListSubheader, Container, LinearProgress, Box} from '@mui/material';

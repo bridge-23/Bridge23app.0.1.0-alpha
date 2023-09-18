@@ -1,4 +1,4 @@
-// src/pages/chat/index.tsx
+// src/pages/chat/[walletAddress].tsx
 import { useRouter } from 'next/router';
 import '@sendbird/uikit-react/dist/index.css';
 import useFirebaseUser from "../../lib/useFirebaseUser";
