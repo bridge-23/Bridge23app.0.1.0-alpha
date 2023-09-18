@@ -1,10 +1,11 @@
 //..src/pages/rewards/index.tsx
-import {ThirdwebNftMedia, useAddress, useContract, useNFT} from '@thirdweb-dev/react';
+import {useAddress, useContract, useNFT} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import { ImageList, ImageListItem, ImageListItemBar, IconButton, Typography, ListSubheader, Container, LinearProgress, Box} from '@mui/material';
+import { ImageList, ImageListItem, ImageListItemBar,Avatar, IconButton, Typography, ListSubheader, Container, LinearProgress, Box} from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import Alert from '@mui/lab/Alert';
 import { useRouter } from 'next/router';
+
 import React from "react";
 
 const RewardsPage: React.FC = () => {
@@ -33,10 +34,10 @@ const RewardsPage: React.FC = () => {
     const nfts = [nft0, nft1, nft80].filter(Boolean);
 
     return (
-        <div >
+        <Container >
             <Typography variant="h3" align="center"> Rewards </Typography>
 
-            <ImageList sx={{ width: 'max-content', height: 'max-content'}}>
+            <ImageList sx={{ width: 500, height: 450, margin: '0 auto' }}>
                 <ImageListItem key="Subheader" cols={2}>
                     <ListSubheader component="div">Cash back</ListSubheader>
                 </ImageListItem>
@@ -44,12 +45,19 @@ const RewardsPage: React.FC = () => {
                 {nfts.map((nft: any) => (
                     <ImageListItem
                         key={nft.metadata.id}
-                        sx={{ width: 300, height: 300 }}
+                        sx={{ width: 200, height: 200 }}
                         onClick={() => {
                             router.push(`/claim/${address}`);
                         }}
                     >
-                        <ThirdwebNftMedia metadata={nft.metadata} />
+                            <Avatar
+                                src={`${nft.metadata.image}?w=248&fit=crop&auto=format`}
+                                srcSet={`${nft.metadata.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                                alt={nft.metadata.name}
+                                variant="square"
+                                sx={{ width: 200, height: 200 }}
+                            />
+
                         <ImageListItemBar
                             title={nft.metadata.name}
                             subtitle={`Token id: ${nft.metadata.id}`}
@@ -65,7 +73,7 @@ const RewardsPage: React.FC = () => {
                     </ImageListItem>
                 ))}
             </ImageList>
-        </div>
+        </Container>
     );
 };
 
