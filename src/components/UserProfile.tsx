@@ -32,7 +32,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs, truncateA
                 <Typography variant="h6">
                     Available Rewards: {rewards} $ {/* Display the calculated rewards */}
                 </Typography>
-                {/* You can add more profile features here */}
+                {/* You can add more transactions features here */}
             </CardContent>
         </Card>
     );

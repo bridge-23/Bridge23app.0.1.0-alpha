@@ -71,15 +71,15 @@ export default function Navbar() {
                     </Typography>
                     <Box sx={{ display: 'flex' }}>
                         <Button color="inherit">
-                            <Link href="/">
-                                <Typography>Home</Typography>
+                            <Link href={`/dashboard/${address}`}>
+                                <Typography>Dashboard</Typography>
                             </Link>
                         </Button>
 
                         {user && (
                             <Button color="inherit">
-                                <Link href={`/profile/${address}`}>
-                                    <Typography>Profile</Typography>
+                                <Link href={`/transactions/${address}`}>
+                                    <Typography>Transactions</Typography>
                                 </Link>
                             </Button>
                         )}
@@ -116,14 +116,14 @@ export default function Navbar() {
 
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px', paddingLeft: '30px', paddingRight: '30px' }}>
 
-                    <Link href="/">
+                    <Link href={`/dashboard/${address}`}>
                         <IconButton color="inherit" aria-label="open drawer">
                             <HomeIcon fontSize="large"/>
                         </IconButton>
                     </Link>
 
                     {user && (
-                        <Link href={`/profile/${address}`}>
+                        <Link href={`/transactions/${address}`}>
                             <IconButton color="inherit" aria-label="open drawer">
                                 <AccountBalanceWalletIcon fontSize="large" />
                             </IconButton>

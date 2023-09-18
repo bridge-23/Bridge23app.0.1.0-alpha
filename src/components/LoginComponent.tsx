@@ -49,9 +49,9 @@ export default function LoginComponent() {
             if (user && user.uid) {
                 await logUserAction('login', user.uid);
                 console.log(`User with ID: ${user.uid} has logged in at ${new Date().toISOString()}`);
-                // Redirect to profile page after successful login
-                console.log("Redirecting to profile...");
-                await router.push(`/profile/${address}`);
+                // Redirect to transactions page after successful login
+                console.log("Redirecting to transactions...");
+                await router.push(`/dashboard/${address}`);
             }
 
         } catch (error) {

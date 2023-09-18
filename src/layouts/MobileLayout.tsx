@@ -30,7 +30,7 @@ const MobileLayout: React.FC = () => {
     };
 
     const handleEditProfile = () => {
-        // Logic to handle when profile is edited.
+        // Logic to handle when transactions is edited.
     };
 
 
