@@ -10,6 +10,8 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import AddIcon from '@mui/icons-material/Add';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import FormatListBulletedSharpIcon from '@mui/icons-material/FormatListBulletedSharp';
 import initializeFirebaseClient from "../lib/initFirebase";
 import useFirebaseUser from "../lib/useFirebaseUser";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
@@ -34,8 +36,8 @@ export default function Navbar() {
     const {auth, db} = initializeFirebaseClient();
     const router = useRouter();
 
-    console.log("Address:", address);
-    console.log("User:", user);
+    // console.log("Address:", address);
+    // console.log("User:", user);
 
     const logUserAction = async (action: 'login' | 'logout', uid: string) => {
         try {
@@ -132,7 +134,7 @@ export default function Navbar() {
                     {user && (
                         <Link href={`/transactions/${address}`}>
                             <IconButton color="inherit" aria-label="open drawer">
-                                <AccountBalanceWalletIcon fontSize="large" />
+                                <FormatListBulletedSharpIcon fontSize="large" />
                             </IconButton>
                         </Link>
                     )}

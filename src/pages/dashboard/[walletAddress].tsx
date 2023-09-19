@@ -1,3 +1,4 @@
+//..src/pages/dashboard/[walletAddress].tsx
 import {Box, Container} from "@mui/material";
 import UserProfileComponent from "../../components/UserProfile";
 import React from "react";
@@ -35,15 +36,13 @@ const Dashboard: NextPage = () => {
     return (
         <Container style={{padding: '24px'}}>
             {address && (
-                <div>
-                    <Box marginBottom={4}>
+
                         <UserProfileComponent
                             address={address}
                             totalNFTs={totalNFTs}
                             truncateAddress={truncateAddress}
                         />
-                    </Box>
-                </div>
+
             )}
         </Container>
     );

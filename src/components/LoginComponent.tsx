@@ -48,9 +48,7 @@ export default function LoginComponent() {
 
             if (user && user.uid) {
                 await logUserAction('login', user.uid);
-                console.log(`User with ID: ${user.uid} has logged in at ${new Date().toISOString()}`);
                 // Redirect to transactions page after successful login
-                console.log("Redirecting to transactions...");
                 await router.push(`/dashboard/${address}`);
             }
 
@@ -70,18 +68,6 @@ export default function LoginComponent() {
             console.error("Error logging user action:", error);
         }
     };
-
-    // const handleSignOut = async () => {
-    //     try {
-    //         await signOut(auth);
-    //         if (user && user.uid) {
-    //             await logUserAction('logout', user.uid);
-    //             console.log(`User with ID: ${user.uid} has logged out at ${new Date().toISOString()}`);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error during sign out:", error);
-    //     }
-    // };
 
     return (
         <Card style={{ padding: '24px' }}>
