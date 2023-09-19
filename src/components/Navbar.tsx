@@ -94,7 +94,7 @@ export default function Navbar() {
                         )}
                         {user && (
                             <Button color="inherit">
-                                <Link href={`/rewards`}>
+                                <Link href={`/rewards/${address}`}>
                                     <Typography>Rewards</Typography>
                                 </Link>
                             </Button>
@@ -142,13 +142,13 @@ export default function Navbar() {
                     {user && (
                         <StyledFab color="secondary" aria-label="add">
                             <a href="/chat" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                <AddIcon fontSize="large"/>
+                                <ReceiptIcon fontSize="large"/>
                             </a>
                         </StyledFab>
                     )}
 
                     {user && (
-                        <Link href={`/rewards`}>
+                        <Link href={`/rewards/${address}`}>
                             <IconButton color="inherit" aria-label="open drawer">
                                 <CardGiftcardIcon fontSize="large"/>
                             </IconButton>

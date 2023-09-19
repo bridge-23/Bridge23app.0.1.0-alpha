@@ -7,28 +7,15 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 type UserProfileProps = {
     address: string | null;
     totalNFTs: number;
-    truncateAddress: (address: string) => string;
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs, truncateAddress }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
     const rewards = (totalNFTs / 100) * 5;  // Calculate the rewards
-
 
     return (
         <Card>
-            {/*            <CardHeader
-                avatar={
-                    <Avatar aria-label="profile" style={{ backgroundColor: '#1976d2' }}>
-                        P
-                    </Avatar>
-                }
-                title="Profile"
-                titleTypographyProps={{ variant: 'h3' }}
-            />*/}
             <CardContent>
-                {/*                <Typography variant="h6">
-                    Bridge id: {truncateAddress(address || '')}
-                </Typography>*/}
+
                 <Box display="flex" justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                     <div >
                         <Typography variant="subtitle1" color="textSecondary" align="center">
