@@ -32,10 +32,10 @@ const Home: NextPage = () => {
             sum += parseFloat(data4.toString()) * 100;
         }
         setTotalRewards(sum);
-        console.log("Data1:", data1?.toString());
+/*        console.log("Data1:", data1?.toString());
         console.log("Data2:", data2?.toString());
         console.log("Data3:", data3?.toString());
-        console.log("Data4:", data4?.toString());
+        console.log("Data4:", data4?.toString());*/
     }, [data1, data2, data3, data4]);
 
 
@@ -60,13 +60,6 @@ const Home: NextPage = () => {
                             <Typography variant="h5">
                                 120$
                             </Typography>
-{/*                            {totalRewards !== null ? (
-                                <Typography variant="h5">
-                                    ${totalRewards}
-                                </Typography>
-                            ) : (
-                                <LinearProgress />
-                            )}*/}
                             <Typography variant="body2">
                                 Your tokenized items generate rewards based on our unique algorithm.
                             </Typography>

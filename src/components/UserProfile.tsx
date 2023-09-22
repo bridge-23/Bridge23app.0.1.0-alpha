@@ -11,11 +11,20 @@ type UserProfileProps = {
 
 const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
     const REWARDS_MULTIPLIER = 0.05;
-    const BASE_NFT_COUNT = 100;
-    const rewards = (totalNFTs) * REWARDS_MULTIPLIER;
+
+    const rawRewards = totalNFTs * REWARDS_MULTIPLIER;
+    const rewards = rawRewards.toFixed(2);
 
     return (
-        <Card>
+        <Card
+            sx={{
+            perspective: '1000px',
+            width: '300px',
+            height: '200px',
+            cursor: 'pointer',
+            borderRadius: '18px'
+        }}
+        >
             <CardContent>
 
                 <Box display="flex" justifyContent="center" alignItems="center" style={{ height: '100%' }}>
