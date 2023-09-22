@@ -14,7 +14,6 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!address) {
         return res.status(401).json({ error });
     }
-
     // Initialize the Firebase Admin SDK.
     const { auth } = initializeFirebaseServer();
 

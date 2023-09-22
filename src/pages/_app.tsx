@@ -9,7 +9,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from "../utils/theme";
 import "@sendbird/uikit-react/dist/index.css";
 import initializeFirebaseClient from '../lib/initFirebase';
-import { Mumbai } from "@thirdweb-dev/chains";
+import { BaseGoerli } from "@thirdweb-dev/chains";
 import SendbirdApp from "@sendbird/uikit-react"; //need for chat page to do fix
 
 function MyApp({Component, pageProps}: AppProps) {
@@ -30,15 +30,15 @@ function MyApp({Component, pageProps}: AppProps) {
         <ThemeProvider theme={theme}>
 
             <ThirdwebProvider
-                supportedChains={[Mumbai]}
-                activeChain="mumbai"
+                supportedChains={[BaseGoerli]}
+                activeChain="base-goerli"
                 clientId="a438ed0706431cf7f53ae4cdbee427a7"
                 supportedWallets={[
                     metamaskWallet(),
                     coinbaseWallet(),
                     walletConnect(),
                     smartWallet({
-                        factoryAddress: "0x47FF79DAF778598301eb0e75aEe0a0c1Ea208B2c",
+                        factoryAddress: "0x0A116c4c47837Fc079839257C62f40b6891A71EB",
                         gasless: true,
                         personalWallets: [
                             metamaskWallet(),

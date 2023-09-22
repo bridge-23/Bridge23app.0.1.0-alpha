@@ -14,26 +14,26 @@ const RewardsPage: React.FC = () => {
     const address = useAddress();
     const {contract: rewardContract} = useContract(REWARD_CONTRACT);
 
-    const {data: nft0, isLoading: isLoading0, error: error0} = useNFT(rewardContract, 0);
     const {data: nft1, isLoading: isLoading1, error: error1} = useNFT(rewardContract, 1);
-    const {data: nft80, isLoading: isLoading80, error: error80} = useNFT(rewardContract, 80);
-    const {data: nft81, isLoading: isLoading81, error: error81} = useNFT(rewardContract, 81);
+    const {data: nft2, isLoading: isLoading2, error: error2} = useNFT(rewardContract, 2);
+    const {data: nft3, isLoading: isLoading3, error: error3} = useNFT(rewardContract, 3);
+    const {data: nft4, isLoading: isLoading4, error: error4} = useNFT(rewardContract, 4);
 
-    if (isLoading0 || isLoading1 || isLoading80 || isLoading81) {
+    if (isLoading1 || isLoading2 || isLoading3 || isLoading4) {
         return <LinearProgress />;
     }
 
-    if (error0 || error1 || error80 || error81) {
+    if (error1 || error2 || error3 || error4) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
                 <Alert severity="error">
-                    Error fetching the rewards: {JSON.stringify(error0 || error1 || error80 || error81)}
+                    Error fetching the rewards: {JSON.stringify(error1 || error2 || error3 || error4)}
                 </Alert>
             </Box>
         );
     }
 
-    const nfts = [nft0, nft1, nft80, nft81].filter(Boolean);
+    const nfts = [nft1, nft2, nft3, nft4].filter(Boolean);
 
     return (
         <Container >

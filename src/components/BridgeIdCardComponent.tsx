@@ -1,12 +1,11 @@
 //..src/components/BridgeIdCardComponent.tsx
 import React, {useState} from "react";
 import QRCode from "qrcode.react";
-import {useAddress, useContract, useNFTs, useOwnedNFTs} from "@thirdweb-dev/react";
-import { Card, CardHeader, Avatar, CardContent, Typography, Box } from '@mui/material';
+import {useContract, useNFTs, useOwnedNFTs} from "@thirdweb-dev/react";
+import { Card, Avatar, CardContent, Typography, Box } from '@mui/material';
 import LoadingComponent from "./shared/LoadingComponent";
 import ErrorComponent from "./shared/ErrorComponent";
 import {REWARD_CONTRACT} from "../consts/parameters";
-
 
 type BridgeIdCardProps = {
     address: string | null;
@@ -17,25 +16,25 @@ type BridgeIdCardProps = {
 const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress }) => {
     const [flipped, setFlipped] = useState(false);
 
-const { contract } = useContract(REWARD_CONTRACT);
-const { data, isLoading, error } = useNFTs(contract);
+    const { contract } = useContract(REWARD_CONTRACT);
+    const { data, isLoading, error } = useNFTs(contract);
 
-const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,error: nftError } = useOwnedNFTs(contract, address);
-if (isOwnedNFTsLoading) {
-    return <LoadingComponent />;
-}
-if (nftError) {
-    return <ErrorComponent message="Failed to fetch your NFTs!" />;
-}
-
-const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
-    if (nft.type === "ERC721") {
-        return accumulator + 1;
-    } else if (nft.type === "ERC1155" && nft.quantityOwned) {
-        return accumulator + (nft.quantityOwned ? Number(nft.quantityOwned) : 0);
+    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,error: nftError } = useOwnedNFTs(contract, address);
+    if (isOwnedNFTsLoading) {
+        return <LoadingComponent />;
     }
-    return accumulator;
-}, 0) || 0;
+    if (nftError) {
+        return <ErrorComponent message="Failed to fetch your NFTs!" />;
+    }
+
+    const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
+        if (nft.type === "ERC721") {
+            return accumulator + 1;
+        } else if (nft.type === "ERC1155" && nft.quantityOwned) {
+            return accumulator + (nft.quantityOwned ? Number(nft.quantityOwned) : 0);
+        }
+        return accumulator;
+    }, 0) || 0;
 
     return (
         <Card
@@ -89,7 +88,6 @@ const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
                         Infinity Membership
                     </Typography>
                 </Box>
-
                 {/* Back side of the card */}
                 <Box
                     component="div"
@@ -115,5 +113,4 @@ const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
         </Card>
     );
 };
-
 export default BridgeIdCard;

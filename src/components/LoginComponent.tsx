@@ -73,13 +73,13 @@ export default function LoginComponent() {
         <Card style={{ padding: '24px' }}>
             <Grid container direction="column" alignItems="center" spacing={2}>
                 <Typography variant="h5" align="center">
-                    Connect Your Wallet
+                    JOIN TODAY + MAKE YOUR EXPENSES COUNT
                 </Typography>
                 <Typography
                     variant="body2"
                     align="center"
                 >
-                    Sign in to start using Bridge 23 and manage your crypto assets.
+                    Sign in
                 </Typography>
 
                 <div>

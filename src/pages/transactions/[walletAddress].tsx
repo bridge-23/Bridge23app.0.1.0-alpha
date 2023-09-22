@@ -52,7 +52,7 @@ const NFTDetailsRow: React.FC<{ nft: any }> = ({ nft }) => {
                             <Table size="small" aria-label="attributes">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Trait Type</TableCell>
+                                        <TableCell>Parameter</TableCell>
                                         <TableCell>Value</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -123,7 +123,7 @@ const Transactions: NextPage = () => {
     }, 0) || 0;
 
     return (
-        <Container style={{ padding: '24px' }}>
+        <Container style={{ padding: '24px', marginBottom: '62px'}}>
             <Box display="flex" justifyContent="center" alignItems="center" height="100%" marginBottom={4}  borderBottom="1px solid #000">
                 <Avatar aria-label="profile" style={{ backgroundColor: '#1976d2' }}>
                     P

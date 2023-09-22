@@ -39,11 +39,10 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     const [quantityOptions, setQuantityOptions] = useState<IQuantityOption[]>([]);
     const [cart, setCart] = useState<ICart[]>([]);
     const [cartTotal, setCartTotal] = useState<number>(0);
-    //const tokenId = '0';
     const { data: nft, isLoading, error } = useNFT(rewardContract, 0);
     const [contractMetadata, setContractMetadata] = useState<ContractMetadata>({});
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+    //const tokenId = '0';
 
     useEffect(() => {
         if (nft) {
@@ -101,7 +100,6 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
         }
 
         const existingItemIndex = cart.findIndex(item => item.id === selectedNft);
-
         const selectedOption = nftOptions.find(option => option.value === selectedNft);
         const maxQuantity = selectedOption ? selectedOption.maxQuantity : 0;
 
@@ -253,7 +251,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
                 </Grid>
                 <Grid item xs={12} md={6}>
 
-                    <Card style={{ padding: '24px'}}>
+                    <Card style={{ padding: '24px', marginBottom: '62px'}}>
                         <CardHeader title="Cart"
                                     subheader="Add 100 tokens for the claim rewards in your cart." />
                         <CardContent>
