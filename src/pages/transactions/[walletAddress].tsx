@@ -185,7 +185,6 @@ const Transactions: NextPage = () => {
                 </IconButton>
             </Box>
 
-            {address ? (
                 <div>
                     <Grid container spacing={3}>
                         <Table>
@@ -222,15 +221,11 @@ const Transactions: NextPage = () => {
                         </Table>
                     </Grid>
                 </div>
-            ) : (
-                <div>
-                    <Typography variant="h6">Connect your wallet to view your profile.</Typography>
-                </div>
-            )}
+
         </Container>
     );
 };
 
 export default Transactions;
-
+//delete {address ? ( from the line 187 to 228)
 
