@@ -9,9 +9,15 @@ import UserProfileComponent from "../../components/UserProfile";
 import BridgeIdCardComponent from "../../components/BridgeIdCardComponent";
 import LoadingComponent from "../../components/shared/LoadingComponent";
 import ErrorComponent from "../../components/shared/ErrorComponent";
-import { PieChart } from '@mui/x-charts/PieChart';
+//import { PieChart } from '@mui/x-charts';
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
+import dynamic from 'next/dynamic';
+
+const PieChartDynamic = dynamic(() => import('@mui/x-charts').then(mod => mod.PieChart), {
+    ssr: false,
+});
+
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -38,6 +44,8 @@ const Dashboard: NextPage = () => {
     const truncateAddress = (address: string) => {
         return `${address.slice(0, 6)}...${address.slice(-4)}`;
     };
+
+// TODO: make component for balances and category expenses
 
     return (
         <Container style={{padding: '24px', marginBottom: '62px'}}>
@@ -96,6 +104,7 @@ const Dashboard: NextPage = () => {
                         />
                     </Grid>
                 )}
+
                 <Grid item xs={12} md={4}>
                     <Card
                         sx={{
@@ -113,7 +122,7 @@ const Dashboard: NextPage = () => {
                         >
                             Expenses by category
                         </Typography>
-                        <PieChart
+                        <PieChartDynamic
                             series={[
                                 {
                                     data: [
