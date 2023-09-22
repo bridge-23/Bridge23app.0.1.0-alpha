@@ -3,6 +3,8 @@ import React from 'react';
 import { Card, CardHeader, Avatar, CardContent, Typography, Box } from '@mui/material';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined';
+import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 
 type UserProfileProps = {
     address: string | null;
@@ -41,10 +43,10 @@ const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
                 <Box display="flex" justifyContent="space-between" alignItems="center">
 
                     <Box display="flex" alignItems="center">
-                        <TrendingUpIcon color="primary" fontSize="large" />
+                        <ArrowCircleUpOutlinedIcon style={{ color: 'green' }} fontSize="large" />
                         <div>
                             <Typography variant="subtitle1" color="textSecondary">
-                                Rewards
+                                Claimable
                             </Typography>
                             <Typography variant="h5" style={{ color: 'green' }}>
                                 {rewards} $
@@ -53,13 +55,13 @@ const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
                     </Box>
 
                     <Box display="flex" alignItems="center">
-                        <TrendingDownIcon color="error" fontSize="large" />
+                        <ArrowCircleDownOutlinedIcon color="error" fontSize="large" />
                         <div>
                             <Typography variant="subtitle1" color="textSecondary">
-                                Expenses
+                                Burn
                             </Typography>
                             <Typography variant="h5" style={{ color: 'red' }}>
-                                100$ {/* Replace with your variable */}
+                                2 {/* Replace with your variable */}
                             </Typography>
                         </div>
                     </Box>

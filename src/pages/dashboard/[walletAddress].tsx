@@ -1,7 +1,7 @@
 //..src/pages/dashboard/[walletAddress].tsx
 import React from "react";
 import {NextPage} from "next";
-import {Container, Grid, useMediaQuery } from "@mui/material";
+import {Container, Grid, useMediaQuery, Card, Typography, CardContent, Box } from "@mui/material";
 import {useAddress, useContract, useOwnedNFTs} from "@thirdweb-dev/react";
 import { Theme } from '@mui/material/styles';
 import {REWARD_CONTRACT} from "../../consts/parameters";
@@ -9,6 +9,9 @@ import UserProfileComponent from "../../components/UserProfile";
 import BridgeIdCardComponent from "../../components/BridgeIdCardComponent";
 import LoadingComponent from "../../components/shared/LoadingComponent";
 import ErrorComponent from "../../components/shared/ErrorComponent";
+import { PieChart } from '@mui/x-charts/PieChart';
+import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
+import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -37,8 +40,43 @@ const Dashboard: NextPage = () => {
     };
 
     return (
-        <Container style={{padding: '24px'}}>
-            <Grid container spacing={isMobile ? 2 : 4} direction={isMobile ? "column" : "row"}>
+        <Container style={{padding: '24px', marginBottom: '62px'}}>
+            <Grid container spacing={isMobile ? 2 : 4} direction={isMobile ? "column" : "row"} alignItems="stretch">
+
+                <Grid item xs={12} md={4}>
+                    <Card
+                        sx={{
+                            perspective: '1000px',
+                            width: '300px',
+                            height: '200px',
+                            cursor: 'pointer',
+                            borderRadius: '18px'
+                        }}
+                    >
+                        <CardContent>
+                            <Typography variant="subtitle1" align="center">Accounts balance</Typography>
+                            <Typography variant="h6" align="center" sx={{ fontWeight: 'bold' }}> $111,000.00 </Typography>
+
+                            <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
+                                <Box display="flex" alignItems="center">
+                                    <ArrowCircleUpOutlinedIcon style={{ color: 'green', marginRight: '8px' }} fontSize="large" />
+                                    <div>
+                                        <Typography variant="subtitle1" color="textSecondary">Income</Typography>
+                                        <Typography variant="h6" style={{ color: 'green' }}>$97,000.00</Typography>
+                                    </div>
+                                </Box>
+
+                                <Box display="flex" alignItems="center">
+                                    <ArrowCircleDownOutlinedIcon style={{ color: 'red', marginRight: '8px' }} fontSize="large" />
+                                    <div>
+                                        <Typography variant="subtitle1" color="textSecondary">Expenses</Typography>
+                                        <Typography variant="h6" style={{ color: 'red' }}>$100</Typography>
+                                    </div>
+                                </Box>
+                            </Box>
+                        </CardContent>
+                    </Card>
+                </Grid>
 
                 {address && (
                     <Grid item xs={12} md={6}>
@@ -58,7 +96,38 @@ const Dashboard: NextPage = () => {
                         />
                     </Grid>
                 )}
-
+                <Grid item xs={12} md={4}>
+                    <Card
+                        sx={{
+                            perspective: '1000px',
+                            width: '300px',
+                            height: '200px',
+                            cursor: 'pointer',
+                            borderRadius: '18px'
+                        }}
+                    >
+                        <Typography
+                            variant="subtitle1"
+                            align="center"
+                            gutterBottom // adds a margin-bottom for space
+                        >
+                            Expenses by category
+                        </Typography>
+                        <PieChart
+                            series={[
+                                {
+                                    data: [
+                                        { id: 0, value: 10, label: 'Pets' },
+                                        { id: 1, value: 15, label: 'Base' },
+                                        { id: 2, value: 20, label: 'Travel' },
+                                    ],
+                                },
+                            ]}
+                            width={280} // Reduced width to account for card padding
+                            height={130} // Reduced height for same reason
+                        />
+                    </Card>
+                </Grid>
             </Grid>
         </Container>
     );
