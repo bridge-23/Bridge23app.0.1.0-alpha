@@ -5,11 +5,10 @@ import {Container, Grid, useMediaQuery, Card, Typography, CardContent, Box } fro
 import {useAddress, useContract, useOwnedNFTs} from "@thirdweb-dev/react";
 import { Theme } from '@mui/material/styles';
 import {REWARD_CONTRACT} from "../../consts/parameters";
-import UserProfileComponent from "../../components/UserProfile";
-import BridgeIdCardComponent from "../../components/BridgeIdCardComponent";
+import UserProfileComponent from "../../components/Dashboard/UserProfile";
+import BridgeIdCardComponent from "../../components/Dashboard/BridgeIdCardComponent";
 import LoadingComponent from "../../components/shared/LoadingComponent";
 import ErrorComponent from "../../components/shared/ErrorComponent";
-//import { PieChart } from '@mui/x-charts';
 import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
 import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
 import dynamic from 'next/dynamic';
@@ -17,7 +16,6 @@ import dynamic from 'next/dynamic';
 const PieChartDynamic = dynamic(() => import('@mui/x-charts').then(mod => mod.PieChart), {
     ssr: false,
 });
-
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));

@@ -3,9 +3,9 @@ import React, {useState} from "react";
 import QRCode from "qrcode.react";
 import {useContract, useNFTs, useOwnedNFTs} from "@thirdweb-dev/react";
 import { Card, Avatar, CardContent, Typography, Box } from '@mui/material';
-import LoadingComponent from "./shared/LoadingComponent";
-import ErrorComponent from "./shared/ErrorComponent";
-import {REWARD_CONTRACT} from "../consts/parameters";
+import LoadingComponent from "../shared/LoadingComponent";
+import ErrorComponent from "../shared/ErrorComponent";
+import {REWARD_CONTRACT} from "../../consts/parameters";
 
 type BridgeIdCardProps = {
     address: string | null;
