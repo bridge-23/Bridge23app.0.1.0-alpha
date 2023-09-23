@@ -11,6 +11,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import UploadButton from "../../components/Buttons/UploadButton";
 
 const NFTDetailsRow: React.FC<{ nft: any }> = ({ nft }) => {
     const [open, setOpen] = useState(false);
@@ -131,7 +132,7 @@ const Transactions: NextPage = () => {
 
                 <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
                     <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-
+                        < UploadButton/>
                         <Button onClick={handleClick}>{options[selectedIndex]}</Button>
                         <Button
                             size="small"

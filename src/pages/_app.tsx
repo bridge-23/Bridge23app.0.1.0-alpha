@@ -8,7 +8,7 @@ import {useEffect} from 'react';
 import {ThemeProvider} from '@mui/material/styles';
 import theme from "../utils/theme";
 import "@sendbird/uikit-react/dist/index.css";
-import initializeFirebaseClient from '../lib/initFirebase';
+import { auth } from "../lib/initFirebase";
 import { BaseGoerli } from "@thirdweb-dev/chains";
 import SendbirdApp from "@sendbird/uikit-react"; //need for chat page to do fix
 
@@ -19,7 +19,6 @@ function MyApp({Component, pageProps}: AppProps) {
         const secretKey = process.env.SECRET_KEY;
         //Use the clientId and secretKey as needed in your application logic.
         // For example, you can pass them as props to other components or use them in API calls.
-        const { auth } = initializeFirebaseClient(); // Use the initialized Firebase auth
         const unsubscribe = auth.onAuthStateChanged(async user => {
         });
         // Cleanup the listener on component unmount

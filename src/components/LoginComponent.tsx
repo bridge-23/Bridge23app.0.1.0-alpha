@@ -2,10 +2,10 @@
 import {Button, Typography, Card, Grid} from "@mui/material";
 import {ConnectWallet, useAddress, useAuth} from "@thirdweb-dev/react";
 import React from "react";
-import {signInWithCustomToken, signOut} from "firebase/auth";
+import {signInWithCustomToken} from "firebase/auth";
 import {doc, getDoc, serverTimestamp, setDoc} from "firebase/firestore";
 import useFirebaseUser from "../lib/useFirebaseUser";
-import initializeFirebaseClient from "../lib/initFirebase";
+import { auth, db } from "../lib/initFirebase";
 import { useRouter } from 'next/router';
 
 
@@ -13,7 +13,6 @@ export default function LoginComponent() {
     const address = useAddress();
     const thirdwebAuth = useAuth();
     const {user} = useFirebaseUser();
-    const {auth, db} = initializeFirebaseClient();
     const router = useRouter();
 
     const signIn = async () => {

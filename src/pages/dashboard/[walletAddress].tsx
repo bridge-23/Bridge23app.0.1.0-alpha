@@ -50,7 +50,6 @@ const Dashboard: NextPage = () => {
     return (
         <Container style={{padding: '24px', marginBottom: '62px'}}>
             <Grid container spacing={isMobile ? 2 : 4} direction={isMobile ? "column" : "row"} alignItems="stretch">
-
                 <Grid item xs={12} md={4}>
                     <Card
                         sx={{

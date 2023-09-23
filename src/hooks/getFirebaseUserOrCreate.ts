@@ -1,12 +1,11 @@
 import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getFirestore, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import initializeFirebaseClient from "../lib/initFirebase";
+import { auth } from "../lib/initFirebase";
 
 export default function useFirebaseUser() {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<User | null>(null);
-    const { auth } = initializeFirebaseClient();
     const firestore = getFirestore();
 
     useEffect(() => {

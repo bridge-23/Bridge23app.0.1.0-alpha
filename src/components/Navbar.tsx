@@ -1,21 +1,26 @@
 //../src/components/Navbar.tsx
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAddress } from '@thirdweb-dev/react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Box, Fab} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import styled from 'styled-components';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import AddIcon from '@mui/icons-material/Add';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import FormatListBulletedSharpIcon from '@mui/icons-material/FormatListBulletedSharp';
-import initializeFirebaseClient from "../lib/initFirebase";
+import {auth, db, storage} from "../lib/initFirebase";
 import useFirebaseUser from "../lib/useFirebaseUser";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import {ref, uploadBytes} from "firebase/storage";
+import Snackbar, {SnackbarCloseReason} from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+
+//TODO: Add a link to the chat page
+//TODO: Make component for upload button
+//TODO: Make button more for mobile and add here chat, logout, profile, await upload, etc..
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -33,12 +38,7 @@ const StyledFab = styled(Fab)({
 export default function Navbar() {
     const address = useAddress();
     const { user } = useFirebaseUser();
-    const {auth, db} = initializeFirebaseClient();
     const router = useRouter();
-
-    // console.log("Address:", address);
-    // console.log("User:", user);
-
     const logUserAction = async (action: 'login' | 'logout', uid: string) => {
         try {
             const logRef = doc(db, 'logins', uid);
@@ -62,6 +62,49 @@ export default function Navbar() {
         } catch (error) {
             console.error("Error during sign out:", error);
         }
+    };
+
+    const fileRef = useRef<HTMLInputElement>(null);
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const handleUpload = async () => {
+        const user = auth.currentUser;
+        if (!user) {
+            setMessage('Please sign in to upload.');
+            setOpen(true);
+            return;
+        }
+
+        const files = fileRef.current?.files;
+        if (files && files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const storageFileRef = ref(storage, `bills/${user.uid}/${file.name}`);
+                await uploadBytes(storageFileRef, file);
+            }
+            setMessage(`${files.length} files uploaded successfully!`);
+            setOpen(true);
+        } else {
+            setMessage('Please select files to upload.');
+            setOpen(true);
+        }
+    };
+
+    const triggerFileSelect = () => {
+        fileRef.current?.click();
+    };
+
+    const handleClose = (
+        event: React.SyntheticEvent<any, Event> | Event,
+        reason: SnackbarCloseReason
+    ) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+    const handleAlertClose = (event: React.SyntheticEvent<Element, Event>) => {
+        setOpen(false);
     };
 
     return (
@@ -140,11 +183,24 @@ export default function Navbar() {
                     )}
 
                     {user && (
-                        <StyledFab color="secondary" aria-label="add">
-                            <a href="/chat" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <>
+                            <StyledFab color="secondary" aria-label="add" onClick={triggerFileSelect}>
                                 <ReceiptIcon fontSize="large"/>
-                            </a>
-                        </StyledFab>
+                                <input
+                                    type="file"
+                                    multiple
+                                    ref={fileRef}
+                                    onChange={handleUpload}
+                                    style={{ display: 'none' }}
+                                />
+                            </StyledFab>
+
+                            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                                <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
+                                    {message}
+                                </Alert>
+                            </Snackbar>
+                        </>
                     )}
 
                     {user && (

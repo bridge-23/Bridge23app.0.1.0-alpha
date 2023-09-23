@@ -1,8 +1,6 @@
 //..src/components/UserProfile.tsx
 import React from 'react';
 import { Card, CardHeader, Avatar, CardContent, Typography, Box } from '@mui/material';
-import TrendingDownIcon from '@mui/icons-material/TrendingDown';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined';
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 
@@ -13,7 +11,6 @@ type UserProfileProps = {
 
 const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
     const REWARDS_MULTIPLIER = 0.05;
-
     const rawRewards = totalNFTs * REWARDS_MULTIPLIER;
     const rewards = rawRewards.toFixed(2);
 
