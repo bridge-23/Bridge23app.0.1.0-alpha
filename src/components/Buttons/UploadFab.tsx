@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { auth, storage } from "../../lib/initFirebase";
+import { auth, storage, db} from "../../lib/initFirebase";
 import { ref, uploadBytes } from 'firebase/storage';
 import Snackbar, {SnackbarCloseReason} from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import styled from "styled-components";
 import {Fab} from "@mui/material";
+import {doc, setDoc} from 'firebase/firestore';
+import {serverTimestamp} from "firebase/firestore"
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -31,14 +33,30 @@ export const UploadFab = () => {
             setOpen(true);
             return;
         }
-
         const files = fileRef.current?.files;
         if (files && files.length > 0) {
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                const storageFileRef = ref(storage, `bills/${user.uid}/${file.name}`);
-                await uploadBytes(storageFileRef, file);
+                const timestamp = Date.now();
+                // Constructing the file name using UID and timestamp
+                const uidFirst3 = user.uid.substring(0, 3);
+                const uidLast4 = user.uid.substring(user.uid.length - 4);
+                const parts = file.name.split('.');
+                const extension = parts.pop();  // Getting the file extension
+                const newFileName = `${uidFirst3}..${uidLast4}_${timestamp}_${i}.${extension}`;
+                // Upload the file with the new unique name
+                await uploadBytes(ref(storage, `bills/${user.uid}/${newFileName}`), file);
+                // Add file details to Firestore (if needed)
+                const fileDocRef = doc(db, 'uploaded_files', user.uid);
+                await setDoc(fileDocRef, {
+                    [newFileName]: {
+                        originalName: file.name,
+                        timestamp: serverTimestamp(),
+                        // add any other file details you need
+                    }
+                }, { merge: true });
             }
+
             setMessage(`${files.length} files uploaded successfully!`);
             setOpen(true);
         } else {
@@ -46,7 +64,6 @@ export const UploadFab = () => {
             setOpen(true);
         }
     };
-
     const triggerFileSelect = () => {
         fileRef.current?.click();
     }
