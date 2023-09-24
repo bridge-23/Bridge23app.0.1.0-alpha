@@ -1,11 +1,13 @@
 //..src/pages/index.tsx
-import { NextPage } from "next";
+import { NextPage,  } from "next";
 import React, { useEffect, useState } from 'react';
 import {Container, Typography, Grid, LinearProgress,Card, CardContent, Box } from "@mui/material";
 import {useContract, useTotalCount, useTotalCirculatingSupply} from "@thirdweb-dev/react";
 import { REWARD_CONTRACT } from '../consts/parameters';
 import useFirebaseUser from "../lib/useFirebaseUser";
 import LoginComponent from "../components/LoginComponent";
+import BenefitsReceivedComponent from "../components/Info/BenefitsReceivedComponent";
+import Image from 'next/image';
 
 //TODO: Make components for tracking total claim rewards and total items tokenized
 
@@ -46,7 +48,7 @@ const Home: NextPage = () => {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Box display="flex" flexDirection="column" alignItems="center">
-                        <img src="/icon-512x512.png" alt="Bridge 23 Logo" width={40} height={40} />
+                        <Image src="/icon-512x512.png" alt="Bridge 23 Logo" width={40} height={40} />
                         <Typography variant="h4" sx={{ mt: 1 }}>
                             Bridge 23
                         </Typography>
@@ -59,19 +61,7 @@ const Home: NextPage = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="h6">
-                                Benefits received
-                            </Typography>
-                            <Typography variant="h5">
-                                120$
-                            </Typography>
-                            <Typography variant="body2">
-                                Your tokenized items generate rewards based on our unique algorithm.
-                            </Typography>
-                        </CardContent>
-                    </Card>
+                    <BenefitsReceivedComponent/>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
@@ -97,14 +87,5 @@ const Home: NextPage = () => {
 export default Home;
 
 
-{/*            {(isLoading1 || isLoading2 || isLoading3 || isLoading4) && (
-                <LinearProgress />
-            )}
-
-            {totalRewards !== null && (
-                <Typography variant="h5" align="center">
-                    ${totalRewards}
-                </Typography>
-            )}*/}
 
 

@@ -8,6 +8,8 @@ import styled from "styled-components";
 import {Fab} from "@mui/material";
 import {doc, setDoc} from 'firebase/firestore';
 import {serverTimestamp} from "firebase/firestore"
+import axios from 'axios';
+import { sendNotificationToSlack } from '../../lib/sendToSlackFunction';
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -26,6 +28,19 @@ export const UploadFab = () => {
     const fileRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
+    const SLACK_WEBHOOK_URL = 'https://hooks.slack.com/services/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';
+    const sendSlackNotification = async (userUID: string, fileName: string) => {
+        const payload = {
+            text: `New file uploaded! \nUser UID: ${userUID} \nFile Name: ${fileName} \nDate: ${new Date().toUTCString()}`,
+        };
+        try {
+            await sendNotificationToSlack({ userUID, fileName }); // Use the passed parameters
+        } catch (error) {
+            console.error('Error sending Slack notification', error);
+        }
+    };
+
+    console.log(SLACK_WEBHOOK_URL);
     const handleUpload = async () => {
         const user = auth.currentUser;
         if (!user) {
@@ -55,6 +70,8 @@ export const UploadFab = () => {
                         // add any other file details you need
                     }
                 }, { merge: true });
+                // Send Slack notification
+                await sendSlackNotification(user.uid, file.name);
             }
 
             setMessage(`${files.length} files uploaded successfully!`);

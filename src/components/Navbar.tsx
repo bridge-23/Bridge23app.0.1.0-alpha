@@ -20,7 +20,7 @@ import ThemeToggleButton from './Buttons/ThemeToggleButton';
 import {usePopupState} from "material-ui-popup-state/hooks";
 
 //TODO: Add a link to the chat page
-//TODO: Make button more for mobile and add here chat, logout, profile, await upload, etc..
+//TODO: Make PopipState
 
 export default function Navbar() {
     const address = useAddress();
@@ -112,7 +112,7 @@ export default function Navbar() {
                 </Toolbar>
 
             </AppBar>
-
+            {user && (
             <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none'} }}>
 
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px', paddingLeft: '30px', paddingRight: '30px' }}>
@@ -161,6 +161,7 @@ export default function Navbar() {
 
                 </Toolbar>
             </AppBar>
+            )}
         </>
     );
 }
