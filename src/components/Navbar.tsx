@@ -1,27 +1,37 @@
 //../src/components/Navbar.tsx
 import React from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useAddress } from '@thirdweb-dev/react';
-import { AppBar, Toolbar, IconButton, Typography, Button, Box} from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Button, Box, Menu, MenuItem} from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import FormatListBulletedSharpIcon from '@mui/icons-material/FormatListBulletedSharp';
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+
 import {auth, db} from "../lib/initFirebase";
 import useFirebaseUser from "../lib/useFirebaseUser";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 import { UploadFab } from './Buttons/UploadFab';
+import ThemeToggleButton from './Buttons/ThemeToggleButton';
+import {usePopupState} from "material-ui-popup-state/hooks";
 
 //TODO: Add a link to the chat page
-//TODO: Make component for upload button
 //TODO: Make button more for mobile and add here chat, logout, profile, await upload, etc..
 
 export default function Navbar() {
     const address = useAddress();
     const { user } = useFirebaseUser();
     const router = useRouter();
+    const handleFeedbackClick = () => {
+        // For demonstration purposes. Replace with your desired logic.
+        alert("Thank you for your feedback!");
+        popupState.close();
+    };
+    const popupState = usePopupState({ variant: 'popover', popupId: 'demo-popup-menu' });
     const logUserAction = async (action: 'login' | 'logout', uid: string) => {
         try {
             const logRef = doc(db, 'logins', uid);
@@ -89,7 +99,7 @@ export default function Navbar() {
                             </Button>
                         )}
                     </Box>
-
+                    <ThemeToggleButton />
                     { user ? (
                         <Button
                             variant="contained"
@@ -133,10 +143,20 @@ export default function Navbar() {
                         </Link>
                     )}
 
-                    { user && (
-                        <IconButton color="inherit" onClick={handleSignOut}>
-                            <LogoutIcon fontSize="large" />
-                        </IconButton>
+                    {user && (
+                        <>
+                            <IconButton color="inherit" {...bindTrigger(popupState)}>
+                                <MoreVertIcon fontSize="large" />
+                            </IconButton>
+                            <Menu {...bindMenu(popupState)}>
+                                <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                                <Link href="/chat">
+                                    <MenuItem onClick={popupState.close}>Chat</MenuItem>
+                                </Link>
+                                <MenuItem onClick={handleFeedbackClick}>FeedBack</MenuItem>
+                                <MenuItem onClick={handleSignOut}>Logout</MenuItem>
+                            </Menu>
+                        </>
                     )}
 
                 </Toolbar>

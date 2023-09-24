@@ -23,7 +23,7 @@ export default function useFirebaseUser() {
         });
 
         return () => listener();
-    }, [auth, firestore]);
+    }, [firestore]);
 
     return { isLoading, user };
 }

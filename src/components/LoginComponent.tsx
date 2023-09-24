@@ -74,13 +74,6 @@ export default function LoginComponent() {
                 <Typography variant="h5" align="center">
                     JOIN TODAY + MAKE YOUR EXPENSES COUNT
                 </Typography>
-                <Typography
-                    variant="body2"
-                    align="center"
-                >
-                    Sign in
-                </Typography>
-
                 <div>
                     {address ? (
                         <Button

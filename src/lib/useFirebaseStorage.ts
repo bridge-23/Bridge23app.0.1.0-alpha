@@ -22,7 +22,7 @@ export default function useFirebaseStorage(filePath: string) {
         } else {
             setIsLoading(false);
         }
-    }, [storage, filePath]);
+    }, [filePath]);
 
     return { isLoading, downloadURL };
 }

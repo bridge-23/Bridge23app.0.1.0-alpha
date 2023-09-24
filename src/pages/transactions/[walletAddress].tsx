@@ -13,6 +13,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import UploadButton from "../../components/Buttons/UploadButton";
 
+//TODO: On change text in table is not visible
+
 const NFTDetailsRow: React.FC<{ nft: any }> = ({ nft }) => {
     const [open, setOpen] = useState(false);
     function formatName(name: string): string {

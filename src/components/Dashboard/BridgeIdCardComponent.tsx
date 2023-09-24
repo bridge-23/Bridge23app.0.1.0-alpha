@@ -15,10 +15,8 @@ type BridgeIdCardProps = {
 
 const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress }) => {
     const [flipped, setFlipped] = useState(false);
-
     const { contract } = useContract(REWARD_CONTRACT);
     const { data, isLoading, error } = useNFTs(contract);
-
     const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,error: nftError } = useOwnedNFTs(contract, address);
     if (isOwnedNFTsLoading) {
         return <LoadingComponent />;
@@ -26,7 +24,6 @@ const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress })
     if (nftError) {
         return <ErrorComponent message="Failed to fetch your NFTs!" />;
     }
-
     const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
         if (nft.type === "ERC721") {
             return accumulator + 1;

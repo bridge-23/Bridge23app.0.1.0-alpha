@@ -1,11 +1,13 @@
 //..src/pages/index.tsx
 import { NextPage } from "next";
 import React, { useEffect, useState } from 'react';
-import {Container, Typography, Grid, LinearProgress,Card, CardContent, } from "@mui/material";
+import {Container, Typography, Grid, LinearProgress,Card, CardContent, Box } from "@mui/material";
 import {useContract, useTotalCount, useTotalCirculatingSupply} from "@thirdweb-dev/react";
 import { REWARD_CONTRACT } from '../consts/parameters';
 import useFirebaseUser from "../lib/useFirebaseUser";
 import LoginComponent from "../components/LoginComponent";
+
+//TODO: Make components for tracking total claim rewards and total items tokenized
 
 const Home: NextPage = () => {
     const { user } = useFirebaseUser();
@@ -42,13 +44,18 @@ const Home: NextPage = () => {
     return (
         <Container style={{ padding: '24px', marginBottom: '82px' }}>
             <Grid container spacing={3}>
-                <Grid item xs={12} style={{ textAlign: 'center' }}>
-                <Typography variant="h4">
-                        Welcome to Bridge 23
-                    </Typography>
-                    {!user && (
-                        <LoginComponent />
-                    )}
+                <Grid item xs={12}>
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <img src="/icon-512x512.png" alt="Bridge 23 Logo" width={40} height={40} />
+                        <Typography variant="h4" sx={{ mt: 1 }}>
+                            Bridge 23
+                        </Typography>
+                        {!user && (
+                            <Box mt={2}>
+                                <LoginComponent />
+                            </Box>
+                        )}
+                    </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={6}>

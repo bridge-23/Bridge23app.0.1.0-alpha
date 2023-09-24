@@ -1,6 +1,6 @@
-//..src/components/UserProfile.tsx
+//..src/components/UserProfileComponent.tsx
 import React from 'react';
-import { Card, CardHeader, Avatar, CardContent, Typography, Box } from '@mui/material';
+import { Card, CardContent, Typography, Box } from '@mui/material';
 import ArrowCircleUpOutlinedIcon from '@mui/icons-material/ArrowCircleUpOutlined';
 import ArrowCircleDownOutlinedIcon from '@mui/icons-material/ArrowCircleDownOutlined';
 
@@ -9,7 +9,7 @@ type UserProfileProps = {
     totalNFTs: number;
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
+const UserProfileComponent: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
     const REWARDS_MULTIPLIER = 0.05;
     const rawRewards = totalNFTs * REWARDS_MULTIPLIER;
     const rewards = rawRewards.toFixed(2);
@@ -17,12 +17,12 @@ const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
     return (
         <Card
             sx={{
-            perspective: '1000px',
-            width: '300px',
-            height: '200px',
-            cursor: 'pointer',
-            borderRadius: '18px'
-        }}
+                perspective: '1000px',
+                width: '300px',
+                height: '200px',
+                cursor: 'pointer',
+                borderRadius: '18px'
+            }}
         >
             <CardContent>
 
@@ -69,4 +69,4 @@ const UserProfile: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
     );
 };
 
-export default UserProfile;
+export default UserProfileComponent;
