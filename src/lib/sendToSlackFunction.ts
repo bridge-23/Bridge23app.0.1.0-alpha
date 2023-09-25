@@ -1,19 +1,19 @@
 //..src/lib/sendToSlackFunction.ts
-import { httpsCallable } from 'firebase/functions';
-import { functions } from "./initFirebase";
-
-const sendToSlackFunction = httpsCallable(functions, 'sendToSlack'); // Notice the change here
+import axios from 'axios';
 
 interface SlackPayload {
     userUID: string;
     fileName: string;
 }
 
+const CLOUD_FUNCTION_URL = 'https://us-central1-bridge23-904ea.cloudfunctions.net/sendToSlack'; // Your Cloud Function URL
+
 export const sendNotificationToSlack = async (payload: SlackPayload): Promise<void> => {
     try {
-        await sendToSlackFunction(payload);
+        await axios.post(CLOUD_FUNCTION_URL, payload);
     } catch (error) {
         console.error('Failed to send Slack notification:', error);
         throw error;
     }
 };
+
