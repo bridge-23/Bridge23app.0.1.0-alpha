@@ -8,7 +8,7 @@ import useFirebaseUser from "../lib/useFirebaseUser";
 import LoginComponent from "../components/LoginComponent";
 import Image from 'next/image';
 
-//TODO: Make components for tracking total claim rewards and total items tokenized
+//TODO:
 
 const Home: NextPage = () => {
     const { user } = useFirebaseUser();

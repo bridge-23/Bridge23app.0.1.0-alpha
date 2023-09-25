@@ -1,38 +1,56 @@
 //..src/components/Dashboard/AccountBalanceCardComponent.tsx
 import React from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import ArrowCircleUpOutlinedIcon from "@mui/icons-material/ArrowCircleUpOutlined";
-import ArrowCircleDownOutlinedIcon from "@mui/icons-material/ArrowCircleDownOutlined";
+import { Box, Card, CardContent, Typography, Avatar, IconButton } from "@mui/material";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import ArrowDownwardSharpIcon from '@mui/icons-material/ArrowDownwardSharp';
+import ArrowUpwardSharpIcon from '@mui/icons-material/ArrowUpwardSharp';
 
 const AccountBalanceCardComponent: React.FC = () => {
     return (
         <Card
             sx={{
                 perspective: '1000px',
-                width: '300px',
+                width: { xs: '100%', sm: '300px' }, // Full width on small devices, 300px on larger devices
                 height: '200px',
                 cursor: 'pointer',
-                borderRadius: '18px'
+                borderRadius: '24px'
             }}
         >
             <CardContent>
-                <Typography variant="subtitle1" align="center">Accounts balance</Typography>
-                <Typography variant="h6" align="center" sx={{ fontWeight: 'bold' }}> $111,000.00 </Typography>
+                <Box display="flex" alignItems="center" justifyContent="space-between">
+                    <Avatar aria-label="profile" style={{ backgroundColor: '#1976d2' }}>
+                        I
+                    </Avatar>
+
+                    <Box display="flex" alignItems="center" marginRight={10}>
+                        <Typography variant="subtitle1" color="textSecondary" >September</Typography>
+                        <IconButton>
+                            <KeyboardArrowDownIcon />
+                        </IconButton>
+                    </Box>
+                </Box>
+
+                <Typography variant="subtitle2" color="textSecondary" align="center">Accounts balance</Typography>
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}> $111,000.00 </Typography>
 
                 <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
                     <Box display="flex" alignItems="center">
-                        <ArrowCircleUpOutlinedIcon style={{ color: 'green', marginRight: '8px' }} fontSize="large" />
+                        <Avatar style={{ backgroundColor: 'green' }} sx={{ mr: 2 }}>
+                            <ArrowUpwardSharpIcon style={{ color: 'white' }} />
+                        </Avatar>
                         <div>
-                            <Typography variant="subtitle1" color="textSecondary">Income</Typography>
-                            <Typography variant="h6" style={{ color: 'green' }}>$97,000.00</Typography>
+                            <Typography variant="caption" color="textSecondary">Income</Typography>
+                            <Typography variant="subtitle2" style={{ color: 'green' }}>$9,000.00</Typography>
                         </div>
                     </Box>
 
                     <Box display="flex" alignItems="center">
-                        <ArrowCircleDownOutlinedIcon style={{ color: 'red', marginRight: '8px' }} fontSize="large" />
+                        <Avatar style={{ backgroundColor: 'red' }} sx={{ mr: 2 }}>
+                            <ArrowDownwardSharpIcon style={{ color: 'white' }} />
+                        </Avatar>
                         <div>
-                            <Typography variant="subtitle1" color="textSecondary">Expenses</Typography>
-                            <Typography variant="h6" style={{ color: 'red' }}>$100</Typography>
+                            <Typography variant="caption" color="textSecondary">Expenses</Typography>
+                            <Typography variant="subtitle2" style={{ color: 'red' }}>$1,300.00</Typography>
                         </div>
                     </Box>
                 </Box>

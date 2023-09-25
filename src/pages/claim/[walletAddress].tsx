@@ -1,11 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useAddress, useContract, useOwnedNFTs, MediaRenderer, useNFT} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';
-import { Card, CardHeader, CardMedia, CardActionArea, CardContent, CardActions, Grid, Typography, FormControl, NativeSelect, InputLabel, Select, MenuItem, Button, Container, Snackbar, TableContainer, Table, Paper, TableHead, TableRow, TableCell, TableBody} from '@mui/material';
+import {
+    Card,
+    CardHeader,
+    CardMedia,
+    CardActionArea,
+    CardContent,
+    CardActions,
+    Grid,
+    Typography,
+    FormControl,
+    NativeSelect,
+    InputLabel,
+    Select,
+    MenuItem,
+    Button,
+    Container,
+    Snackbar,
+    TableContainer,
+    Table,
+    Paper,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    useMediaQuery
+} from '@mui/material';
 import type { NextPage } from "next";
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
+import {Theme} from "@mui/material/styles";
 
+//TODO: so many to do's
 
 type ContractMetadata = {
     name?: string| number | null;
@@ -43,6 +70,7 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     const [contractMetadata, setContractMetadata] = useState<ContractMetadata>({});
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     //const tokenId = '0';
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
     useEffect(() => {
         if (nft) {
@@ -162,7 +190,10 @@ const Claim: NextPage<{ contractMetadata: ContractMetadata }> = ({}) => {
     };
 
     return (
-        <Container style={{ padding: '24px'}}>
+        <Container style={{
+            marginBottom: isMobile ? '118px' : '62px',
+            padding: isMobile ? 'initial' : '24px'
+        }}>
 
             <Snackbar
                 open={errorMessage !== null}

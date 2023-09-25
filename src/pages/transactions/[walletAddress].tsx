@@ -11,7 +11,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import UploadButton from "../../components/Buttons/UploadButton";
+
 
 //TODO: On change text in table is not visible
 
@@ -126,7 +126,7 @@ const Transactions: NextPage = () => {
     }, 0) || 0;
 
     return (
-        <Container style={{ padding: '24px', marginBottom: '62px'}}>
+        <Container style={{ padding: '24px', marginBottom: '118px'}}>
             <Box display="flex" justifyContent="center" alignItems="center" height="100%" marginBottom={4}  borderBottom="1px solid #000">
                 <Avatar aria-label="profile" style={{ backgroundColor: '#1976d2' }}>
                     P
@@ -134,8 +134,9 @@ const Transactions: NextPage = () => {
 
                 <Box display="flex" justifyContent="center" alignItems="center" flexGrow={1}>
                     <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                        < UploadButton/>
+
                         <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+
                         <Button
                             size="small"
                             aria-controls={open ? 'split-button-menu' : undefined}

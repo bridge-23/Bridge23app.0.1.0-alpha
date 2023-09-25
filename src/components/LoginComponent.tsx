@@ -8,6 +8,8 @@ import useFirebaseUser from "../lib/useFirebaseUser";
 import { auth, db } from "../lib/initFirebase";
 import { useRouter } from 'next/router';
 
+//TODO: make slide bar witn introduction for login if you have wallet or create magic wallet from Google account
+//TODO: add terms and services rules link
 
 export default function LoginComponent() {
     const address = useAddress();
