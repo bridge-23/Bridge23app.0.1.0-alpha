@@ -2,11 +2,12 @@
 import {Button, Typography, Card, Grid} from "@mui/material";
 import {ConnectWallet, useAddress, useAuth} from "@thirdweb-dev/react";
 import React from "react";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import {signInWithCustomToken} from "firebase/auth";
 import {doc, getDoc, serverTimestamp, setDoc} from "firebase/firestore";
 import useFirebaseUser from "../lib/useFirebaseUser";
 import { auth, db } from "../lib/initFirebase";
-import { useRouter } from 'next/router';
 
 //TODO: make slide bar witn introduction for login if you have wallet or create magic wallet from Google account
 //TODO: add terms and services rules link
@@ -90,7 +91,14 @@ export default function LoginComponent() {
                         />
                     )}
                 </div>
-
+                <Grid item xs={12} style={{ marginTop: '16px' }}>
+                    <Typography variant="body2" align="center">
+                        By signing in, you agree to our
+                        <Link href="/terms-of-service"> Terms of Service</Link>
+                        and
+                        <Link href="/privacy-policy">Privacy Policy</Link>.
+                    </Typography>
+                </Grid>
             </Grid>
         </Card>
     );

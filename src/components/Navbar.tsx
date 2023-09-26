@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAddress } from '@thirdweb-dev/react';
 import { AppBar, Toolbar, IconButton, Typography, Button, Box, Menu, MenuItem} from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
@@ -19,7 +18,7 @@ import { UploadFab } from './Buttons/UploadFab';
 import ThemeToggleButton from './Buttons/ThemeToggleButton';
 import {usePopupState} from "material-ui-popup-state/hooks";
 
-//TODO: Add a link to the chat page
+//TODO: Delete chat
 //TODO: Make PopipState
 
 export default function Navbar() {
@@ -93,8 +92,8 @@ export default function Navbar() {
                         )}
                         {user && (
                             <Button color="inherit">
-                                <Link href={`/chat`}>
-                                    <Typography>Chat</Typography>
+                                <Link href={`/rewards/${address}`}>
+                                    <Typography>Support</Typography>
                                 </Link>
                             </Button>
                         )}
@@ -150,9 +149,7 @@ export default function Navbar() {
                             </IconButton>
                             <Menu {...bindMenu(popupState)}>
                                 <MenuItem onClick={popupState.close}>Profile</MenuItem>
-                                <Link href="/chat">
-                                    <MenuItem onClick={popupState.close}>Chat</MenuItem>
-                                </Link>
+                                <MenuItem onClick={popupState.close}>Support</MenuItem>
                                 <MenuItem onClick={handleFeedbackClick}>FeedBack</MenuItem>
                                 <MenuItem onClick={handleSignOut}>Logout</MenuItem>
                             </Menu>

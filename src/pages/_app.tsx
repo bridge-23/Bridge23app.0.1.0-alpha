@@ -6,10 +6,9 @@ import { ThirdwebProvider, magicLink,metamaskWallet, coinbaseWallet, smartWallet
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';
 import { ColorModeProvider } from '../contexts/ColorModeContext';
-import "@sendbird/uikit-react/dist/index.css";
 import { auth } from "../lib/initFirebase";
 import { BaseGoerli } from "@thirdweb-dev/chains";
-import SendbirdApp from "@sendbird/uikit-react"; //need for chat page to do fix
+
 
 function MyApp({Component, pageProps}: AppProps) {
     useEffect(() => {

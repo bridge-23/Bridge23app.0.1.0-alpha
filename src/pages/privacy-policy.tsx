@@ -1,3 +1,4 @@
+//../src/pages/terms-of-service.tsx
 import React from 'react';
 import { Container, Typography, Grid, Card, Button } from "@mui/material";
 import {NextPage} from "next";

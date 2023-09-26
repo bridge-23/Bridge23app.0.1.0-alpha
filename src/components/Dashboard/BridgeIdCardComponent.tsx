@@ -68,7 +68,6 @@ const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress })
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: '#fafafa',
                         borderRadius: '18px',
                     }}
                 >
