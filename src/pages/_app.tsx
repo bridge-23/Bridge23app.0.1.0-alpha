@@ -39,8 +39,8 @@ function MyApp({Component, pageProps}: AppProps) {
                         ],
                     }),
                     magicLink({
-                        apiKey:  process.env.NEXT_PUBLIC_MAGIC_API_KEY as string,
-                        type: 'connect',
+                        apiKey: process.env.NEXT_PUBLIC_MAGIC_API_KEY as string,
+                        type: "connect",
                     }),
                 ]}
                 authConfig={{

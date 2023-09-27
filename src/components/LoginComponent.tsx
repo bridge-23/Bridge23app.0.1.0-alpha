@@ -35,10 +35,8 @@ export default function LoginComponent() {
             const { token } = await res.json();
             // Sign in with the token.
             const userCredential = await signInWithCustomToken(auth, token);
-
             // On success, we have access to the user object.
             const user = userCredential.user;
-
             // If this is a new user, we create a new document in the database.
             const usersRef = doc(db, "users", user.uid!);
             const userDoc = await getDoc(usersRef);
@@ -47,7 +45,6 @@ export default function LoginComponent() {
                 // User now has permission to update their own document outlined in the Firestore rules.
                 await setDoc(usersRef, { createdAt: serverTimestamp() }, { merge: true });
             }
-
             if (user && user.uid) {
                 await logUserAction('login', user.uid);
                 // Redirect to transactions page after successful login
@@ -82,13 +79,17 @@ export default function LoginComponent() {
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => signIn()}>Sign in with Wallet
+                            onClick={() => signIn()}
+                        >
+                            Sign in with Wallet
                         </Button>
                     ) : (
-                        <ConnectWallet
-                            theme={"dark"}
-                            auth={{ loginOptional: false }}
-                        />
+                        <>
+                            <ConnectWallet
+                                theme={"dark"}
+                                auth={{ loginOptional: false }}
+                            />
+                        </>
                     )}
                 </div>
                 <Grid item xs={12} style={{ marginTop: '16px' }}>
