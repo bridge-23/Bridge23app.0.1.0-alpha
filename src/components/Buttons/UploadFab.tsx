@@ -10,6 +10,13 @@ import { Fab } from "@mui/material";
 import { doc, setDoc } from 'firebase/firestore';
 import { serverTimestamp } from "firebase/firestore";
 import { sendNotificationToSlack } from '../../lib/sendToSlackFunction';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+
 
 const StyledFab = styled(Fab)({
     position: 'absolute',
@@ -73,11 +80,7 @@ export const UploadFab = () => {
 
     const triggerFileSelect = () => fileRef.current?.click();
 
-    const handleClose = (
-        event: React.SyntheticEvent<any, Event> | Event,
-        reason: SnackbarCloseReason
-    ) => {
-        if (reason === 'clickaway') return;
+    const handleClose = () => {
         setOpen(false);
     };
 
@@ -95,11 +98,24 @@ export const UploadFab = () => {
                     style={{ display: 'none' }}
                 />
             </StyledFab>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleAlertClose} severity="info" sx={{ width: '100%' }}>
-                    {message}
-                </Alert>
-            </Snackbar>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Notification"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {message}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 };

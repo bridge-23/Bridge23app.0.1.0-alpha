@@ -10,6 +10,7 @@ import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalan
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";
 import LoadingComponent from "../../components/shared/LoadingComponent";
 import ErrorComponent from "../../components/shared/ErrorComponent";
+import { auth } from "../../lib/initFirebase";
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -33,9 +34,14 @@ const Dashboard: NextPage = () => {
         return accumulator;
     }, 0) || 0;
 
-    const truncateAddress = (address: string) => {
-        return `${address.slice(0, 6)}...${address.slice(-4)}`;
+    const truncateUid = (uid: string) => {
+        return `${uid.slice(0, 6)}...${uid.slice(-4)}`;
     };
+
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+
+//TODO: make all to db dont use base
 
     return (
         <Container style={{
@@ -72,9 +78,10 @@ const Dashboard: NextPage = () => {
                     {address && (
                         <Grid item xs={12} md={6}>
                             <BridgeIdCardComponent
+                                uid={uid}
                                 address={address}
                                 totalNFTs={totalNFTs}
-                                truncateAddress={truncateAddress}
+                                truncateUid={truncateUid}
                             />
                         </Grid>
                     )}

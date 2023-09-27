@@ -8,12 +8,13 @@ import ErrorComponent from "../shared/ErrorComponent";
 import {REWARD_CONTRACT} from "../../consts/parameters";
 
 type BridgeIdCardProps = {
+    uid: string | null;
     address: string | null;
     totalNFTs: number;
-    truncateAddress: (address: string) => string;
+    truncateUid: (uid: string) => string;
 };
 
-const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress }) => {
+const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ uid,address, truncateUid }) => {
     const [flipped, setFlipped] = useState(false);
     const { contract } = useContract(REWARD_CONTRACT);
     const { data, isLoading, error } = useNFTs(contract);
@@ -73,7 +74,7 @@ const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress })
                 >
                     <Avatar src="/icon-256x256.png" alt="Bridge 23 Logo" sx={{ position: 'absolute', top: '10px', left: '10px' }} />
                     <Typography variant="h6"> Bridge23 </Typography>
-                    <Typography variant="body2"> {truncateAddress(address || '')}</Typography>
+                    <Typography variant="body2"> {truncateUid(uid || '')}</Typography>
                     <Typography variant="subtitle2" sx={{ position: 'absolute', top: '10px', right: '10px' }}>
                         Balance
                     </Typography>
@@ -99,11 +100,10 @@ const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ address, truncateAddress })
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: '#fafafa',
                         borderRadius: '8px',
                     }}
                 >
-                    <QRCode value={address || ''} />
+                    <QRCode value={uid || ''} />
                 </Box>
             </CardContent>
         </Card>
