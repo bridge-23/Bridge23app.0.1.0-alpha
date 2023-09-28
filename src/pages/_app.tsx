@@ -9,7 +9,6 @@ import { ColorModeProvider } from '../contexts/ColorModeContext';
 import { auth } from "../lib/initFirebase";
 import { BaseGoerli } from "@thirdweb-dev/chains";
 
-
 function MyApp({Component, pageProps}: AppProps) {
     useEffect(() => {
         // const clientId = process.env.CLIENT_ID;

@@ -25,6 +25,7 @@ const StyledFab = styled(Fab)({
 });
 
 export const UploadFab = () => {
+    const [isUploading, setIsUploading] = useState(false);
     const fileRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
@@ -39,6 +40,7 @@ export const UploadFab = () => {
         }
         const files = fileRef.current?.files;
         if (files && files.length > 0) {
+            setIsUploading(true);
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const timestamp = Date.now();
@@ -70,6 +72,7 @@ export const UploadFab = () => {
                         },
                         () => {
                             setUploadProgress(null);  // Reset progress
+                            setIsUploading(false);  // End uploading
                             setMessage(`${files.length} files uploaded successfully!`);
                             setOpen(true);
                         }
@@ -93,10 +96,10 @@ export const UploadFab = () => {
                     console.error('Error sending Slack notification', error);
                 }
             }
-            setMessage(`${files.length} files uploaded successfully!`);
+            setMessage(`${files.length} bill uploaded successfully!`);
             setOpen(true);
         } else {
-            setMessage('Please select files to upload.');
+            setMessage('Please select bill to upload.');
             setOpen(true);
         }
     };
@@ -121,24 +124,23 @@ export const UploadFab = () => {
                     style={{ display: 'none' }}
                 />
             </StyledFab>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Notification"}</DialogTitle>
+
+            {/* Upload Progress Modal */}
+            <Dialog open={isUploading}>
                 <DialogContent>
-                    {uploadProgress !== null && (
-                        <>
-                            <Typography variant="body2">Uploading: {Math.round(uploadProgress)}%</Typography>
-                            <LinearProgress variant="determinate" value={uploadProgress} />
-                        </>
-                    )}
-                    <DialogContentText id="alert-dialog-description">
+                    <Typography variant="body2">Uploading...</Typography>
+                    {uploadProgress !== null && <LinearProgress variant="determinate" value={uploadProgress} />}
+                </DialogContent>
+            </Dialog>
+
+            {/* Notification Dialog */}
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>{"Notification"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
                         {message}
                     </DialogContentText>
-                </DialogContent> {/* <-- This was missing */}
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" autoFocus>
                         Close
