@@ -1,7 +1,7 @@
 //../src/pages/_app.tsx
 import '../styles/globals.css'
 import type {AppProps} from "next/app";
-import React, {useContext} from 'react';
+import React from 'react';
 import { ThirdwebProvider, magicLink,metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
 import Navbar from "../components/Navbar";
 import {useEffect} from 'react';

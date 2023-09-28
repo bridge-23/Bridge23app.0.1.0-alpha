@@ -25,6 +25,7 @@
     "@thirdweb-dev/sdk": "^3",
     "@thirdweb-dev/wallets": "^1.2.1",
     "axios": "^1.5.0",
+    "browser-image-compression": "^2.0.2",
     "ethers": "^5",
     "firebase": "^10.3.1",
     "firebase-admin": "^11.10.1",

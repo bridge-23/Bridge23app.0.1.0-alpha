@@ -8,7 +8,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import HomeIcon from '@mui/icons-material/Home';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import FormatListBulletedSharpIcon from '@mui/icons-material/FormatListBulletedSharp';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 import {auth, db} from "../lib/initFirebase";
 import useFirebaseUser from "../lib/useFirebaseUser";

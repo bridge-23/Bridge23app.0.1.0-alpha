@@ -1,21 +1,15 @@
 //..src/components/Buttons/UploadFab.tsx
 import React, { useRef, useState } from 'react';
-import { auth, storage, db } from "../../lib/initFirebase";
-import { ref, uploadBytes } from 'firebase/storage';
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import imageCompression from 'browser-image-compression';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import styled from "styled-components";
-import { Fab } from "@mui/material";
+import { Fab, Typography,Button,Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle,LinearProgress } from "@mui/material";
+import 'firebase/storage';
+import { auth, storage, db } from "../../lib/initFirebase";
+import { ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 import { serverTimestamp } from "firebase/firestore";
 import { sendNotificationToSlack } from '../../lib/sendToSlackFunction';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 
 
 const StyledFab = styled(Fab)({
@@ -34,6 +28,7 @@ export const UploadFab = () => {
     const fileRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState('');
+    const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
     const handleUpload = async () => {
         const user = auth.currentUser;
@@ -51,21 +46,49 @@ export const UploadFab = () => {
                 const uidLast4 = user.uid.substring(user.uid.length - 4);
                 const parts = file.name.split('.');
                 const extension = parts.pop();
+                const compressedFile = await imageCompression(file, {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true,
+                });
                 const newFileName = `${uidFirst3}..${uidLast4}_${timestamp}_${i}.${extension}`;
 
-                await uploadBytes(ref(storage, `bills/${user.uid}/${newFileName}`), file);
+                if (compressedFile) {
+                    await uploadBytes(ref(storage, `bills/${user.uid}/${newFileName}`), compressedFile);
+                    const storageRef = ref(storage, `bills/${user.uid}/${newFileName}`);
+                    const uploadTask = uploadBytesResumable(storageRef, compressedFile);
 
-                const fileDocRef = doc(db, 'uploaded_files', user.uid);
-                await setDoc(fileDocRef, {
-                    [newFileName]: {
-                        originalName: file.name,
-                        timestamp: serverTimestamp(),
-                    }
-                }, { merge: true });
+                    uploadTask.on('state_changed',
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            setUploadProgress(progress);
+                        },
+                        (error) => {
+                            console.error("Upload failed:", error);
+                            setMessage("Upload failed.");
+                            setOpen(true);
+                        },
+                        () => {
+                            setUploadProgress(null);  // Reset progress
+                            setMessage(`${files.length} files uploaded successfully!`);
+                            setOpen(true);
+                        }
+                    );
 
+                    const fileDocRef = doc(db, 'uploaded_files', user.uid);
+                    await setDoc(fileDocRef, {
+                        [newFileName]: {
+                            originalName: file.name,
+                            timestamp: serverTimestamp(),
+                        }
+                    }, { merge: true });
+                }
                 // Send Slack notification
                 try {
-                    await sendNotificationToSlack({ userUID: user.uid, fileName: file.name });
+                    await sendNotificationToSlack({
+                        userUID: user.uid,
+                        fileName: file.name
+                    });
                 } catch (error) {
                     console.error('Error sending Slack notification', error);
                 }
@@ -84,7 +107,7 @@ export const UploadFab = () => {
         setOpen(false);
     };
 
-    const handleAlertClose = (event: React.SyntheticEvent<Element, Event>) => setOpen(false);
+    //const handleAlertClose = (event: React.SyntheticEvent<Element, Event>) => setOpen(false);
 
     return (
         <>
@@ -106,10 +129,16 @@ export const UploadFab = () => {
             >
                 <DialogTitle id="alert-dialog-title">{"Notification"}</DialogTitle>
                 <DialogContent>
+                    {uploadProgress !== null && (
+                        <>
+                            <Typography variant="body2">Uploading: {Math.round(uploadProgress)}%</Typography>
+                            <LinearProgress variant="determinate" value={uploadProgress} />
+                        </>
+                    )}
                     <DialogContentText id="alert-dialog-description">
                         {message}
                     </DialogContentText>
-                </DialogContent>
+                </DialogContent> {/* <-- This was missing */}
                 <DialogActions>
                     <Button onClick={handleClose} color="primary" autoFocus>
                         Close
