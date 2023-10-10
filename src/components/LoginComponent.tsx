@@ -47,7 +47,7 @@ export default function LoginComponent() {
             }
             if (user && user.uid) {
                 await logUserAction('login', user.uid);
-                // Redirect to transactions page after successful login
+                // Redirect to tokenslistdashboard page after successful login
                 await router.push(`/dashboard/${address}`);
             }
 

@@ -4,6 +4,7 @@ import { getAuth, Auth } from "firebase/auth";
 import { getFirestore, Firestore } from "firebase/firestore";
 import { getStorage, FirebaseStorage } from "firebase/storage";
 import { getFunctions, Functions } from "firebase/functions";
+import { getMessaging, isSupported } from 'firebase/messaging';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -19,3 +20,15 @@ export const db: Firestore = getFirestore(app);
 export const auth: Auth = getAuth(app);
 export const storage: FirebaseStorage = getStorage(app);
 export const functions: Functions = getFunctions(app);
+export const initFirebaseApp = () => {
+    return initializeApp(firebaseConfig);
+};
+export let messaging: any = null; // Adjust the type based on your needs
+
+async function initializeMessaging() {
+    if (await isSupported()) {
+        messaging = getMessaging(app);
+    }
+}
+
+initializeMessaging();

@@ -1,4 +1,4 @@
-//..src/pages/transactions/[walletAddress].tsx
+//..src/pages/tokenslist/[walletAddress].tsx
 import React, { useState, useRef } from 'react';
 import { NextPage } from "next";
 import { useAddress, useContract, useOwnedNFTs, useNFTs } from '@thirdweb-dev/react';
@@ -76,7 +76,7 @@ const NFTDetailsRow: React.FC<{ nft: any }> = ({ nft }) => {
     );
 }
 
-const Transactions: NextPage = () => {
+const TokensList: NextPage = () => {
     const address = useAddress();
     const { contract } = useContract(REWARD_CONTRACT);
     const { data, isLoading, error } = useNFTs(contract);
@@ -230,6 +230,6 @@ const Transactions: NextPage = () => {
     );
 };
 
-export default Transactions;
+export default TokensList;
 //delete {address ? ( from the line 187 to 228)
 

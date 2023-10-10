@@ -2,11 +2,11 @@
 import axios from 'axios';
 
 interface SlackPayload {
-    userUID: string;
-    fileName: string;
+    userUID?: string;
+    fileName?: string;
 }
 
-const CLOUD_FUNCTION_URL = 'https://us-central1-bridge23-904ea.cloudfunctions.net/sendToSlack'; // Your Cloud Function URL
+const CLOUD_FUNCTION_URL = 'https://us-central1-bridge23-904ea.cloudfunctions.net/default'; // Your Cloud Function URL
 
 export const sendNotificationToSlack = async (payload: SlackPayload): Promise<void> => {
     try {

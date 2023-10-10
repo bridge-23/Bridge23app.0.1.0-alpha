@@ -1,5 +1,5 @@
 //..src/components/Dashboard/AccountBalanceCardComponent.tsx
-import React from "react";
+import React from 'react';
 import { Box, Card, CardContent, Typography, Avatar, IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowDownwardSharpIcon from '@mui/icons-material/ArrowDownwardSharp';

@@ -1,4 +1,5 @@
-import React from "react";
+//..src/dashboard/[walletAddress].tsx
+import React, { useState, useEffect } from 'react';
 import { NextPage } from "next";
 import { Container, Grid, useMediaQuery, Box } from "@mui/material";
 import { useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
@@ -11,6 +12,8 @@ import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCa
 import LoadingComponent from "../../components/shared/LoadingComponent";
 import ErrorComponent from "../../components/shared/ErrorComponent";
 import { auth } from "../../lib/initFirebase";
+import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
+import AccountsList from "../../components/Dashboard/AccountsList";
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -44,39 +47,38 @@ const Dashboard: NextPage = () => {
 //TODO: make all to db dont use base
 
     return (
-        <Container style={{
-            marginBottom: isMobile ? '118px' : '62px',
-            padding: isMobile ? 'initial' : '24px'
-        }}>
+        <Container
+            sx={{
+                marginBottom: isMobile ? '118px' : '62px',
+                padding: isMobile ? 'initial' : '24px',
+            }}
+        >
             <Box
                 sx={{
                     perspective: '1000px',
-                    width: '100%', // always full width
+                    width: '100%',
                     height: '200px',
-                    marginBottom: isMobile ? '16px' : '24px', // add some margin for spacing
+                    marginBottom: isMobile ? '16px' : '24px',
                     cursor: 'pointer',
                 }}
             >
                 <AccountBalanceCardComponent />
             </Box>
 
-            <Box px={isMobile ? 2 : 0}>  {/* Conditional padding based on isMobile */}
+            <Box px={isMobile ? 2 : 0}>
                 <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="stretch">
                     {address && (
-                        <Grid item xs={12} md={6}>
-                            <UserProfileComponent
-                                address={address}
-                                totalNFTs={totalNFTs}
-                            />
+                        <Grid item xs={12} md={4} lg={3}>
+                            <UserProfileComponent address={address} totalNFTs={totalNFTs} />
                         </Grid>
                     )}
 
-                    <Grid item xs={12} md={6}>
+                    <Grid item xs={12} md={4} lg={3}>
                         <ExpensesbyCategoryComponent />
                     </Grid>
 
                     {address && (
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={4} lg={3}>
                             <BridgeIdCardComponent
                                 uid={uid}
                                 address={address}
@@ -87,8 +89,19 @@ const Dashboard: NextPage = () => {
                     )}
                 </Grid>
             </Box>
+
+            <Box px={isMobile ? 2 : 0}>
+                <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="stretch">
+                    <Grid item xs={12} md={4} lg={3}>
+                        <NewAccountComponent />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <AccountsList />
+                    </Grid>
+                </Grid>
+            </Box>
         </Container>
     );
 };
 export default Dashboard;
-

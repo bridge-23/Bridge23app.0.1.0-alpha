@@ -68,7 +68,7 @@ const UserProfileComponent: React.FC<UserProfileProps> = ({ address, totalNFTs})
                         </div>
                     </Box>
                 </Box>
-                {/* You can add more transactions features here */}
+                {/* You can add more tokenslist features here */}
             </CardContent>
         </Card>
     );
