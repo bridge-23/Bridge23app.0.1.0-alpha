@@ -21,6 +21,7 @@ const Dashboard: NextPage = () => {
     const address = useAddress();
     const { contract } = useContract(REWARD_CONTRACT);
     const { data: ownedNFTs, isLoading: isOwnedNFTsLoading, error: nftError } = useOwnedNFTs(contract, address);
+    const [open, setOpen] = useState(false);
 
     if (isOwnedNFTsLoading) {
         return <LoadingComponent />;
@@ -28,7 +29,6 @@ const Dashboard: NextPage = () => {
     if (nftError) {
         return <ErrorComponent message="Failed to fetch your NFTs!" />;
     }
-    const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
         setOpen(true);
