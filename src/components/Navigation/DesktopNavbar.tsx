@@ -7,7 +7,7 @@ import ThemeToggleButton from "../Buttons/ThemeToggleButton";
 function DesktopNavbar() {
 
     return (
-        <AppBar position="static" sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <AppBar color="primary" position="static" sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Toolbar>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Bridge 23

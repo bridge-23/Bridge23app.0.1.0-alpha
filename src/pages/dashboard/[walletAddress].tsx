@@ -14,6 +14,7 @@ import ErrorComponent from "../../components/shared/ErrorComponent";
 import { auth } from "../../lib/initFirebase";
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
+import AddExpense from "../../components/Dashboard/AddExpense";
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
@@ -27,6 +28,15 @@ const Dashboard: NextPage = () => {
     if (nftError) {
         return <ErrorComponent message="Failed to fetch your NFTs!" />;
     }
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
         if (nft.type === "ERC721") {
@@ -76,6 +86,9 @@ const Dashboard: NextPage = () => {
                     <Grid item xs={12} md={4} lg={3}>
                         <ExpensesbyCategoryComponent />
                     </Grid>
+                    <Grid item xs={12} md={4} lg={3}>
+                        <NewAccountComponent />
+                    </Grid>
 
                     {address && (
                         <Grid item xs={12} md={4} lg={3}>
@@ -93,9 +106,11 @@ const Dashboard: NextPage = () => {
             <Box px={isMobile ? 2 : 0}>
                 <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="stretch">
                     <Grid item xs={12} md={4} lg={3}>
-                        <NewAccountComponent />
+                        <AddExpense
+                            open={open}
+                            onClose={handleClose}
+                        />
                     </Grid>
-
                     <Grid item xs={12}>
                         <AccountsList />
                     </Grid>

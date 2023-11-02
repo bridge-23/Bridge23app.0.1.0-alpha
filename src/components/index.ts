@@ -1,6 +1,6 @@
 //src/components/index.ts
 
-export * from "./Navbar";
+export * from "./Navigation/Navbar";
 export { default as UserProfileComponent } from "./Dashboard/UserProfileComponent";
 
 

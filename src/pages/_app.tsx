@@ -1,24 +1,33 @@
 //../src/pages/_app.tsx
+import '../lib/initJuno';
 import '../styles/globals.css'
-import type {AppProps} from "next/app";
-import React from 'react';
-import { ThirdwebProvider, magicLink,metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
-import Navbar from "../components/Navbar";
-import {useEffect} from 'react';
+import type { AppProps } from "next/app";
+import React, { useEffect } from 'react';
+import { ThirdwebProvider, magicLink, metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
+import Navbar from "../components/Navigation/Navbar";
 import { ColorModeProvider } from '../contexts/ColorModeContext';
 import { auth } from "../lib/initFirebase";
 import { BaseGoerli } from "@thirdweb-dev/chains";
+import { initializeJuno } from '../lib/initJuno'; // Importing the initializeJuno function
+import { Auth } from '../contexts/AuthContext';
 
-function MyApp({Component, pageProps}: AppProps) {
+
+function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
-        // const clientId = process.env.CLIENT_ID;
-        // const secretKey = process.env.SECRET_KEY;
-        const unsubscribe = auth.onAuthStateChanged(async user => {
+        // Initializing Juno
+        initializeJuno().catch(error => {
+            console.error('Failed to initialize Juno:', error);
         });
+
+        const unsubscribe = auth.onAuthStateChanged(async user => {
+
+        });
+
         return () => unsubscribe();
     }, []);
 
     return (
+        <Auth>
         <ColorModeProvider>
             <ThirdwebProvider
                 supportedChains={[BaseGoerli]}
@@ -46,11 +55,11 @@ function MyApp({Component, pageProps}: AppProps) {
                     authUrl: '/api/auth',
                     domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
                 }} >
-                <Navbar/>
+                <Navbar />
                 <Component {...pageProps} />
             </ThirdwebProvider>
         </ColorModeProvider>
+        </Auth>
     );
 }
-
 export default MyApp;

@@ -8,6 +8,8 @@ import {signInWithCustomToken} from "firebase/auth";
 import {doc, getDoc, serverTimestamp, setDoc} from "firebase/firestore";
 import useFirebaseUser from "../lib/useFirebaseUser";
 import { auth, db } from "../lib/initFirebase";
+import ICPSignInButton from '../components/Buttons/ICPSignInButton'; // Adjust the path as necessary
+
 
 //TODO: make slide bar witn introduction for login if you have wallet or create magic wallet from Google account
 //TODO: add terms and services rules link
@@ -92,6 +94,7 @@ export default function LoginComponent() {
                         </>
                     )}
                 </div>
+                <ICPSignInButton />
                 <Grid item xs={12} style={{ marginTop: '16px' }}>
                     <Typography variant="body2" align="center">
                         By signing in, you agree to our

@@ -1,13 +1,16 @@
 //..src/components/CustomList.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import AddExpense from "../Dashboard/AddExpense";
 
 export default function CustomList() {
+    const [isDialogOpen, setDialogOpen] = useState(false);
     return (
+        <>
         <List
             sx={{
                 width: '280px',
@@ -17,7 +20,7 @@ export default function CustomList() {
                 padding: '16px'
             }}
         >
-            <ListItem>
+            <ListItem button onClick={() => setDialogOpen(true)}>
                 <ListItemIcon>
                     <RemoveIcon sx={{ color: 'red' }} />
                 </ListItemIcon>
@@ -42,5 +45,7 @@ export default function CustomList() {
                 <ListItemText primary="Transfer" />
             </ListItem>
         </List>
+    <AddExpense open={isDialogOpen} onClose={() => setDialogOpen(false)} />
+</>
     );
 }

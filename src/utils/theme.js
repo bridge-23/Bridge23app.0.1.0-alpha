@@ -3,7 +3,6 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
     palette: {
         mode: 'light', // or 'dark'
-        // other palette properties
     },
     components: {
         MuiTypography: {
@@ -20,6 +19,17 @@ const theme = createTheme({
                     body1: 'span',
                     body2: 'span',
                 },
+            },
+        },
+        palette: {
+            primary: {
+                main: '#2D62EB',
+            },
+            secondary: {
+                main: '#FFFFFF'
+            },
+            tertiary: {
+                main: '#000000',
             },
         },
     },
