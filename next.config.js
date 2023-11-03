@@ -12,4 +12,17 @@ module.exports = withPWA({
   images: {
     domains: ['bridge23.app', 'localhost'],
   },
+  webpack(config, { dev, isServer }) {
+    // Overwrite the devtool option for production builds
+    if (!dev && !isServer) {
+      config.devtool = 'source-map';
+
+      // Here we disable minification for non-development, non-server builds
+      config.optimization.minimize = false;
+    }
+
+    // You can add more custom Webpack config here if needed
+
+    return config;
+  },
 });

@@ -11,7 +11,6 @@ import { BaseGoerli } from "@thirdweb-dev/chains";
 import { initializeJuno } from '../lib/initJuno'; // Importing the initializeJuno function
 import { Auth } from '../contexts/AuthContext';
 
-
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         // Initializing Juno

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Container } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs, } from "@junobuild/core";
 import { initializeJuno } from '../../lib/initJuno';
@@ -46,6 +47,14 @@ const ShoppingList: React.FC = () => {
     const [currentNote, setCurrentNote] = useState<string>('');
     const { user } = useContext(AuthContext);
     const [junoReady, setJunoReady] = useState<boolean>(false);
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
+    const paperStyle = {
+        padding: '20px',
+        paddingLeft: isDesktop ? '90px' : '20px',
+        paddingTop: isDesktop ? '20px' : '50px',
+    };
 
     useEffect(() => {
         async function init() {
@@ -123,7 +132,6 @@ const ShoppingList: React.FC = () => {
             alert('Failed to update note. Please try again.');
         }
     };
-
     const addNote = async () => {
         //console.log('User object:', user);
         if (currentNote.trim()) {
@@ -194,8 +202,7 @@ const ShoppingList: React.FC = () => {
     };
 
     return (
-        <Container>
-        <Paper elevation={2} style={{ padding: '20px'}}>
+        <Paper elevation={2} style={paperStyle}>
             <Typography variant="h6" style={{ textAlign: 'center', marginBottom: '20px' }}>
                 Shopping List - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
             </Typography>
@@ -227,7 +234,6 @@ const ShoppingList: React.FC = () => {
                 ))}
             </List>
         </Paper>
-        </Container>
     );
 };
 export default ShoppingList;

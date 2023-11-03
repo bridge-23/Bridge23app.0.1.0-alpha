@@ -6,6 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import AddExpense from "../Dashboard/AddExpense";
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 export default function CustomList() {
     const [isDialogOpen, setDialogOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function CustomList() {
             </ListItem>
             <ListItem>
                 <ListItemIcon>
-                    <CreditCardIcon sx={{ color: 'blue' }} />
+                    <ReceiptIcon sx={{ color: 'blue' }} />
                 </ListItemIcon>
                 <ListItemText primary="Upload receipt" />
             </ListItem>

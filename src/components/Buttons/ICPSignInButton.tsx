@@ -1,6 +1,6 @@
 // src/components/ICPSignInButton.tsx
 import React, { useEffect, useState } from 'react';
-import { Button, Container, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Button, Container, ToggleButton, ToggleButtonGroup, Grid } from '@mui/material';
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core';
 import { useRouter } from 'next/router';
 
@@ -67,37 +67,42 @@ const ICPSignInButton = () => {
 
     return (
         <Container>
-            <ToggleButtonGroup
-                color="primary"
-                value={providerType}
-                exclusive
-                onChange={handleProviderChange}
-                style={{ marginBottom: '10px' }}
-            >
-                <ToggleButton value="internetIdentity">Internet Identity</ToggleButton>
-                <ToggleButton value="nftId">NFID</ToggleButton>
-            </ToggleButtonGroup>
-            {isUserSignedIn ? (
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleSignOut}
-                    style={{ margin: '10px' }}
-                >
-                    Sign Out
-                </Button>
-            ) : (
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSignIn}
-                    style={{ margin: '10px' }}
-                >
-                    Sign In
-                </Button>
-            )}
+            <Grid container direction="column" alignItems="center" spacing={3}>
+                <Grid item>
+                    <ToggleButtonGroup
+                        color="primary"
+                        value={providerType}
+                        exclusive
+                        onChange={handleProviderChange}
+                        style={{ marginBottom: '10px' }}
+                    >
+                        <ToggleButton value="internetIdentity">Internet Identity</ToggleButton>
+                        <ToggleButton value="nftId">NFID</ToggleButton>
+                    </ToggleButtonGroup>
+                </Grid>
+                <Grid item>
+                    {isUserSignedIn ? (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleSignOut}
+                        >
+                            Sign Out
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSignIn}
+                        >
+                            Sign In
+                        </Button>
+                    )}
+                </Grid>
+            </Grid>
         </Container>
     );
 };
+
 export default ICPSignInButton;
 

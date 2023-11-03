@@ -14,7 +14,8 @@ import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import {doc, serverTimestamp, setDoc} from "firebase/firestore";
 import {auth, db} from "../../lib/initFirebase";
-import {signOut} from "firebase/auth";
+//import {signOut} from "firebase/auth";
+import { signOut } from '@junobuild/core';
 
 function MobileNavbar() {
     const address = useAddress();
@@ -38,7 +39,7 @@ function MobileNavbar() {
             console.error("Error logging user action:", error);
         }
     };
-    const handleSignOut = async () => {
+  /*  const handleSignOut = async () => {
         try {
             await signOut(auth);
             if (user && user.uid) {
@@ -48,7 +49,16 @@ function MobileNavbar() {
         } catch (error) {
             console.error("Error during sign out:", error);
         }
+    };*/
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            console.log("Sign-out successful!");
+        } catch (error) {
+            console.error("Sign-out failed:", error);
+        }
     };
+
     return (
         <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none'} }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px', paddingLeft: '30px', paddingRight: '30px' }}>
