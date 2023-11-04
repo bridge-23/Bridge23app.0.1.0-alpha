@@ -1,7 +1,7 @@
 //../src/components/Navbar.tsx
 import React, {useContext} from 'react';
 import {Hidden} from '@mui/material';
-import useFirebaseUser from "../../lib/useFirebaseUser";
+import useFirebaseUser from "../../lib/FireBase/useFirebaseUser";
 import AppBarUser from './AppBarUser';
 import DesktopNavbar from './DesktopNavbar';
 import MobileNavbar from './MobileNavbar';

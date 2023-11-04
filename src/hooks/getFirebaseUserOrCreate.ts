@@ -1,7 +1,7 @@
 import { onAuthStateChanged, User } from "firebase/auth";
 import { doc, getFirestore, getDoc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth } from "../lib/initFirebase";
+import { auth } from "../lib/FireBase/initFirebase";
 
 export default function useFirebaseUser() {
     const [isLoading, setIsLoading] = useState(true);

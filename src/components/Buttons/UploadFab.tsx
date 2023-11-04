@@ -5,11 +5,11 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import styled from "styled-components";
 import { Fab, Typography,Button,Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle,LinearProgress } from "@mui/material";
 import 'firebase/storage';
-import { auth, storage, db } from "../../lib/initFirebase";
+import { auth, storage, db } from "../../lib/FireBase/initFirebase";
 import { ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { doc, setDoc } from 'firebase/firestore';
 import { serverTimestamp } from "firebase/firestore";
-import { sendNotificationToSlack } from '../../lib/sendToSlackFunction';
+import { sendNotificationToSlack } from '../../lib/FireBase/sendToSlackFunction';
 
 
 const StyledFab = styled(Fab)({

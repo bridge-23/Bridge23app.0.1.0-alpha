@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Container, Card, CardContent } from '@mui/material';
 import AccountCard from '../Accounts/AccountCardComponent';
-import { db } from "../../lib/initFirebase";
+import { db } from "../../lib/FireBase/initFirebase";
 import { collection, getDocs } from "firebase/firestore";
 
 const AccountList: React.FC = () => {

@@ -3,14 +3,13 @@ import '../lib/initJuno';
 import '../styles/globals.css'
 import type { AppProps } from "next/app";
 import React, { useEffect } from 'react';
-import { ThirdwebProvider, magicLink, metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
 import Navbar from "../components/Navigation/Navbar";
 import { ColorModeProvider } from '../contexts/ColorModeContext';
-import { auth } from "../lib/initFirebase";
-import { BaseGoerli } from "@thirdweb-dev/chains";
+import { auth } from "../lib/FireBase/initFirebase";
 import { initializeJuno } from '../lib/initJuno'; // Importing the initializeJuno function
 import { Auth } from '../contexts/AuthContext';
-
+//import { ThirdwebProvider, magicLink, metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
+//import { BaseGoerli } from "@thirdweb-dev/chains";
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
 

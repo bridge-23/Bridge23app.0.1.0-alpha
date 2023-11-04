@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {signInWithCustomToken} from "firebase/auth";
 import {doc, getDoc, serverTimestamp, setDoc} from "firebase/firestore";
-import useFirebaseUser from "../../lib/useFirebaseUser";
-import { auth, db } from "../../lib/initFirebase";
+import useFirebaseUser from "../../lib/FireBase/useFirebaseUser";
+import { auth, db } from "../../lib/FireBase/initFirebase";
 import ICPSignInButton from '../Buttons/ICPSignInButton'; // Adjust the path as necessary
 
 

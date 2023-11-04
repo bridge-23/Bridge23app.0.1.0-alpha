@@ -9,11 +9,11 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import {bindMenu, bindTrigger} from "material-ui-popup-state";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {useAddress} from "@thirdweb-dev/react";
-import useFirebaseUser from "../../lib/useFirebaseUser";
+import useFirebaseUser from "../../lib/FireBase/useFirebaseUser";
 import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import {doc, serverTimestamp, setDoc} from "firebase/firestore";
-import {auth, db} from "../../lib/initFirebase";
+import {auth, db} from "../../lib/FireBase/initFirebase";
 //import {signOut} from "firebase/auth";
 import { signOut } from '@junobuild/core';
 

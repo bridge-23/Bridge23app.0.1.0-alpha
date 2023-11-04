@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react';
 import { ref, uploadBytes} from 'firebase/storage';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { auth, storage } from "../../lib/initFirebase";
+import { auth, storage } from "../../lib/FireBase/initFirebase";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import ReceiptIcon from '@mui/icons-material/Receipt'
