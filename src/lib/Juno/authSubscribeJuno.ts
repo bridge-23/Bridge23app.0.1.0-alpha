@@ -11,7 +11,6 @@ export const handleAuthSubscription = () => {
 
     return unsubscribe;
 };
-
 export const handleSessionExpiration = () => {
     const onSessionExpire = () => {
         console.log("Session has expired");

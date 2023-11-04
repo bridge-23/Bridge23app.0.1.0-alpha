@@ -12,11 +12,7 @@ import {useAddress} from "@thirdweb-dev/react";
 import useFirebaseUser from "../../lib/FireBase/useFirebaseUser";
 import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
-import {doc, serverTimestamp, setDoc} from "firebase/firestore";
-import {auth, db} from "../../lib/FireBase/initFirebase";
-//import {signOut} from "firebase/auth";
 import { signOut } from '@junobuild/core';
-
 function MobileNavbar() {
     const address = useAddress();
     const { user } = useFirebaseUser();
@@ -27,33 +23,15 @@ function MobileNavbar() {
         popupState.close();
     };
     const popupState = usePopupState({ variant: 'popover', popupId: 'demo-popup-menu' });
-    const logUserAction = async (action: 'login' | 'logout', uid: string) => {
-        try {
-            const logRef = doc(db, 'logins', uid);
-            await setDoc(logRef, {
-                action: action,
-                timestamp: serverTimestamp()
-            }, { merge: true });
-            router.push('/');
-        } catch (error) {
-            console.error("Error logging user action:", error);
-        }
-    };
-  /*  const handleSignOut = async () => {
-        try {
-            await signOut(auth);
-            if (user && user.uid) {
-                logUserAction('logout', user.uid);
-                console.log(`User with ID: ${user.uid} has logged out at ${new Date().toISOString()}`);
-            }
-        } catch (error) {
-            console.error("Error during sign out:", error);
-        }
-    };*/
+
     const handleSignOut = async () => {
         try {
-            await signOut();
+            await signOut(); // Your signOut logic
             console.log("Sign-out successful!");
+
+            // Redirect to the desired path after sign out
+            router.push('/'); // Adjust the path as needed
+
         } catch (error) {
             console.error("Sign-out failed:", error);
         }

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { setDoc } from "@junobuild/core";
-import { initializeJuno, isJunoInitialized } from '../../lib/initJuno';
+import { initializeJuno, isJunoInitialized } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';

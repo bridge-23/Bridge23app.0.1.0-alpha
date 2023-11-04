@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs, } from "@junobuild/core";
-import { initializeJuno } from '../../lib/initJuno';
+import { initializeJuno } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import { deleteDoc } from "@junobuild/core";
 import { getDoc } from "@junobuild/core";
