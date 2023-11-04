@@ -13,16 +13,29 @@ module.exports = withPWA({
     domains: ['bridge23.app', 'localhost'],
   },
   webpack(config, { dev, isServer }) {
-    // Overwrite the devtool option for production builds
     if (!dev && !isServer) {
       config.devtool = 'source-map';
-
-      // Here we disable minification for non-development, non-server builds
       config.optimization.minimize = false;
     }
-
-    // You can add more custom Webpack config here if needed
-
     return config;
   },
+  async headers() {
+    return [
+      {
+        source: "/.well-known/ii-alternative-origins",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*"
+          },
+          {
+            key: "Content-Type",
+            value: "application/json"
+          },
+        ],
+      },
+      // ... any other headers you need to set
+    ];
+  },
 });
+
