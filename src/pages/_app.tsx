@@ -13,13 +13,11 @@ import { Auth } from '../contexts/AuthContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
-        // Initializing Juno
+
         initializeJuno().catch(error => {
             console.error('Failed to initialize Juno:', error);
         });
-
         const unsubscribe = auth.onAuthStateChanged(async user => {
-
         });
 
         return () => unsubscribe();
@@ -28,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <Auth>
         <ColorModeProvider>
-            <ThirdwebProvider
+{/*            <ThirdwebProvider
                 supportedChains={[BaseGoerli]}
                 activeChain="base-goerli"
                 clientId="a438ed0706431cf7f53ae4cdbee427a7"
@@ -53,10 +51,10 @@ function MyApp({ Component, pageProps }: AppProps) {
                 authConfig={{
                     authUrl: '/api/auth',
                     domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
-                }} >
+                }} >*/}
                 <Navbar />
                 <Component {...pageProps} />
-            </ThirdwebProvider>
+           {/* </ThirdwebProvider>*/}
         </ColorModeProvider>
         </Auth>
     );

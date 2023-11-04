@@ -59,19 +59,18 @@ const NewAccountComponent: React.FC = () => {
     };
 
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <>
             <Card
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    p: 2,
                     perspective: '1000px',
                     width: '300px',
                     height: '200px',
-                    boxShadow: 3,
-                    borderRadius: '24px'
+                    cursor: 'pointer',
+                    borderRadius: '18px'
                 }}
             >
                 <IconButton onClick={() => setOpen(true)}>
@@ -158,7 +157,7 @@ const NewAccountComponent: React.FC = () => {
                     )}
                 </Box>
             </Dialog>
-        </Box>
+        </>
     );
 };
 

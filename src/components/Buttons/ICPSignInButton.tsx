@@ -44,7 +44,7 @@ const ICPSignInButton = () => {
                 });
             await signIn({ provider });
             console.log("Sign-in successful!");
-            router.push('/shoppinglist');
+            router.push('/shoppinglist/${user.key}');
         } catch (error) {
             console.error("Sign-in failed:", error);
         }

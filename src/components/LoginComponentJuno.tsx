@@ -16,11 +16,11 @@ export default function LoginComponentJuno() {
                 </Typography>
                 <ICPSignInButton />
                 <Grid item xs={12} style={{ marginTop: '16px' }}>
-                    <Typography variant="body2" align="center">
+                    <Typography variant="body2" align="center" >
                         By signing in, you agree to our{' '}
-                        <Link href="/terms-of-service">Terms of Service</Link>
-                        and{' '}
-                        <Link href="/privacy-policy">Privacy Policy</Link>.
+                        <Link color="primary" href="/terms-of-service">Terms of Service</Link>
+                        {' '}and{' '}
+                        <Link color="primary" href="/privacy-policy">Privacy Policy</Link>.
                     </Typography>
                 </Grid>
             </Grid>

@@ -1,4 +1,4 @@
-//..src/page/shoppinglist/index/tsx
+//..src/page/shoppinglist/[userKey]tsx
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Container } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -10,6 +10,7 @@ import { initializeJuno } from '../../lib/initJuno';
 import { nanoid } from "nanoid";
 import { deleteDoc } from "@junobuild/core";
 import { getDoc } from "@junobuild/core";
+import { useRouter } from 'next/router';
 
 //TODO: make filter when items alredy buy
 //TODO: make shopping panel for create shopping list
@@ -21,12 +22,6 @@ interface ShoppingListDoc {
     content: string;
     checked?: boolean;
 }
-/*interface Note {
-    content: string;
-    id: string;
-    checked: boolean;
-}*/
-
 const ShoppingListItem: React.FC<ShoppingListItemProps & { checked: boolean, onCheck: () => void }> = ({ note, onDelete, checked, onCheck }) => {
     return (
         <ListItem>
@@ -46,6 +41,8 @@ const ShoppingList: React.FC = () => {
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
     const { user } = useContext(AuthContext);
+    const router = useRouter();
+    const { userKey } = router.query;
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
@@ -97,17 +94,13 @@ const ShoppingList: React.FC = () => {
     const handleCheckboxChange = async (index: number) => {
         const updatedNotes = [...notes];
         updatedNotes[index].checked = !updatedNotes[index].checked;
-
-        // Retrieve the most recent document
         const currentDoc = await getDoc({ collection: "ShoppingList", key: updatedNotes[index].id });
-
         // Check if currentDoc exists
         if (!currentDoc) {
             console.error("Error retrieving the current document.");
             alert('Failed to retrieve the current document. Please try again.');
             return; // exit the function
         }
-
         try {
             await setDoc({
                 collection: "ShoppingList",
@@ -120,9 +113,7 @@ const ShoppingList: React.FC = () => {
                     }
                 }
             });
-
             setNotes(updatedNotes);
-
             // If the checkbox is checked, add a new note
             if (updatedNotes[index].checked) {
                 addNote();
@@ -133,13 +124,11 @@ const ShoppingList: React.FC = () => {
         }
     };
     const addNote = async () => {
-        //console.log('User object:', user);
         if (currentNote.trim()) {
             if (!junoReady) {
                 alert('Application is initializing, please try again in a moment.');
                 return;
             }
-
             if (!user) {
                 alert('You must be logged in to add a note.');
                 return;

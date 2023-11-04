@@ -1,4 +1,4 @@
-//..src/pages/tokenslist/[walletAddress].tsx
+//..src/pages/tokenslist/[userKey].tsx
 import React, { useState, useRef } from 'react';
 import { NextPage } from "next";
 import { useAddress, useContract, useOwnedNFTs, useNFTs } from '@thirdweb-dev/react';

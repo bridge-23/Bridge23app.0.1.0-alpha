@@ -1,19 +1,20 @@
-//..src/pages/index.tsx
+//..src/pages/[userKey].tsx
 import { NextPage,  } from "next";
-import React from 'react';
+import React, {useContext} from 'react';
 import {Container, Typography, Grid,Box } from "@mui/material";
-import {useContract} from "@thirdweb-dev/react";
-import { REWARD_CONTRACT } from '../consts/parameters';
-import useFirebaseUser from "../lib/useFirebaseUser";
-import LoginComponent from "../components/LoginComponent";
 import Image from 'next/image';
+import LoginComponentJuno from "../components/LoginComponentJuno";
+import {AuthContext} from "../contexts/AuthContext";
+//import {useContract} from "@thirdweb-dev/react";
+//import { REWARD_CONTRACT } from '../consts/parameters';
+//import useFirebaseUser from "../lib/useFirebaseUser";
 
 //TODO:
 
 const Home: NextPage = () => {
-    const { user } = useFirebaseUser();
-    const { contract } = useContract(REWARD_CONTRACT);
-
+    //const { user } = useFirebaseUser();
+    //const { contract } = useContract(REWARD_CONTRACT);
+    const { user } = useContext(AuthContext);
     return (
         <Container style={{ padding: '24px', marginBottom: '82px' }}>
             <Grid container spacing={3}>
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
                         </Typography>
                         {!user && (
                             <Box mt={2}>
-                                <LoginComponent />
+                                <LoginComponentJuno/>
                             </Box>
                         )}
                     </Box>

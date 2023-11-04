@@ -1,4 +1,4 @@
-//..src/pages/rewards/[walletAddress].tsx
+//..src/pages/rewards/[userKey].tsx
 import React from "react";
 import {useAddress, useContract, useNFT} from '@thirdweb-dev/react';
 import { REWARD_CONTRACT } from '../../consts/parameters';

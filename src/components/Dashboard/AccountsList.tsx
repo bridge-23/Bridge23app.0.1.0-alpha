@@ -22,13 +22,13 @@ const AccountList: React.FC = () => {
     }, []);
 
     return (
-        <Container>
             <Card
                 sx={{
-                    p: 2,
-                    mb: 3,
-                    borderRadius: '18px',
-                    boxShadow: 3,
+                    perspective: '1000px',
+                    width: '300px',
+                    height: '200px',
+                    cursor: 'pointer',
+                    borderRadius: '18px'
                 }}
             >
                 <CardContent>
@@ -49,7 +49,6 @@ const AccountList: React.FC = () => {
                 ))}
             </Grid>
             </Card>
-        </Container>
     );
 };
 export default AccountList;

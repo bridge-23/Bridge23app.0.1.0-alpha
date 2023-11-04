@@ -1,14 +1,12 @@
 //..src/contexts/AuthContext.tsx
-import { createContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useEffect, useState, ReactNode } from "react";
 import { authSubscribe, User } from "@junobuild/core";
 import { useRouter } from 'next/router';
 import LoginComponentJuno from '../components/LoginComponentJuno';
-
 // Define the context shape and default values
 interface AuthContextType {
     user: User | null | undefined;
 }
-
 //TODO: print to users collection user.key, time create
 export const AuthContext = createContext<AuthContextType>({ user: undefined });
 
@@ -16,7 +14,6 @@ export const AuthContext = createContext<AuthContextType>({ user: undefined });
 interface AuthProps {
     children: ReactNode;
 }
-
 export const Auth: React.FC<AuthProps> = ({ children }) => {
     const [user, setUser] = useState<User | null | undefined>(undefined);
     const router = useRouter();
@@ -32,7 +29,6 @@ export const Auth: React.FC<AuthProps> = ({ children }) => {
                 console.log("User is signed out or session has expired3");
                 if (!user && typeof window !== 'undefined' && !isRedirecting) {
                     setIsRedirecting(true);
-                   /// router.push('/').then(() => setIsRedirecting(false));
                 }
             }
         });
@@ -45,7 +41,7 @@ export const Auth: React.FC<AuthProps> = ({ children }) => {
             {user ? (
                 <div>{children}</div>
             ) : (
-                <LoginComponentJuno />  // <-- Use the LoginComponent when the user is not logged in
+                <LoginComponentJuno />
             )}
         </AuthContext.Provider>
     );

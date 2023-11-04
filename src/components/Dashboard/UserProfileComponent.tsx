@@ -6,14 +6,13 @@ import ArrowDownwardSharpIcon from "@mui/icons-material/ArrowDownwardSharp";
 
 
 type UserProfileProps = {
-    address: string | null;
-    totalNFTs: number;
+
 };
 
-const UserProfileComponent: React.FC<UserProfileProps> = ({ address, totalNFTs}) => {
+const UserProfileComponent: React.FC<UserProfileProps> = ({ }) => {
     const REWARDS_MULTIPLIER = 0.05;
-    const rawRewards = totalNFTs * REWARDS_MULTIPLIER;
-    const rewards = rawRewards.toFixed(2);
+    //const rawRewards = totalNFTs * REWARDS_MULTIPLIER;
+    //const rewards = rawRewards.toFixed(2);
 
     return (
         <Card
@@ -33,7 +32,7 @@ const UserProfileComponent: React.FC<UserProfileProps> = ({ address, totalNFTs})
                             Total Items Tokenized
                         </Typography>
                         <Typography variant="h5" align="center"> {/* h4 for a larger font size. Adjust as needed. */}
-                            {totalNFTs}
+                            100
                         </Typography>
                     </div>
                 </Box>
@@ -49,7 +48,7 @@ const UserProfileComponent: React.FC<UserProfileProps> = ({ address, totalNFTs})
                                 Claimable
                             </Typography>
                             <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }} style={{ color: 'green' }}>
-                                ${rewards}
+                                1000$
                             </Typography>
                         </div>
                     </Box>

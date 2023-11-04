@@ -1,4 +1,4 @@
-//..src/pages/accounts/index.tsx
+//..src/pages/accounts/[userKey].tsx
 import React from 'react';
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";

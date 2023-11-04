@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {signInWithCustomToken} from "firebase/auth";
 import {doc, getDoc, serverTimestamp, setDoc} from "firebase/firestore";
-import useFirebaseUser from "../lib/useFirebaseUser";
-import { auth, db } from "../lib/initFirebase";
-import ICPSignInButton from '../components/Buttons/ICPSignInButton'; // Adjust the path as necessary
+import useFirebaseUser from "../../lib/useFirebaseUser";
+import { auth, db } from "../../lib/initFirebase";
+import ICPSignInButton from '../Buttons/ICPSignInButton'; // Adjust the path as necessary
 
 
 //TODO: make slide bar witn introduction for login if you have wallet or create magic wallet from Google account
@@ -98,9 +98,9 @@ export default function LoginComponent() {
                 <Grid item xs={12} style={{ marginTop: '16px' }}>
                     <Typography variant="body2" align="center">
                         By signing in, you agree to our
-                        <Link href="/terms-of-service"> Terms of Service</Link>
+                        <Link href="/src/pages/terms-of-service"> Terms of Service</Link>
                         and
-                        <Link href="/privacy-policy">Privacy Policy</Link>.
+                        <Link href="/src/pages/privacy-policy">Privacy Policy</Link>.
                     </Typography>
                 </Grid>
             </Grid>
