@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import { Card, IconButton, Typography, Dialog, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { Alert } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { db, auth } from "../../lib/FireBase/initFirebase";
-import { doc, setDoc } from "firebase/firestore";
-import { serverTimestamp } from "firebase/firestore";
+
 
 const NewAccountComponent: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string>('');
@@ -17,7 +15,7 @@ const NewAccountComponent: React.FC = () => {
     const [financialInstitution, setFinancialInstitution] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
 
-    const handleCreateAccount = async () => {
+/*    const handleCreateAccount = async () => {
         const parsedInitialBalance = parseFloat(initialBalance.toString());
         setErrorMessage('');
 
@@ -56,7 +54,7 @@ const NewAccountComponent: React.FC = () => {
             console.error('Error creating account:', error.message);
             setErrorMessage('Error creating account. Please try again.');
         }
-    };
+    };*/
 
     return (
         <>
@@ -141,7 +139,7 @@ const NewAccountComponent: React.FC = () => {
                         color="primary"
                         sx={{ mt: 2 }}
                         fullWidth
-                        onClick={handleCreateAccount}
+
                     >
                         Create
                     </Button>

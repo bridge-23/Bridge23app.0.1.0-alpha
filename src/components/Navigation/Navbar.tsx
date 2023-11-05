@@ -11,13 +11,9 @@ export default function Navbar() {
 
     return (
         <>
-            <Hidden smDown>
-            {user ? (<AppBarUser/>) : (<DesktopNavbar/>)}
-            </Hidden>
+            <Hidden smDown> {user ? (<AppBarUser/>) : (<DesktopNavbar/>)} </Hidden>
 
-            <Hidden mdUp>
-            {user && (<MobileNavbar/>)}
-            </Hidden>
+            <Hidden mdUp> {user && (<MobileNavbar/>)} </Hidden>
         </>
     );
 }

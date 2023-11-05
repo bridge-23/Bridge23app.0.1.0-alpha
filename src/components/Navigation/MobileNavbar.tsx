@@ -1,5 +1,5 @@
 //..src/components/Navigation/AppBarUser.tsx
-import React from 'react';
+import React, {useContext} from 'react';
 import {AppBar, Toolbar, IconButton, Menu, MenuItem} from '@mui/material';
 import Link from 'next/link';
 import HomeIcon from "@mui/icons-material/Home";
@@ -8,15 +8,14 @@ import {UploadFab} from "../Buttons/UploadFab";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import {bindMenu, bindTrigger} from "material-ui-popup-state";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {useAddress} from "@thirdweb-dev/react";
-import useFirebaseUser from "../../lib/FireBase/useFirebaseUser";
 import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import { signOut } from '@junobuild/core';
+import {AuthContext} from "../../contexts/AuthContext";
 function MobileNavbar() {
-    const address = useAddress();
-    const { user } = useFirebaseUser();
     const router = useRouter();
+    const { userKey } = router.query;
+    const { user } = useContext(AuthContext);
     const handleFeedbackClick = () => {
         // For demonstration purposes. Replace with your desired logic.
         alert("Thank you for your feedback!");
@@ -40,13 +39,15 @@ function MobileNavbar() {
     return (
         <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none'} }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px', paddingLeft: '30px', paddingRight: '30px' }}>
-                <Link href={`/dashboard/${address}`}>
+                {user && (
+                <Link href={`/dashboard/${user.key}`}>
                     <IconButton color="inherit" aria-label="open drawer">
                         <HomeIcon fontSize="large"/>
                     </IconButton>
                 </Link>
+                )}
                 {user && (
-                    <Link href={`/tokenslist/${address}`}>
+                    <Link href={`/tokenslist/${user.key}`}>
                         <IconButton color="inherit" aria-label="open drawer">
                             <FormatListBulletedSharpIcon fontSize="large" />
                         </IconButton>
@@ -56,7 +57,7 @@ function MobileNavbar() {
                     <UploadFab />
                 )}
                 {user && (
-                    <Link href={`/rewards/${address}`}>
+                    <Link href={`/rewards`}>
                         <IconButton color="inherit" aria-label="open drawer">
                             <CardGiftcardIcon fontSize="large"/>
                         </IconButton>

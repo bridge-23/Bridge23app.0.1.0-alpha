@@ -12,21 +12,17 @@ export const AuthContext = createContext<AuthContextType>({
     loading: true,
     error: null
 });
-
 interface AuthProps {
     children: React.ReactNode;
 }
-
 export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState<Error | null>(null); // Error state
+    const [error, setError] = useState<Error | null>(null); // Error state is still needed
 
     useEffect(() => {
         // authSubscribe callback only provides the new user value, no error handling here
         const unsubscribe = authSubscribe((newUser: User | null) => {
             setUser(newUser);
-            setLoading(false);
             if (!newUser) {
                 console.log("User is signed out or session has expired");
                 // Redirect logic or additional logic if user is not authenticated
@@ -42,15 +38,10 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, error }}>
-            {loading ? (
-                <div>Loading...</div> // Your loading indicator
-            ) : (
-                children // Render the children, which could be HomePage or any other component based on routing or other logic
-            )}
+        <AuthContext.Provider value={{ user, loading: false, error }}>
+            {children}
         </AuthContext.Provider>
     );
 };
-export default AuthProvider;
 
 

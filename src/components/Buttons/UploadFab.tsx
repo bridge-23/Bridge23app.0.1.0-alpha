@@ -4,12 +4,6 @@ import imageCompression from 'browser-image-compression';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import styled from "styled-components";
 import { Fab, Typography,Button,Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle,LinearProgress } from "@mui/material";
-import 'firebase/storage';
-import { auth, storage, db } from "../../lib/FireBase/initFirebase";
-import { ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
-import { doc, setDoc } from 'firebase/firestore';
-import { serverTimestamp } from "firebase/firestore";
-import { sendNotificationToSlack } from '../../lib/FireBase/sendToSlackFunction';
 
 
 const StyledFab = styled(Fab)({
@@ -31,7 +25,7 @@ export const UploadFab = () => {
     const [message, setMessage] = useState('');
     const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
-    const handleUpload = async () => {
+    /*const handleUpload = async () => {
         const user = auth.currentUser;
         if (!user) {
             setMessage('Please sign in to upload.');
@@ -104,7 +98,7 @@ export const UploadFab = () => {
         }
     };
 
-    const triggerFileSelect = () => fileRef.current?.click();
+    const triggerFileSelect = () => fileRef.current?.click();*/
 
     const handleClose = () => {
         setOpen(false);
@@ -114,13 +108,12 @@ export const UploadFab = () => {
 
     return (
         <>
-            <StyledFab color="secondary" aria-label="add" onClick={triggerFileSelect}>
+            <StyledFab color="secondary" aria-label="add" >
                 <ReceiptIcon fontSize="large" />
                 <input
                     type="file"
                     multiple
                     ref={fileRef}
-                    onChange={handleUpload}
                     style={{ display: 'none' }}
                 />
             </StyledFab>

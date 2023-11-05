@@ -1,7 +1,6 @@
 //..src/components/BridgeIdCardComponent.tsx
 import React, {useState} from "react";
 import QRCode from "qrcode.react";
-import {useContract, useNFTs, useOwnedNFTs} from "@thirdweb-dev/react";
 import { Card, Avatar, CardContent, Typography, Box } from '@mui/material';
 import LoadingComponent from "../shared/LoadingComponent";
 import ErrorComponent from "../shared/ErrorComponent";
@@ -16,23 +15,6 @@ type BridgeIdCardProps = {
 
 const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ uid,address, truncateUid }) => {
     const [flipped, setFlipped] = useState(false);
-    const { contract } = useContract(REWARD_CONTRACT);
-    const { data, isLoading, error } = useNFTs(contract);
-    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading,error: nftError } = useOwnedNFTs(contract, address);
-    if (isOwnedNFTsLoading) {
-        return <LoadingComponent />;
-    }
-    if (nftError) {
-        return <ErrorComponent message="Failed to fetch your NFTs!" />;
-    }
-    const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
-        if (nft.type === "ERC721") {
-            return accumulator + 1;
-        } else if (nft.type === "ERC1155" && nft.quantityOwned) {
-            return accumulator + (nft.quantityOwned ? Number(nft.quantityOwned) : 0);
-        }
-        return accumulator;
-    }, 0) || 0;
 
     return (
         <Card
@@ -79,7 +61,7 @@ const BridgeIdCard: React.FC<BridgeIdCardProps> = ({ uid,address, truncateUid })
                         Balance
                     </Typography>
                     <Typography variant="body2" sx={{ position: 'absolute', top: '30px', right: '25px' }}>
-                        {totalNFTs}
+                       1000
                     </Typography>
                     <Typography variant="subtitle2" sx={{ position: 'absolute', bottom: '10px', right: '10px' }}>
                         Infinity Membership

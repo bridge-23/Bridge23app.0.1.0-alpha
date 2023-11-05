@@ -2,13 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Container, Card, CardContent } from '@mui/material';
 import AccountCard from '../Accounts/AccountCardComponent';
-import { db } from "../../lib/FireBase/initFirebase";
-import { collection, getDocs } from "firebase/firestore";
+
 
 const AccountList: React.FC = () => {
     const [accounts, setAccounts] = useState<any[]>([]);
 
-    useEffect(() => {
+/*    useEffect(() => {
         const fetchAccounts = async () => {
             try {
                 const querySnapshot = await getDocs(collection(db, "accounts"));
@@ -19,7 +18,7 @@ const AccountList: React.FC = () => {
             }
         };
         fetchAccounts();
-    }, []);
+    }, []);*/
 
     return (
             <Card
