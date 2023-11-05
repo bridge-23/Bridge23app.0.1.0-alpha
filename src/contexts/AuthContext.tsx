@@ -1,7 +1,6 @@
 //..src/contexts/AuthContext.tsx
 import React, { createContext, useEffect, useState } from "react";
 import { authSubscribe, User } from "@junobuild/core";
-import LoginComponentJuno from '../components/LoginComponentJuno';
 
 interface AuthContextType {
     user: User | null;
