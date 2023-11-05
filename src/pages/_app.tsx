@@ -2,24 +2,36 @@
 import '../lib/Juno/initJuno';
 import '../styles/globals.css'
 import type { AppProps } from "next/app";
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from "../components/Navigation/Navbar";
 import { ColorModeProvider } from '../contexts/ColorModeContext';
-import { auth } from "../lib/FireBase/initFirebase";
-import { initializeJuno } from '../lib/Juno/initJuno'; // Importing the initializeJuno function
-import { Auth } from '../contexts/AuthContext';
-//import { ThirdwebProvider, magicLink, metamaskWallet, coinbaseWallet, smartWallet, walletConnect } from "@thirdweb-dev/react";
-//import { BaseGoerli } from "@thirdweb-dev/chains";
+import { initializeJuno } from '../lib/Juno/initJuno';
+import Auth  from '../contexts/AuthContext';
+import {authSubscribe, User} from "@junobuild/core";
 function MyApp({ Component, pageProps }: AppProps) {
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true); // Loading state
     useEffect(() => {
 
         initializeJuno().catch(error => {
             console.error('Failed to initialize Juno:', error);
         });
-        const unsubscribe = auth.onAuthStateChanged(async user => {
+
+        const unsubscribe = authSubscribe((newUser: User | null) => {
+            setUser(newUser);
+            setLoading(false);
+            if (!newUser) {
+                console.log("User is signed out or session has expired");
+                // Redirect logic or additional logic if user is not authenticated
+            }
         });
 
-        return () => unsubscribe();
+        // The cleanup function
+        return () => {
+            if (typeof unsubscribe === 'function') {
+                unsubscribe();
+            }
+        };
     }, []);
 
     return (

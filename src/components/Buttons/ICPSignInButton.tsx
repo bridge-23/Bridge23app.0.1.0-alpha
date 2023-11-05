@@ -1,6 +1,6 @@
 // src/components/ICPSignInButton.tsx
 import React, { useEffect, useState } from 'react';
-import { Button, Container, ToggleButton, ToggleButtonGroup, Grid } from '@mui/material';
+import { Button, Container, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core';
 import { useRouter } from 'next/router';
 
@@ -66,7 +66,7 @@ const ICPSignInButton = () => {
     };
 
     return (
-        <Container>
+        <Box>
             <Grid container direction="column" alignItems="center" spacing={3}>
                 <Grid item>
                     <ToggleButtonGroup
@@ -80,7 +80,7 @@ const ICPSignInButton = () => {
                         <ToggleButton value="nftId">NFID</ToggleButton>
                     </ToggleButtonGroup>
                 </Grid>
-                <Grid item>
+                <Grid item style={{ marginTop: '2px' }}>
                     {isUserSignedIn ? (
                         <Button
                             variant="contained"
@@ -100,7 +100,7 @@ const ICPSignInButton = () => {
                     )}
                 </Grid>
             </Grid>
-        </Container>
+        </Box>
     );
 };
 
