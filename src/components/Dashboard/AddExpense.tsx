@@ -12,12 +12,12 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 
-interface AddExpenseProps {
+interface AddTransactionProps {
     open: boolean;
     onClose: () => void;
 }
 
-function AddExpense({ open, onClose }: AddExpenseProps) {
+function AddTransaction({ open, onClose }: AddTransactionProps) {
     const { user } = useContext(AuthContext);
     const [expenseName, setExpenseName] = useState('');
     const [expenseAmount, setExpenseAmount] = useState('');
@@ -108,5 +108,5 @@ function AddExpense({ open, onClose }: AddExpenseProps) {
     );
 }
 
-export default AddExpense;
+export default AddTransaction;
 

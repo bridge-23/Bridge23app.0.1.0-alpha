@@ -8,15 +8,16 @@ import LoginComponentJuno from "../components/LoginComponentJuno";
 import { AuthContext } from "../contexts/AuthContext";
 
 const Home: NextPage = () => {
-    const { user, loading } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
 
-    if (loading) {
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <CircularProgress />
-            </Box>
-        );
+    // Make sure authContext is not undefined by checking its existence
+    if (!authContext) {
+        // Handle the case where authContext is not provided, such as showing a loading spinner or error message
+        return <CircularProgress />;
     }
+
+    // Destructure the values needed from authContext after confirming its existence
+    const { user, setBusy } = authContext;
 
     return (
         <>

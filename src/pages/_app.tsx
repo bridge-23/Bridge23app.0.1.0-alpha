@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, []);
 
     return (
-        <AuthProvider> {/* Wrap your app with AuthProvider */}
+        <AuthProvider>
             <ColorModeProvider>
                 <Navbar />
                 <Component {...pageProps} />
