@@ -5,8 +5,6 @@ import AccountsList from "../../components/Dashboard/AccountsList";
 import { Container, Grid, Typography } from "@mui/material";
 import {listDocs} from "@junobuild/core";
 import {AuthContext} from "../../contexts/AuthContext";
-import AccountCard from '../../components/Accounts/AccountCardComponent';
-
 interface AccountData {
     accountName: string;
     currentBalance: number;

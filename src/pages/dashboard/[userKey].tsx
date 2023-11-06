@@ -11,7 +11,6 @@ import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddExpense";
 import {AuthContext} from "../../contexts/AuthContext";
 import {listDocs} from "@junobuild/core";
-import {Account} from "../../../types/index"
 interface AccountData {
     accountName: string;
     currentBalance: number;
@@ -31,6 +30,20 @@ const Dashboard: NextPage = () => {
         setOpen(false);
     };
 
+    const totalCurrentBalance = accounts.reduce((sum, account) => sum + account.currentBalance, 0);
+
+    const formattedTotalBalance = totalCurrentBalance.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'IDR', // Change to the actual currency code if necessary
+    });
+
+    useEffect(() => {
+        fetchAccounts(); // Call the fetch function on component mount
+    }, []);
+    const handleEdit = (accountId: string) => {
+        // Implement your edit logic here
+        console.log('Editing account with ID:', accountId);
+    };
     const fetchAccounts = async () => {
         try {
             const accountsData = await listDocs({
@@ -64,10 +77,10 @@ const Dashboard: NextPage = () => {
             <Box px={isMobile ? 2 : 0}>
                 <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="stretch">
 
-                    {/* First row of cards */}
                     <Grid item xs={12} md={4}>
-                        <AccountBalanceCardComponent currentBalance={currentBalance}/>
+                        <AccountBalanceCardComponent currentBalance={formattedTotalBalance} />
                     </Grid>
+
 
                     <Grid item xs={12} md={4}>
                         <UserProfileComponent/>
