@@ -19,7 +19,6 @@ const ICPSignInButton = () => {
                 console.log("User is signed out");
             }
         });
-
         const handleSessionExpiration = () => {
             console.log("Session has expired");
             // Handle session expiration if needed
@@ -48,7 +47,6 @@ const ICPSignInButton = () => {
             console.error("Sign-in failed:", error);
         }
     };
-
     const handleSignOut = async () => {
         try {
             await signOut();

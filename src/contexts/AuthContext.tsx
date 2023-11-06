@@ -1,14 +1,13 @@
 //..src/contexts/AuthContext.tsx
 import React, { createContext, useEffect, useState } from "react";
 import { authSubscribe, User } from "@junobuild/core";
-
+import ICPSignInButton from "../components/Buttons/ICPSignInButton";
 // Define the context type
 interface AuthContextType {
     user: User | null;
     loading: boolean;
     error: ExtendedError | null; // Change this to your custom error type
 }
-
 // Create the context with default values
 export const AuthContext = createContext<AuthContextType>({
     user: null,
@@ -71,7 +70,10 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     return (
         <AuthContext.Provider value={{ user, loading, error }}>
             {loading ? (
-                <div>Loading...</div>
+                <>
+                    <div>Loading...</div>
+                    <ICPSignInButton />
+                </>
             ) : error ? (
                 <div>Error: {error.message}</div> // Display error message
             ) : (
