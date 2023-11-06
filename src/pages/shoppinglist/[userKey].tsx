@@ -1,20 +1,6 @@
 //..src/page/shoppinglist/[userKey]tsx
 import React, { useContext, useEffect, useState } from 'react';
-import {
-    Button,
-    TextField,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    Checkbox,
-    IconButton,
-    Paper,
-    Typography,
-    Box,
-    Container,
-    CircularProgress
-} from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Container } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -59,16 +45,7 @@ const ShoppingList: React.FC = () => {
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
-    const authContext = useContext(AuthContext);
-
-    // Make sure authContext is not undefined by checking its existence
-    if (!authContext) {
-        // Handle the case where authContext is not provided, such as showing a loading spinner or error message
-        return <CircularProgress />;
-    }
-
-    // Destructure the values needed from authContext after confirming its existence
-    const { user, setBusy } = authContext;
+    const { user } = useContext(AuthContext);
 
     const paperStyle = {
         padding: '20px',
