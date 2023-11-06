@@ -3,8 +3,6 @@ import React from 'react';
 import { Card, Container, Grid, Typography } from '@mui/material';
 import ICPSignInButton from './Buttons/ICPSignInButton';
 import Link from 'next/link';
-import Image from 'next/image';
-
 // Define the component as React.FC if there are no props
 const LoginComponentJuno: React.FC = () => {
     return (
@@ -32,6 +30,5 @@ const LoginComponentJuno: React.FC = () => {
         </Container>
     );
 };
-
 export default LoginComponentJuno;
 

@@ -1,11 +1,10 @@
 // src/components/ICPSignInButton.tsx
 import React, { useEffect, useState } from 'react';
-import { Button, Container, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
+import { Button, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core';
 import { useRouter } from 'next/router';
 
 type ProviderType = 'internetIdentity' | 'nftId';
-
 const ICPSignInButton = () => {
     const [isUserSignedIn, setIsUserSignedIn] = useState(false);
     const [providerType, setProviderType] = useState<ProviderType>('internetIdentity');
@@ -37,7 +36,7 @@ const ICPSignInButton = () => {
     const handleSignIn = async () => {
         try {
             const provider = providerType === 'internetIdentity'
-                ? new InternetIdentityProvider({ domain: "ic0.app" })
+                ? new InternetIdentityProvider({ domain: "internetcomputer.org" })
                 : new NFIDProvider({
                     appName: "ReFinityapp",
                     logoUrl: "https://somewhere.com/your_logo.png",
@@ -103,6 +102,5 @@ const ICPSignInButton = () => {
         </Box>
     );
 };
-
 export default ICPSignInButton;
 
