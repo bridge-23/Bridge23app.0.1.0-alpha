@@ -8,7 +8,6 @@ import { initializeJuno } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 
-
 const NewAccountComponent: React.FC = () => {
     //const [note, setNote] = useState<string>('');
     const [junoReady, setJunoReady] = useState<boolean>(false);

@@ -6,7 +6,7 @@ export async function initializeJuno() {
     if (!initialized) {
         try {
             await initJuno({
-                satelliteId: "kuyff-qaaaa-aaaal-ac5uq-cai",
+                satelliteId: process.env.NEXT_PUBLIC_JUNO_ID as string,
             });
             initialized = true;
         } catch (error) {
