@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs, } from "@junobuild/core";
-import { initializeJuno } from '../../lib/Juno/initJuno';
+//import { initializeJuno } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import { deleteDoc } from "@junobuild/core";
 import { getDoc } from "@junobuild/core";
@@ -40,12 +40,12 @@ const ShoppingList: React.FC = () => {
         checked: boolean; content: string, id: string
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
-    const { user } = useContext(AuthContext);
     const router = useRouter();
     const { userKey } = router.query;
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+    const { user } = useContext(AuthContext);
 
     const paperStyle = {
         padding: '20px',
@@ -55,7 +55,6 @@ const ShoppingList: React.FC = () => {
 
     useEffect(() => {
         async function init() {
-            await initializeJuno();
             setJunoReady(true);
         }
         init();

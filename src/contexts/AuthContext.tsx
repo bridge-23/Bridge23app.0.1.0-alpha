@@ -31,12 +31,10 @@ class ExtendedError extends Error {
         this.code = code;
     }
 }
-
 // Define the provider props
 interface AuthProps {
     children: React.ReactNode;
 }
-
 // Define the provider component
 export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);

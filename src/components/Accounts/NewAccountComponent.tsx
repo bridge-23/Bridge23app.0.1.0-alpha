@@ -4,13 +4,10 @@ import { Card, IconButton, Typography, Dialog, TextField, Button, Box, Select, M
 import { Alert } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { setDoc } from "@junobuild/core";
-import { initializeJuno } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const NewAccountComponent: React.FC = () => {
-    //const [note, setNote] = useState<string>('');
-    const [junoReady, setJunoReady] = useState<boolean>(false);
     const { user } = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [open, setOpen] = useState(false);
@@ -21,13 +18,6 @@ const NewAccountComponent: React.FC = () => {
     const [financialInstitution, setFinancialInstitution] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
 
-    useEffect(() => {
-        async function init() {
-            await initializeJuno();
-            setJunoReady(true);
-        }
-        init();
-    }, []);
     const handleCreateAccount = async () => {
         const parsedInitialBalance = parseFloat(initialBalance.toString());
         setErrorMessage('');
@@ -35,11 +25,6 @@ const NewAccountComponent: React.FC = () => {
         if (!accountName || isNaN(parsedInitialBalance) || parsedInitialBalance < 0) {
             console.error('Please provide a valid account name and initial balance.');
             setErrorMessage('Please provide a valid account name and initial balance.');
-            return;
-        }
-
-        if (!junoReady) {
-            console.error('Application is initializing, please try again in a moment.');
             return;
         }
 

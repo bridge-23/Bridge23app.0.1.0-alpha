@@ -1,9 +1,8 @@
 //..src/components/Dashboard/AddExpense
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { setDoc } from "@junobuild/core";
-import { initializeJuno, isJunoInitialized } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -11,6 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import {AuthContext} from "../../contexts/AuthContext";
 
 interface AddExpenseProps {
     open: boolean;
@@ -18,31 +18,15 @@ interface AddExpenseProps {
 }
 
 function AddExpense({ open, onClose }: AddExpenseProps) {
+    const { user } = useContext(AuthContext);
     const [expenseName, setExpenseName] = useState('');
     const [expenseAmount, setExpenseAmount] = useState('');
     const [junoReady, setJunoReady] = useState(false);
 
-    useEffect(() => {
-        async function init() {
-            await initializeJuno();
-            setJunoReady(true);
-        }
-
-        if (!isJunoInitialized()) {
-            init();
-        } else {
-            setJunoReady(true);
-        }
-    }, []);
 
     const handleAddExpense = async () => {
         if (!expenseName || !expenseAmount) {
             alert('Please provide valid expense details.');
-            return;
-        }
-
-        if (!junoReady) {
-            alert('Application is initializing, please try again in a moment.');
             return;
         }
 

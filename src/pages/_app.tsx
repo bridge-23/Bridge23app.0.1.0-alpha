@@ -8,13 +8,17 @@ import { ColorModeProvider } from '../contexts/ColorModeContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { initJuno } from "@junobuild/core";
 
-
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {
         (async () => {
-            await initJuno({
-                satelliteId: process.env.NEXT_PUBLIC_JUNO_ID as string,
-            });
+            try {
+                await initJuno({
+                    satelliteId: process.env.NEXT_PUBLIC_JUNO_ID as string,
+                });
+            } catch (error) {
+                console.error('Failed to initialize Juno:', error);
+                // Handle the error appropriately
+            }
         })();
     }, []);
 

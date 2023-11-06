@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { setDoc } from "@junobuild/core";
-import { initializeJuno } from '../../lib/Juno/initJuno';
+//import { initializeJuno } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -26,7 +26,6 @@ const AddShoppingListItem: FC<AddShoppingListNoteProps> = ({ open, onClose }) =>
 
     useEffect(() => {
         async function init() {
-            await initializeJuno();
             setJunoReady(true);
         }
         init();
