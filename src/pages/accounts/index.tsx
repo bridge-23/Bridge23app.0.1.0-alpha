@@ -4,7 +4,7 @@ import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import { Container, Grid, Typography } from "@mui/material";
 import {listDocs} from "@junobuild/core";
-import {AuthContext} from "../../contexts/AuthContext";
+//import {AuthContext} from "../../contexts/AuthContext";
 interface AccountData {
     accountName: string;
     currentBalance: number;
@@ -13,7 +13,7 @@ interface AccountData {
     id: string;
 }
 const Accounts: React.FC = () => {
-    const { user } = useContext(AuthContext);
+    //const { user } = useContext(AuthContext);
     const [currentMonth, setCurrentMonth] = useState('');
     const [accounts, setAccounts] = useState<AccountData[]>([]);
 

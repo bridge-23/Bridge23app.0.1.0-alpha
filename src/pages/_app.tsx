@@ -1,5 +1,4 @@
 //../src/pages/_app.tsx
-import App, { AppContext } from 'next/app';
 import { AppProps } from 'next/app';
 import '../lib/Juno/initJuno';
 import '../styles/globals.css'
@@ -25,16 +24,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         </AuthProvider>
     );
 }
-
-MyApp.getInitialProps = async (appContext: AppContext) => {
-    // calls page's `getInitialProps` and fills `appProps.pageProps`
-    const appProps = await App.getInitialProps(appContext);
-
-    // additional app-level data fetching can go here if necessary
-
-    return { ...appProps }
-};
-
 export default MyApp;
 
 
