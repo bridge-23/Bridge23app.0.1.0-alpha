@@ -5,7 +5,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowDownwardSharpIcon from '@mui/icons-material/ArrowDownwardSharp';
 import ArrowUpwardSharpIcon from '@mui/icons-material/ArrowUpwardSharp';
 
-const AccountBalanceCardComponent: React.FC = () => {
+interface AccountBalanceCardProps {
+    currentBalance: string; // Prop for the current balance
+}
+const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ currentBalance }) => {
     return (
         <Card
             sx={{
@@ -31,7 +34,9 @@ const AccountBalanceCardComponent: React.FC = () => {
                 </Box>
 
                 <Typography variant="subtitle2" color="textSecondary" align="center">Accounts balance</Typography>
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}> $111,000.00 </Typography>
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}>
+                    {currentBalance}
+                </Typography>
 
                 <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
                     <Box display="flex" alignItems="center">

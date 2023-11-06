@@ -10,28 +10,20 @@ import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddExpense";
 import {AuthContext} from "../../contexts/AuthContext";
-import {useRouter} from "next/router";
-/*import { useAddress, useContract, useOwnedNFTs } from "@thirdweb-dev/react";
-import LoadingComponent from "../../components/shared/LoadingComponent";
-import ErrorComponent from "../../components/shared/ErrorComponent";
-import { auth } from "../../lib/initFirebase";
-import BridgeIdCardComponent from "../../components/Dashboard/BridgeIdCardComponent";
-import { REWARD_CONTRACT } from "../../consts/parameters";*/
+import {listDocs} from "@junobuild/core";
+import {Account} from "../../../types/index"
+interface AccountData {
+    accountName: string;
+    currentBalance: number;
+    currency: string;
+    type: string; // Corresponds to accountType
+    id: string;
+}
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const { user } = useContext(AuthContext);
-    const router = useRouter();
     const [open, setOpen] = useState(false);
-    /*const address = useAddress();
-    const { contract } = useContract(REWARD_CONTRACT);
-    const { data: ownedNFTs, isLoading: isOwnedNFTsLoading, error: nftError } = useOwnedNFTs(contract, address);
-
-    if (isOwnedNFTsLoading) {
-        return <LoadingComponent />;
-    }
-    if (nftError) {
-        return <ErrorComponent message="Failed to fetch your NFTs!" />;
-    }*/
+    const [accounts, setAccounts] = useState<AccountData[]>([]);
     const handleOpen = () => {
         setOpen(true);
     };
@@ -39,22 +31,33 @@ const Dashboard: NextPage = () => {
         setOpen(false);
     };
 
-    /*const totalNFTs = ownedNFTs?.reduce((accumulator, nft) => {
-        if (nft.type === "ERC721") {
-            return accumulator + 1;
-        } else if (nft.type === "ERC1155" && nft.quantityOwned) {
-            return accumulator + Number(nft.quantityOwned);
+    const fetchAccounts = async () => {
+        try {
+            const accountsData = await listDocs({
+                collection: "Accounts"
+            });
+
+            if (accountsData && accountsData.items) {
+                const fetchedAccounts = accountsData.items.map(doc => {
+                    const data = doc.data as AccountData;
+                    return {
+                        accountName: data.accountName,
+                        currentBalance: data.currentBalance,
+                        currency: data.currency,
+                        type: data.type, // Make sure that this value exists in your fetched data
+                        id: doc.key
+                    };
+                });
+                setAccounts(fetchedAccounts); // Update the component's state with the fetched accounts
+            } else {
+                console.error("Accounts data is undefined or items are missing");
+                alert('Failed to fetch accounts. Please try again.');
+            }
+        } catch (error) {
+            console.error("Error fetching accounts:", error);
+            alert('Failed to fetch accounts. Please try again.');
         }
-        return accumulator;
-    }, 0) || 0;
-
-    const truncateUid = (uid: string) => {
-        return `${uid.slice(0, 6)}...${uid.slice(-4)}`;
     };
-    const user = auth.currentUser;
-    const uid = user ? user.uid : null;*/
-
-//TODO: make all to db dont use base
 
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
@@ -63,7 +66,7 @@ const Dashboard: NextPage = () => {
 
                     {/* First row of cards */}
                     <Grid item xs={12} md={4}>
-                        <AccountBalanceCardComponent />
+                        <AccountBalanceCardComponent currentBalance={currentBalance}/>
                     </Grid>
 
                     <Grid item xs={12} md={4}>
@@ -84,7 +87,7 @@ const Dashboard: NextPage = () => {
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                        <AccountsList />
+                        <AccountsList accounts={accounts} />
                     </Grid>
 
                 </Grid>
@@ -95,13 +98,3 @@ const Dashboard: NextPage = () => {
 export default Dashboard;
 
 
-{/*{address && (
-                        <Grid item xs={12} md={4} lg={3}>
-                            <BridgeIdCardComponent
-                                uid={uid}
-                                address={address}
-                                totalNFTs={totalNFTs}
-                                truncateUid={truncateUid}
-                            />
-                        </Grid>
-                    )}*/}

@@ -1,11 +1,18 @@
 //src/components/Accounts/NewAccountComponent.tsx
-import React, { useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Card, IconButton, Typography, Dialog, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { Alert } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { setDoc } from "@junobuild/core";
+import { initializeJuno } from '../../lib/Juno/initJuno';
+import { nanoid } from "nanoid";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 const NewAccountComponent: React.FC = () => {
+    const [note, setNote] = useState<string>('');
+    const [junoReady, setJunoReady] = useState<boolean>(false);
+    const { user } = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [open, setOpen] = useState(false);
     const [accountName, setAccountName] = useState('');
@@ -15,46 +22,64 @@ const NewAccountComponent: React.FC = () => {
     const [financialInstitution, setFinancialInstitution] = useState<string>('');
     const [successMessage, setSuccessMessage] = useState<string>('');
 
-/*    const handleCreateAccount = async () => {
+    useEffect(() => {
+        async function init() {
+            await initializeJuno();
+            setJunoReady(true);
+        }
+        init();
+    }, []);
+    const handleCreateAccount = async () => {
         const parsedInitialBalance = parseFloat(initialBalance.toString());
         setErrorMessage('');
 
         if (!accountName || isNaN(parsedInitialBalance) || parsedInitialBalance < 0) {
             console.error('Please provide a valid account name and initial balance.');
-            setErrorMessage('Please provide a valid account name and initial balance.'); // This is the error handling in case of invalid inputs
+            setErrorMessage('Please provide a valid account name and initial balance.');
+            return;
+        }
+
+        if (!junoReady) {
+            console.error('Application is initializing, please try again in a moment.');
             return;
         }
 
         try {
-            const user = auth.currentUser;
-
             if (!user) {
                 console.error('Please sign in to create an account.');
                 return;
             }
 
-            const newAccountData = {
-                accountName,
-                initialBalance: parsedInitialBalance,
-                currency,
-                accountType,
-                financialInstitution,
-                timestamp: serverTimestamp(),
-            };
+            const accountRef = `${user.key}_${nanoid()}`; // This creates a unique reference for the account using the user ID and nanoid
+            await setDoc({
+                collection: "Accounts",
+                doc: {
+                    key: accountRef,
+                    data: {
+                        userId: user.key, // Replace with actual user ID variable
+                        accountName,
+                        financialInstitution,
+                        initialBalance: parsedInitialBalance,
+                        currentBalance: parsedInitialBalance,
+                        currency,
+                        accountType,
+                        created: new Date().toISOString(), // Assuming you want to use ISO string for the timestamp
+                        // Add other necessary fields
+                    }
+                }
+            });
 
-            // Assuming the collection where you store accounts is named 'accounts'
-            const accountRef = doc(db, 'accounts', `${user.uid}_${accountName}`);
-            await setDoc(accountRef, newAccountData);
+            console.log('Account created successfully!');
             setSuccessMessage('Account created successfully!');
             setTimeout(() => {
                 setOpen(false);
                 setSuccessMessage('');
-            }, 1500); // Close the dialog after 1.5 seconds
-        } catch (error: any) {
-            console.error('Error creating account:', error.message);
+            }, 1500);
+        } catch (error) {
+            console.error('Error creating account:', error);
             setErrorMessage('Error creating account. Please try again.');
         }
-    };*/
+    };
 
     return (
         <>
@@ -120,8 +145,8 @@ const NewAccountComponent: React.FC = () => {
                             <MenuItem value="USD">USD</MenuItem>
                             <MenuItem value="EUR">EUR</MenuItem>
                             <MenuItem value="GBP">GBP</MenuItem>
-                            <MenuItem value="GBP">IDR</MenuItem>
-                            <MenuItem value="GBP">CAD</MenuItem>
+                            <MenuItem value="IDR">IDR</MenuItem>
+                            <MenuItem value="CAD">CAD</MenuItem>
                             {/* Add more currencies if necessary */}
                         </Select>
                     </FormControl>
@@ -139,7 +164,7 @@ const NewAccountComponent: React.FC = () => {
                         color="primary"
                         sx={{ mt: 2 }}
                         fullWidth
-
+                        onClick={handleCreateAccount}
                     >
                         Create
                     </Button>
