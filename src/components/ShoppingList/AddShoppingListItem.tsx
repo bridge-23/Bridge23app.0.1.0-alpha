@@ -12,6 +12,7 @@ import { setDoc } from "@junobuild/core";
 //import { initializeJuno } from '../../lib/Juno/initJuno';
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
+import {CircularProgress} from "@mui/material";
 
 interface AddShoppingListNoteProps {
     open: boolean;
@@ -22,7 +23,16 @@ interface AddShoppingListNoteProps {
 const AddShoppingListItem: FC<AddShoppingListNoteProps> = ({ open, onClose }) => {
     const [note, setNote] = useState<string>('');
     const [junoReady, setJunoReady] = useState<boolean>(false);
-    const { user } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+
+    // Make sure authContext is not undefined by checking its existence
+    if (!authContext) {
+        // Handle the case where authContext is not provided, such as showing a loading spinner or error message
+        return <CircularProgress />;
+    }
+
+    // Destructure the values needed from authContext after confirming its existence
+    const { user, setBusy } = authContext;
 
     useEffect(() => {
         async function init() {

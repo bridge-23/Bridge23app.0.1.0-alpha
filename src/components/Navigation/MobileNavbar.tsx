@@ -1,6 +1,6 @@
 //..src/components/Navigation/AppBarUser.tsx
 import React, {useContext} from 'react';
-import {AppBar, Toolbar, IconButton, Menu, MenuItem} from '@mui/material';
+import {AppBar, Toolbar, IconButton, Menu, MenuItem, CircularProgress} from '@mui/material';
 import Link from 'next/link';
 import HomeIcon from "@mui/icons-material/Home";
 import FormatListBulletedSharpIcon from "@mui/icons-material/FormatListBulletedSharp";
@@ -15,7 +15,16 @@ import {AuthContext} from "../../contexts/AuthContext";
 function MobileNavbar() {
     const router = useRouter();
     const { userKey } = router.query;
-    const { user } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+
+    // Make sure authContext is not undefined by checking its existence
+    if (!authContext) {
+        // Handle the case where authContext is not provided, such as showing a loading spinner or error message
+        return <CircularProgress />;
+    }
+
+    // Destructure the values needed from authContext after confirming its existence
+    const { user, setBusy } = authContext;
     const handleFeedbackClick = () => {
         // For demonstration purposes. Replace with your desired logic.
         alert("Thank you for your feedback!");

@@ -1,6 +1,19 @@
 //src/components/Accounts/NewAccountComponent.tsx
 import React, {useContext, useEffect, useState} from 'react';
-import { Card, IconButton, Typography, Dialog, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import {
+    Card,
+    IconButton,
+    Typography,
+    Dialog,
+    TextField,
+    Button,
+    Box,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    CircularProgress
+} from '@mui/material';
 import { Alert } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { setDoc } from "@junobuild/core";
@@ -8,7 +21,16 @@ import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const NewAccountComponent: React.FC = () => {
-    const { user } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+
+    // Make sure authContext is not undefined by checking its existence
+    if (!authContext) {
+        // Handle the case where authContext is not provided, such as showing a loading spinner or error message
+        return <CircularProgress />;
+    }
+
+    // Destructure the values needed from authContext after confirming its existence
+    const { user, setBusy } = authContext;
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [open, setOpen] = useState(false);
     const [accountName, setAccountName] = useState('');

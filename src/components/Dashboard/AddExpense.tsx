@@ -11,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
+import {CircularProgress} from "@mui/material";
 
 interface AddTransactionProps {
     open: boolean;
@@ -18,7 +19,16 @@ interface AddTransactionProps {
 }
 
 function AddTransaction({ open, onClose }: AddTransactionProps) {
-    const { user } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
+
+    // Make sure authContext is not undefined by checking its existence
+    if (!authContext) {
+        // Handle the case where authContext is not provided, such as showing a loading spinner or error message
+        return <CircularProgress />;
+    }
+
+    // Destructure the values needed from authContext after confirming its existence
+    const { user, setBusy } = authContext;
     const [expenseName, setExpenseName] = useState('');
     const [expenseAmount, setExpenseAmount] = useState('');
     const [junoReady, setJunoReady] = useState(false);
