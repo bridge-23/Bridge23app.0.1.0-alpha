@@ -10,7 +10,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 
 const NewAccountComponent: React.FC = () => {
-    const [note, setNote] = useState<string>('');
+    //const [note, setNote] = useState<string>('');
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const { user } = useContext(AuthContext);
     const [errorMessage, setErrorMessage] = useState<string>('');

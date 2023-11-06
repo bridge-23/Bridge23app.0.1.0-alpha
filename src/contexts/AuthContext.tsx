@@ -16,7 +16,7 @@ interface AuthProps {
 }
 export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [error, setError] = useState<Error | null>(null); // Error state is still needed
+    const [error] = useState<Error | null>(null); // Error state is still needed
 
     useEffect(() => {
         // authSubscribe callback only provides the new user value, no error handling here

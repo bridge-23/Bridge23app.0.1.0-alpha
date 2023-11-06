@@ -1,5 +1,5 @@
 //..src/dashboard/[userKey].tsx
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import { NextPage } from "next";
 import { Container, Grid, useMediaQuery, Box } from "@mui/material";
 import { Theme } from '@mui/material/styles';
@@ -9,8 +9,8 @@ import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCa
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddExpense";
-import {AuthContext} from "../../contexts/AuthContext";
 import {listDocs} from "@junobuild/core";
+//import {AuthContext} from "../../contexts/AuthContext";
 interface AccountData {
     accountName: string;
     currentBalance: number;
@@ -20,12 +20,12 @@ interface AccountData {
 }
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    const { user } = useContext(AuthContext);
+    //const { user } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<AccountData[]>([]);
-    const handleOpen = () => {
+/*    const handleOpen = () => {
         setOpen(true);
-    };
+    };*/
     const handleClose = () => {
         setOpen(false);
     };
@@ -40,10 +40,10 @@ const Dashboard: NextPage = () => {
     useEffect(() => {
         fetchAccounts(); // Call the fetch function on component mount
     }, []);
-    const handleEdit = (accountId: string) => {
+/*    const handleEdit = (accountId: string) => {
         // Implement your edit logic here
         console.log('Editing account with ID:', accountId);
-    };
+    };*/
     const fetchAccounts = async () => {
         try {
             const accountsData = await listDocs({
