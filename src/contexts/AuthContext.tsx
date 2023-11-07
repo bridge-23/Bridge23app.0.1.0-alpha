@@ -11,7 +11,7 @@ interface AuthContextType {
 // Create the context with default values
 export const AuthContext = createContext<AuthContextType>({
     user: null,
-    loading: true,
+    loading: false,
     error: null
 });
 // Define the error props interface

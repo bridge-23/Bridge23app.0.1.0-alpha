@@ -4,16 +4,15 @@ import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import { Container, Grid, Typography } from "@mui/material";
 import {listDocs} from "@junobuild/core";
-//import {AuthContext} from "../../contexts/AuthContext";
+import AccountCard from '../../components/Accounts/AccountCardComponent';
 interface AccountData {
     accountName: string;
+    financialInstitution: string;
     currentBalance: number;
     currency: string;
-    type: string;
     id: string;
 }
 const Accounts: React.FC = () => {
-    //const { user } = useContext(AuthContext);
     const [currentMonth, setCurrentMonth] = useState('');
     const [accounts, setAccounts] = useState<AccountData[]>([]);
 
@@ -36,13 +35,13 @@ const Accounts: React.FC = () => {
                     const data = doc.data as AccountData;
                     return {
                         accountName: data.accountName,
+                        financialInstitution: data.financialInstitution,
                         currentBalance: data.currentBalance,
                         currency: data.currency,
-                        type: data.type, // Make sure that this value exists in your fetched data
                         id: doc.key
                     };
                 });
-                setAccounts(fetchedAccounts); // Update the component's state with the fetched accounts
+                setAccounts(fetchedAccounts);
             } else {
                 console.error("Accounts data is undefined or items are missing");
                 alert('Failed to fetch accounts. Please try again.');
@@ -55,8 +54,16 @@ const Accounts: React.FC = () => {
 
     return (
         <Container>
-            <Typography variant="h4" gutterBottom>
-                {currentMonth ? `Accounts for ${currentMonth}` : 'Loading...'}
+            <Typography
+                variant="h3"
+                gutterBottom
+                sx={{
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    color: 'primary.main'
+                }}
+            >
+                {currentMonth ? `Accounts  ${currentMonth}` : 'Loading...'}
             </Typography>
 
             <Grid container spacing={3}>
@@ -70,7 +77,6 @@ const Accounts: React.FC = () => {
         </Container>
     );
 };
-
 export default Accounts;
 
 

@@ -1,14 +1,14 @@
-//..src/components/CustomList.tsx
+//..src/components/TransactionList.tsx
 import React, { useState, useEffect } from 'react';
 import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import AddExpense from "../Dashboard/AddExpense";
+import AddExpense from "../Dashboard/AddTransaction";
 import ReceiptIcon from '@mui/icons-material/Receipt';
 
-export default function CustomList() {
+export default function TransactionList() {
     const [isDialogOpen, setDialogOpen] = useState(false);
     return (
         <>

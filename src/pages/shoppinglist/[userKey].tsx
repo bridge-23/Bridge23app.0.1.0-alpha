@@ -5,11 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
-import { setDoc, listDocs, } from "@junobuild/core";
-//import { initializeJuno } from '../../lib/Juno/initJuno';
+import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core";
 import { nanoid } from "nanoid";
-import { deleteDoc } from "@junobuild/core";
-import { getDoc } from "@junobuild/core";
 import { useRouter } from 'next/router';
 
 //TODO: make filter when items alredy buy
@@ -73,14 +70,14 @@ const ShoppingList: React.FC = () => {
 
             if (shoppingListData && shoppingListData.items) {
                 const fetchedNotes = shoppingListData.items.map(doc => {
-                    const data = doc.data as ShoppingListDoc; // Type assertion here
+                    const data = doc.data as ShoppingListDoc;
                     return {
                         content: data.content,
                         id: doc.key,
                         checked: data.checked || false
                     };
                 });
-                setNotes(fetchedNotes); // Update the component's state with the fetched notes
+                setNotes(fetchedNotes);
             } else {
                 console.error("Shopping list data is undefined or items are missing");
                 alert('Failed to fetch shopping list. Please try again.');
@@ -191,7 +188,15 @@ const ShoppingList: React.FC = () => {
 
     return (
         <Paper elevation={2} style={paperStyle}>
-            <Typography variant="h6" style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <Typography
+                variant="h3"
+                gutterBottom
+                sx={{
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    color: 'primary.main' //
+                }}
+            >
                 Shopping List - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
             </Typography>
 

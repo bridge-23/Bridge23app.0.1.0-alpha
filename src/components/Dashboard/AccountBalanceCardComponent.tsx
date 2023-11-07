@@ -37,28 +37,6 @@ const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ curren
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold' }}>
                     {currentBalance}
                 </Typography>
-
-                <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
-                    <Box display="flex" alignItems="center">
-                        <Avatar style={{ backgroundColor: 'green' }} sx={{ mr: 2 }}>
-                            <ArrowUpwardSharpIcon style={{ color: 'white' }} />
-                        </Avatar>
-                        <div>
-                            <Typography variant="caption" color="textSecondary">Income</Typography>
-                            <Typography variant="subtitle2" style={{ color: 'green' }}>$9,000.00</Typography>
-                        </div>
-                    </Box>
-
-                    <Box display="flex" alignItems="center">
-                        <Avatar style={{ backgroundColor: 'red' }} sx={{ mr: 2 }}>
-                            <ArrowDownwardSharpIcon style={{ color: 'white' }} />
-                        </Avatar>
-                        <div>
-                            <Typography variant="caption" color="textSecondary">Expenses</Typography>
-                            <Typography variant="subtitle2" style={{ color: 'red' }}>$1,300.00</Typography>
-                        </div>
-                    </Box>
-                </Box>
             </CardContent>
         </Card>
     );

@@ -6,24 +6,26 @@ import { Theme } from '@mui/material/styles';
 import UserProfileComponent from "../../components/Dashboard/UserProfileComponent";
 import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalanceCardComponent";
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";
+import IncomeCardComponent from "../../components/Dashboard/IncomeCardComponent";
+import ExpenseCardComponent from "../../components/Dashboard/IncomeCardComponent";
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
-import AddExpense from "../../components/Dashboard/AddExpense";
+import AddExpense from "../../components/Dashboard/AddTransaction";
 import {listDocs} from "@junobuild/core";
-//import {AuthContext} from "../../contexts/AuthContext";
+
 interface AccountData {
     accountName: string;
+    financialInstitution: string;
     currentBalance: number;
     currency: string;
-    type: string; // Corresponds to accountType
     id: string;
 }
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    //const { user } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<AccountData[]>([]);
-/*    const handleOpen = () => {
+
+    /*    const handleOpen = () => {
         setOpen(true);
     };*/
     const handleClose = () => {
@@ -55,13 +57,14 @@ const Dashboard: NextPage = () => {
                     const data = doc.data as AccountData;
                     return {
                         accountName: data.accountName,
+                        financialInstitution: data.financialInstitution,
                         currentBalance: data.currentBalance,
                         currency: data.currency,
-                        type: data.type, // Make sure that this value exists in your fetched data
                         id: doc.key
                     };
                 });
-                setAccounts(fetchedAccounts); // Update the component's state with the fetched accounts
+                setAccounts(fetchedAccounts);
+                console.log(accountsData);
             } else {
                 console.error("Accounts data is undefined or items are missing");
                 alert('Failed to fetch accounts. Please try again.');
@@ -74,13 +77,20 @@ const Dashboard: NextPage = () => {
 
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
-            <Box px={isMobile ? 2 : 0}>
-                <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="stretch">
+            <Box px={isMobile ? 2 : 2}>
+                <Grid container spacing={isMobile ? 2 : 2} direction="row" alignItems="stretch">
 
                     <Grid item xs={12} md={4}>
                         <AccountBalanceCardComponent currentBalance={formattedTotalBalance} />
                     </Grid>
 
+                    <Grid item xs={12} md={4}>
+                        <IncomeCardComponent/>
+                    </Grid>
+
+                    <Grid item xs={12} md={4}>
+                        <ExpenseCardComponent/>
+                    </Grid>
 
                     <Grid item xs={12} md={4}>
                         <UserProfileComponent/>
@@ -89,19 +99,18 @@ const Dashboard: NextPage = () => {
                     <Grid item xs={12} md={4}>
                         <ExpensesbyCategoryComponent />
                     </Grid>
-
-                    {/* Second row of cards */}
-                    <Grid item xs={12} md={4}>
-                        <NewAccountComponent />
-                    </Grid>
-
                     <Grid item xs={12} md={4}>
                         <AddExpense open={open} onClose={handleClose}/>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={6} md={8}>
                         <AccountsList accounts={accounts} />
                     </Grid>
+
+                    <Grid item xs={6} md={4}>
+                        <NewAccountComponent />
+                    </Grid>
+
 
                 </Grid>
             </Box>

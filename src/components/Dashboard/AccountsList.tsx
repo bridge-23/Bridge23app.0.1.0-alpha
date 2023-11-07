@@ -2,12 +2,13 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
 import AccountCard from '../Accounts/AccountCardComponent';
-// Remove listDocs import since it's no longer needed inside this component
+import { setDoc } from "@junobuild/core";
+
 interface AccountData {
     accountName: string;
+    financialInstitution: string;
     currentBalance: number;
     currency: string;
-    type: string; // Corresponds to accountType
     id: string;
 }
 interface AccountsListProps {
@@ -26,7 +27,7 @@ const AccountList: React.FC<AccountsListProps> = ({ accounts }) => { // Accept p
                 mx: 'auto',
                 my: 2,
                 p: 2,
-                borderRadius: '18px'
+                borderRadius: '24px'
             }}
         >
             <CardContent>
@@ -35,12 +36,12 @@ const AccountList: React.FC<AccountsListProps> = ({ accounts }) => { // Accept p
                 </Typography>
                 <Grid container spacing={3}>
                     {accounts.map((account) => ( // Use the accounts from props
-                        <Grid item xs={12} sm={6} md={4} key={account.id}>
+                        <Grid item xs={12} key={account.id}>
                             <AccountCard
                                 accountName={account.accountName}
+                                financialInstitution={account.financialInstitution}
                                 currentBalance={account.currentBalance}
                                 accountCurrency={account.currency}
-                                accountType={account.type}
                                 onEdit={() => handleEdit(account.id)} // Removed the non-null assertion as id should be non-optional
                             />
                         </Grid>
