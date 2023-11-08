@@ -1,7 +1,10 @@
 //..src/contexts/AuthContext.tsx
 import React, { createContext, useEffect, useState } from "react";
 import { type User } from "@junobuild/core";
-import ICPSignInButton from "../components/Buttons/ICPSignInButton";
+import dynamic from "next/dynamic";
+
+const DynamicICPSignInButton = dynamic(() => import("../components/Buttons/ICPSignInButton"));
+
 // Define the context type
 interface AuthContextType {
     user: User | null;
@@ -73,7 +76,7 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
             {loading ? (
                 <>
                     <div>Loading...</div>
-                    <ICPSignInButton />
+                    <DynamicICPSignInButton />
                 </>
             ) : error ? (
                 <div>Error: {error.message}</div> // Display error message
