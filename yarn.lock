@@ -1404,7 +1404,7 @@
     "@babel/helper-validator-identifier" "^7.22.5"
     to-fast-properties "^2.0.0"
 
-"@dfinity/agent@^0.19.2":
+"@dfinity/agent@^0.19.3":
   version "0.19.3"
   resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.19.3.tgz#aa3f9c0f67d8e8f81714650ebb2a38e1b691021b"
   integrity sha512-q410aNLoOA1ZkwdAMgSo6t++pjISn9TfSybRXhPRI5Ume7eG6+6qYr/rlvcXy7Nb2+Ar7LTsHNn34IULfjni7w==
@@ -1414,14 +1414,19 @@
     borc "^2.1.1"
     simple-cbor "^0.4.1"
 
-"@dfinity/auth-client@^0.19.2":
+"@dfinity/auth-client@^0.19.3":
   version "0.19.3"
   resolved "https://registry.yarnpkg.com/@dfinity/auth-client/-/auth-client-0.19.3.tgz#c38baa311e02d4d5487a6be01875dcaae9643455"
   integrity sha512-fN5sZXkO3pzsBE+dVOD57Nv59n2H5jtK1JRWP7NEKmxgUk/dOOX6I5ZwUYVOQA3VcJ3azvV9SbXUHSgaFcf0sw==
   dependencies:
     idb "^7.0.2"
 
-"@dfinity/identity@^0.19.2":
+"@dfinity/candid@^0.19.3":
+  version "0.19.3"
+  resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.19.3.tgz#edc3491572d293824b821ce3a4fc50f5b4714f4d"
+  integrity sha512-yXfbLSWTeRd4G0bLLxYoDqpXH3Jim0P+1PPZOoktXNC1X1hB+ea3yrZebX75t4GVoQK7123F7mxWHiPjuV2tQQ==
+
+"@dfinity/identity@^0.19.3":
   version "0.19.3"
   resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.19.3.tgz#caec4a38b4a7d4567e662a7eb5bf2a9ae6466bdf"
   integrity sha512-6XHrkNQ8tVN6+MERyXPy+avGHTd2zoX3l47bu6gSwreDdOZQnAnXpHVzLcXhnUptkBVetcC70YQEKCmqtuLriA==
@@ -1430,7 +1435,7 @@
     borc "^2.1.1"
     tweetnacl "^1.0.1"
 
-"@dfinity/principal@^0.19.2":
+"@dfinity/principal@^0.19.3":
   version "0.19.3"
   resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.19.3.tgz#428cfca3d2d2de9e1433b3b33498fd595fb441d8"
   integrity sha512-+nixVvdGt7ECxRvLXDXsvU9q9sSPssBtDQ4bXa149SK6gcYcmZ6lfWIi3DJNqj3tGROxILVBsguel9tECappsA==
@@ -2041,21 +2046,17 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@junobuild/core@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@junobuild/core/-/core-0.0.32.tgz#54334b5963a66bc351833f72d4ca9f4dc3c927e1"
-  integrity sha512-YBydK3FQtCvUb38HNDVIAkWSb8Hyh5qY6YixBislftrj7NPKHNdVwM5PoMrD1LUwVyt6Y3CwUX+MRbCMHGnqXw==
+"@junobuild/core@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@junobuild/core/-/core-0.0.34.tgz#90471f0e7acdeeeb7ae2eb4d108f7bd78a7cf1d6"
+  integrity sha512-nUX9tgao4iKXby/OnhgG/500b0ztv4P1vCE+R8KdWWiL1IrVKpceHXHQhnFlP4nKSpeto1fR1cv6JA3g4ppLjQ==
   dependencies:
-    "@dfinity/agent" "^0.19.2"
-    "@dfinity/auth-client" "^0.19.2"
-    "@dfinity/identity" "^0.19.2"
-    "@dfinity/principal" "^0.19.2"
     "@junobuild/utils" "*"
 
 "@junobuild/utils@*":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@junobuild/utils/-/utils-0.0.13.tgz#4ca22932872455d8af4a8f9a8c185f00ae04844f"
-  integrity sha512-fLy6OXP3MeafVyK6rjbAsiy3Jf+pmHOKaB27OtkQCrkU1UOtc+uqXozU12KMa5AMPVD+CxHVFl36feDGjIoj+A==
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@junobuild/utils/-/utils-0.0.14.tgz#6fe98b45de5770d7794dfedc5d19c3a51de83fe6"
+  integrity sha512-ypSYtd54kFNa0d2hiAAonqjhk4/m2OJtCN/AqNkSZd+InScO2uI9ryDPsQwL4IYpg6JFXRYhABl4onH7PzGlQQ==
 
 "@mui/base@5.0.0-beta.14":
   version "5.0.0-beta.14"
@@ -4571,7 +4572,7 @@ idb@^7.0.1, idb@^7.0.2:
 
 ieee754@^1.1.13:
   version "1.2.1"
-  resolved "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
+  resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
 
 ignore@^5.2.0, ignore@^5.2.4:
@@ -6459,7 +6460,7 @@ tsutils@^3.21.0:
 
 tweetnacl@^1.0.1:
   version "1.0.3"
-  resolved "https://registry.npmjs.org/tweetnacl/-/tweetnacl-1.0.3.tgz"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
   integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@^0.4.0, type-check@~0.4.0:
