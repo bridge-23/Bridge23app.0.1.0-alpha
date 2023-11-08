@@ -5,7 +5,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
-import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core";
 import { nanoid } from "nanoid";
 //import { useRouter } from 'next/router';
 
@@ -69,6 +68,8 @@ const ShoppingList: React.FC = () => {
         }[] = []; // Declare fetchedNotes here and initialize it as an empty array
 
         try {
+            const {listDocs} = await import("@junobuild/core");
+
             const shoppingListData = await listDocs({
                 collection: "ShoppingList"
             });
@@ -98,6 +99,9 @@ const ShoppingList: React.FC = () => {
     const handleCheckboxChange = async (index: number) => {
         const updatedNotes = [...notes];
         updatedNotes[index].checked = !updatedNotes[index].checked;
+
+        const {getDoc, setDoc} = await import("@junobuild/core");
+
         const currentDoc = await getDoc({ collection: "ShoppingList", key: updatedNotes[index].id });
         // Check if currentDoc exists
         if (!currentDoc) {
@@ -142,6 +146,8 @@ const ShoppingList: React.FC = () => {
             const noteId = `${nanoid()}`;
 
             try {
+                const {setDoc} = await import("@junobuild/core");
+
                 await setDoc({
                     collection: "ShoppingList",
                     doc: {
@@ -168,6 +174,7 @@ const ShoppingList: React.FC = () => {
         const noteId = notes[index].id;  // Get the note's id
 
         // Retrieve the most recent document
+        const {getDoc, deleteDoc} = await import("@junobuild/core");
         const currentDoc = await getDoc({ collection: "ShoppingList", key: noteId });
 
         // Check if currentDoc exists

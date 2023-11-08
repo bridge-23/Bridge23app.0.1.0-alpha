@@ -1,6 +1,6 @@
 //..src/contexts/AuthContext.tsx
 import React, { createContext, useEffect, useState } from "react";
-import { authSubscribe, User } from "@junobuild/core";
+import { type User } from "@junobuild/core";
 import ICPSignInButton from "../components/Buttons/ICPSignInButton";
 // Define the context type
 interface AuthContextType {
@@ -40,25 +40,31 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
 
     useEffect(() => {
         setLoading(true);
-        let unsubscribe: () => void = () => {};
+        let unsubscribe: (() => void) | undefined = undefined;
 
-        try {
-            unsubscribe = authSubscribe((newUser: User | null) => {
-                setUser(newUser);
+        const load = async () => {
+            try {
+                const {authSubscribe} = await import("@junobuild/core");
+
+                unsubscribe = authSubscribe((newUser: User | null) => {
+                    setUser(newUser);
+                    setLoading(false);
+                    if (!newUser) {
+                        console.log("User is signed out or session has expired");
+                    }
+                });
+            } catch (error: any) { // Use 'any' or perform type checking
+                console.error(error.message);
+                setError(new ExtendedError({ message: 'An error occurred', code: error.code }));
                 setLoading(false);
-                if (!newUser) {
-                    console.log("User is signed out or session has expired");
-                }
-            });
-        } catch (error: any) { // Use 'any' or perform type checking
-            console.error(error.message);
-            setError(new ExtendedError({ message: 'An error occurred', code: error.code }));
-            setLoading(false);
+            }
         }
+
+        load();
 
         // Clean-up function
         return () => {
-            unsubscribe();
+            unsubscribe?.();
         };
     }, []);
 

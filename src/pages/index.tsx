@@ -4,8 +4,11 @@ import Head from 'next/head';
 import React, { useContext } from 'react';
 import { Container, Typography, Grid, Box, CircularProgress } from "@mui/material";
 import Image from 'next/image';
-import LoginComponentJuno from "../components/LoginComponentJuno";
 import { AuthContext } from "../contexts/AuthContext";
+import dynamic from "next/dynamic";
+
+const DynamicLoginComponentJuno = dynamic(() => import("../components/LoginComponentJuno"));
+
 const Home: NextPage = () => {
     const { user, loading } = useContext(AuthContext);
 
@@ -34,7 +37,7 @@ const Home: NextPage = () => {
                             {/* Conditional rendering based on the user's authentication status */}
                             {!user && (
                                 <Box mt={2}>
-                                    <LoginComponentJuno />
+                                    <DynamicLoginComponentJuno />
                                 </Box>
                             )}
                             <Image src="/logo-icp.png" alt="ICP Logo" width={263.625} height={16.125}/>

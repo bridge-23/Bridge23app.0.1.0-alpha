@@ -1,9 +1,8 @@
 //..src/pages/accounts/index.tsx
 import React, {useState, useEffect, useContext} from 'react';
-import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
+import dynamic from 'next/dynamic'
 import AccountsList from "../../components/Dashboard/AccountsList";
 import { Container, Grid, Typography } from "@mui/material";
-import {listDocs} from "@junobuild/core";
 import AccountCard from '../../components/Accounts/AccountCardComponent';
 interface AccountData {
     accountName: string;
@@ -12,6 +11,9 @@ interface AccountData {
     currency: string;
     id: string;
 }
+
+const DynamicNewAccountComponent = dynamic(() => import("../../components/Accounts/NewAccountComponent"));
+
 const Accounts: React.FC = () => {
     const [currentMonth, setCurrentMonth] = useState('');
     const [accounts, setAccounts] = useState<AccountData[]>([]);
@@ -26,6 +28,8 @@ const Accounts: React.FC = () => {
     };*/
     const fetchAccounts = async () => {
         try {
+            const {listDocs} = await import("@junobuild/core");
+
             const accountsData = await listDocs({
                 collection: "Accounts"
             });
@@ -68,7 +72,7 @@ const Accounts: React.FC = () => {
 
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={4}>
-                    <NewAccountComponent />
+                    <DynamicNewAccountComponent />
                 </Grid>
                 <Grid item xs={12} md={6} lg={8}>
                     <AccountsList accounts={accounts} />

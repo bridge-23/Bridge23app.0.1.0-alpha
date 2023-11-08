@@ -5,8 +5,10 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import AddExpense from "../Dashboard/AddTransaction";
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import dynamic from "next/dynamic";
+
+const DynamicAddExpense = dynamic(() => import("../Dashboard/AddTransaction"));
 
 export default function TransactionList() {
     const [isDialogOpen, setDialogOpen] = useState(false);
@@ -46,7 +48,7 @@ export default function TransactionList() {
                 <ListItemText primary="Transfer" />
             </ListItem>
         </List>
-    <AddExpense open={isDialogOpen} onClose={() => setDialogOpen(false)} />
+    <DynamicAddExpense open={isDialogOpen} onClose={() => setDialogOpen(false)} />
 </>
     );
 }

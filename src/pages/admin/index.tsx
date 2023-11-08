@@ -1,6 +1,5 @@
 //..src/admin/index.tsx
 import React, {useContext} from 'react';
-import { setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
 import {AuthContext} from "../../contexts/AuthContext";
 
@@ -39,6 +38,7 @@ const Admin = () => {
     const addCategories = async (categories: Category[]) => {
         for (const category of categories) {
             try {
+                const {setDoc} = await import("@junobuild/core");
                 await setDoc<Category>({
                     collection: "Categories",
                     doc: {

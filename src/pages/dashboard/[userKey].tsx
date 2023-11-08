@@ -8,10 +8,8 @@ import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalan
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";
 import IncomeCardComponent from "../../components/Dashboard/IncomeCardComponent";
 import ExpenseCardComponent from "../../components/Dashboard/IncomeCardComponent";
-import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
-import AddExpense from "../../components/Dashboard/AddTransaction";
-import {listDocs} from "@junobuild/core";
+import dynamic from "next/dynamic";
 
 interface AccountData {
     accountName: string;
@@ -20,6 +18,10 @@ interface AccountData {
     currency: string;
     id: string;
 }
+
+const DynamicNewAccountComponent = dynamic(() => import("../../components/Accounts/NewAccountComponent"));
+const DynamicAddExpense = dynamic(() => import("../../components/Dashboard/AddTransaction"));
+
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [open, setOpen] = useState(false);
@@ -48,6 +50,7 @@ const Dashboard: NextPage = () => {
     };*/
     const fetchAccounts = async () => {
         try {
+            const {listDocs} = await import("@junobuild/core");
             const accountsData = await listDocs({
                 collection: "Accounts"
             });
@@ -100,11 +103,11 @@ const Dashboard: NextPage = () => {
                         <ExpensesbyCategoryComponent />
                     </Grid>
                     <Grid item xs={12} md={4}>
-                        <AddExpense open={open} onClose={handleClose}/>
+                        <DynamicAddExpense open={open} onClose={handleClose}/>
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                        <NewAccountComponent />
+                        <DynamicNewAccountComponent />
                     </Grid>
 
                     <Grid item xs={6} md={8}>
@@ -112,7 +115,7 @@ const Dashboard: NextPage = () => {
                     </Grid>
 
                     <Grid item xs={6} md={4}>
-                        <NewAccountComponent />
+                        <DynamicNewAccountComponent />
                     </Grid>
 
                 </Grid>
