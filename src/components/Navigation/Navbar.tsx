@@ -5,8 +5,8 @@ import DesktopNavbar from './DesktopNavbar';
 import { AuthContext } from "../../contexts/AuthContext";
 import dynamic from "next/dynamic";
 
-const DynamicAppBarUser = dynamic(() => import('./AppBarUser'));
-const DynamicMobileNavbar = dynamic(() => import('./MobileNavbar'));
+const DynamicAppBarUser = dynamic(() => import('./AppBarUser'), {ssr: false});
+const DynamicMobileNavbar = dynamic(() => import('./MobileNavbar'), {ssr: false});
 
 export default function Navbar() {
     const { user } = useContext(AuthContext);

@@ -12,7 +12,7 @@ interface AccountData {
     id: string;
 }
 
-const DynamicNewAccountComponent = dynamic(() => import("../../components/Accounts/NewAccountComponent"));
+const DynamicNewAccountComponent = dynamic(() => import("../../components/Accounts/NewAccountComponent"), {ssr: false});
 
 const Accounts: React.FC = () => {
     const [currentMonth, setCurrentMonth] = useState('');

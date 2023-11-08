@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from "react";
 import { type User } from "@junobuild/core";
 import dynamic from "next/dynamic";
 
-const DynamicICPSignInButton = dynamic(() => import("../components/Buttons/ICPSignInButton"));
+const DynamicICPSignInButton = dynamic(() => import("../components/Buttons/ICPSignInButton"), {ssr: false});
 
 // Define the context type
 interface AuthContextType {

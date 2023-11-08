@@ -5,7 +5,7 @@ import Link from 'next/link';
 import dynamic from "next/dynamic";
 // Define the component as React.FC if there are no props
 
-const DynamicICPSignInButton = dynamic(() => import("./Buttons/ICPSignInButton"));
+const DynamicICPSignInButton = dynamic(() => import("./Buttons/ICPSignInButton"), {ssr: false});
 
 const LoginComponentJuno: React.FC = () => {
     return (

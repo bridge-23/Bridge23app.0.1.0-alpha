@@ -8,7 +8,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import dynamic from "next/dynamic";
 
-const DynamicAddExpense = dynamic(() => import("../Dashboard/AddTransaction"));
+const DynamicAddExpense = dynamic(() => import("../Dashboard/AddTransaction"), {ssr: false});
 
 export default function TransactionList() {
     const [isDialogOpen, setDialogOpen] = useState(false);

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { AuthContext } from "../contexts/AuthContext";
 import dynamic from "next/dynamic";
 
-const DynamicLoginComponentJuno = dynamic(() => import("../components/LoginComponentJuno"));
+const DynamicLoginComponentJuno = dynamic(() => import("../components/LoginComponentJuno"), {ssr: false});
 
 const Home: NextPage = () => {
     const { user, loading } = useContext(AuthContext);

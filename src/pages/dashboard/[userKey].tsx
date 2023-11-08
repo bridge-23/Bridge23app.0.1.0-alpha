@@ -19,8 +19,8 @@ interface AccountData {
     id: string;
 }
 
-const DynamicNewAccountComponent = dynamic(() => import("../../components/Accounts/NewAccountComponent"));
-const DynamicAddExpense = dynamic(() => import("../../components/Dashboard/AddTransaction"));
+const DynamicNewAccountComponent = dynamic(() => import("../../components/Accounts/NewAccountComponent"), {ssr: false});
+const DynamicAddExpense = dynamic(() => import("../../components/Dashboard/AddTransaction"), {ssr: false});
 
 const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
