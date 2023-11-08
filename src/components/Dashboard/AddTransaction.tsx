@@ -38,9 +38,6 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
     //const [selectedAccountId, setSelectedAccountId] = useState('');
 
     useEffect(() => {
-        fetchAccounts();
-    }, [user]); // This will run when the 'user' object changes, which typically happens when a user logs in or out.
-
     const fetchAccounts = async () => {
         if (user) {
             try {
@@ -58,11 +55,11 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
                         return {
                             key: doc.key,
                             data: {
-                                accountName: doc.data.accountName,
-                                financialInstitution: doc.data.financialInstitution,
-                                currentBalance: doc.data.currentBalance,
-                                currency: doc.data.currency,
-                                owner: doc.data.owner,
+                                accountName: data.accountName,
+                                financialInstitution: data.financialInstitution,
+                                currentBalance: data.currentBalance,
+                                currency: data.currency,
+                                owner: data.owner,
                                 userId: user.key,
                             },
                         };
@@ -79,6 +76,8 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
             }
         }
     };
+        fetchAccounts();
+    }, [user]);
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
             alert('Please provide valid expense details.');
