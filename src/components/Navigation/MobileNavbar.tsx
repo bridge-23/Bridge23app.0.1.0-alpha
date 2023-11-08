@@ -47,7 +47,7 @@ function MobileNavbar() {
                 </Link>
                 )}
                 {user && (
-                    <Link href={`/tokenslist/${user.key}`}>
+                    <Link href={`/shoppinglist/${user.key}`}>
                         <IconButton color="inherit" aria-label="open drawer">
                             <FormatListBulletedSharpIcon fontSize="large" />
                         </IconButton>
