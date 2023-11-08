@@ -1,6 +1,6 @@
 //..src/components/Dashboard/ExpensesbyCategoryComponent.tsx
 import React from "react";
-import { Card, Typography, Box } from "@mui/material";
+import { Card, Typography, Box, CardHeader, CardContent } from "@mui/material";
 import dynamic from 'next/dynamic';
 
 const PieChartDynamic = dynamic(() => import('@mui/x-charts').then(mod => mod.PieChart), {
@@ -12,20 +12,31 @@ const ExpensesbyCategoryComponent: React.FC = () => {
         <Card
             sx={{
                 perspective: '1000px',
-                width: '300px',
+                width: { xs: '100%', sm: '300px' },
                 height: '200px',
                 cursor: 'pointer',
-                borderRadius: '18px'
+                borderRadius: '24px',
+                display: 'flex',
+                flexDirection: 'column', // Stack children vertically
             }}
         >
-            <Typography
-                variant="subtitle1"
-                align="center"
-                gutterBottom // adds a margin-bottom for space
+            <CardHeader
+                title={
+                    <Typography variant="subtitle1" align="center" gutterBottom>
+                        Category
+                    </Typography>
+                }
+                sx={{ textAlign: 'center', paddingBottom: 0 }} // Override padding if necessary
+            />
+            <CardContent
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexGrow: 1, // Take up available space
+                    paddingTop: 0, // Override padding if necessary
+                }}
             >
-                Expenses by category
-            </Typography>
-            <Box>
                 <PieChartDynamic
                     series={[
                         {
@@ -36,11 +47,12 @@ const ExpensesbyCategoryComponent: React.FC = () => {
                             ],
                         },
                     ]}
-                    width={280} // Reduced width to account for card padding
-                    height={130} // Reduced height for same reason
+                    width={280} // Adjust width as needed
+                    height={130} // Adjust height as needed
                 />
-            </Box>
+            </CardContent>
         </Card>
+
     );
 }
 

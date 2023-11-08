@@ -103,6 +103,10 @@ const Dashboard: NextPage = () => {
                         <AddExpense open={open} onClose={handleClose}/>
                     </Grid>
 
+                    <Grid item xs={12} md={4}>
+                        <NewAccountComponent />
+                    </Grid>
+
                     <Grid item xs={6} md={8}>
                         <AccountsList accounts={accounts} />
                     </Grid>
@@ -110,7 +114,6 @@ const Dashboard: NextPage = () => {
                     <Grid item xs={6} md={4}>
                         <NewAccountComponent />
                     </Grid>
-
 
                 </Grid>
             </Box>

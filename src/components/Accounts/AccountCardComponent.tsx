@@ -1,6 +1,6 @@
 //..src/components/Accounts/AccountCardComponent.tsx
 import React from 'react';
-import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Box } from '@mui/material';
+import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Box, Paper, CardContent } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
 interface AccountCardProps {
@@ -24,9 +24,18 @@ const AccountCard: React.FC<AccountCardProps> = ({
         : `${accountCurrency} `;
 
     return (
-        <Card sx={{perspective: '1000px', width: '100%', cursor: 'pointer', borderRadius: '24px', boxShadow: 3}}>
-            <TableContainer>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Card
+            sx={{
+                perspective: '1000px',
+                width: '100%', // Ensure it takes full width on all screen sizes
+                borderRadius: '24px',
+                boxShadow: 3,
+                display: 'flex',
+                flexDirection: 'column', // Stack children vertically
+            }}
+        >
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader>
                     <TableHead>
                         <TableRow>
                             <TableCell>Account Name</TableCell>
@@ -46,21 +55,22 @@ const AccountCard: React.FC<AccountCardProps> = ({
                                 <IconButton onClick={onEdit} size="small">
                                     <EditIcon />
                                 </IconButton>
-                            </TableCell>
-                        </TableRow>
+                                </TableCell>
+                            </TableRow>
+
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box
+            <CardContent
                 sx={{
                     display: 'flex',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    padding: (theme) => theme.spacing(2)
                 }}
             >
-            <Button size="small">See More</Button>
-            </Box>
-        </Card>
-    );
+                <Button variant="text" size="small">See More</Button>
+            </CardContent>
+        </Card>    );
 };
 export default AccountCard;
 

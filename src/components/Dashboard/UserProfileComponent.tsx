@@ -18,12 +18,14 @@ const UserProfileComponent: React.FC<UserProfileProps> = ({ }) => {
         <Card
             sx={{
                 perspective: '1000px',
-                width: '300px',
+                width: { xs: '100%', sm: '300px' },
                 height: '200px',
                 cursor: 'pointer',
-                borderRadius: '18px'
-            }}
-        >
+                borderRadius: '24px',
+                display: 'flex', // Use flex to center children
+                alignItems: 'center', // Center children vertically
+                justifyContent: 'center' // Center children horizontally
+            }}>
             <CardContent>
 
                 <Box display="flex" justifyContent="center" alignItems="center" style={{ height: '100%' }}>

@@ -69,17 +69,16 @@ const NewAccountComponent: React.FC = () => {
         <>
             <Card
                 sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                     perspective: '1000px',
-                    width: '300px',
+                    width: { xs: '100%', sm: '300px' },
                     height: '200px',
                     cursor: 'pointer',
-                    borderRadius: '18px'
-                }}
-            >
+                    borderRadius: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: 3
+                }}>
                 <IconButton onClick={() => setOpen(true)}>
                     <AddCircleIcon fontSize="large" />
                 </IconButton>

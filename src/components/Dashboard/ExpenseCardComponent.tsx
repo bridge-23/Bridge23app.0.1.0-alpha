@@ -12,9 +12,10 @@ const ExpenseCardComponent: React.FC = () => {
                 height: '200px',
                 cursor: 'pointer',
                 borderRadius: '24px',
-                display: 'flex', // Use flex to center children
-                alignItems: 'center', // Center children vertically
-                justifyContent: 'center' // Center children horizontally
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: 3
             }}>
             <CardContent sx={{ textAlign: 'center' }}> {/* Add textAlign to center content */}
                 <Box

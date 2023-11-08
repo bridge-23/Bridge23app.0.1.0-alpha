@@ -9,8 +9,8 @@ import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core";
 import { nanoid } from "nanoid";
 import { useRouter } from 'next/router';
 
-//TODO: make filter when items alredy buy
 //TODO: make shopping panel for create shopping list
+//TODO: add edit button for shopping list
 interface ShoppingListItemProps {
     note: string;
     onDelete: () => void;
@@ -19,9 +19,10 @@ interface ShoppingListDoc {
     content: string;
     checked?: boolean;
 }
-const ShoppingListItem: React.FC<ShoppingListItemProps & { checked: boolean, onCheck: () => void }> = ({ note, onDelete, checked, onCheck }) => {
+const ShoppingListItem: React.FC<ShoppingListItemProps & { checked: boolean, onCheck: () => void }> = ({ note, onDelete, checked, onCheck}) => {
+    const itemStyle = checked ? { backgroundColor: '#f0f0f0', color: '#d0d0d0' } : {};
     return (
-        <ListItem>
+        <ListItem style={itemStyle}>
             <Checkbox edge="start" tabIndex={-1} disableRipple checked={checked} onChange={onCheck} />
             <ListItemText primary={note} />
             <ListItemSecondaryAction>
@@ -63,13 +64,17 @@ const ShoppingList: React.FC = () => {
         }
     }, [junoReady]);
     const fetchShoppingList = async () => {
+        let fetchedNotes: {
+            checked: boolean; content: string; id: string;
+        }[] = []; // Declare fetchedNotes here and initialize it as an empty array
+
         try {
             const shoppingListData = await listDocs({
                 collection: "ShoppingList"
             });
 
             if (shoppingListData && shoppingListData.items) {
-                const fetchedNotes = shoppingListData.items.map(doc => {
+                fetchedNotes = shoppingListData.items.map(doc => {
                     const data = doc.data as ShoppingListDoc;
                     return {
                         content: data.content,
@@ -77,7 +82,6 @@ const ShoppingList: React.FC = () => {
                         checked: data.checked || false
                     };
                 });
-                setNotes(fetchedNotes);
             } else {
                 console.error("Shopping list data is undefined or items are missing");
                 alert('Failed to fetch shopping list. Please try again.');
@@ -86,6 +90,10 @@ const ShoppingList: React.FC = () => {
             console.error("Error fetching shopping list:", error);
             alert('Failed to fetch shopping list. Please try again.');
         }
+
+        // Sort fetchedNotes after it's been populated
+        const sortedFetchedNotes = fetchedNotes.sort((a, b) => Number(a.checked) - Number(b.checked));
+        setNotes(sortedFetchedNotes);
     };
     const handleCheckboxChange = async (index: number) => {
         const updatedNotes = [...notes];
@@ -118,6 +126,8 @@ const ShoppingList: React.FC = () => {
             console.error("Error updating note:", error);
             alert('Failed to update note. Please try again.');
         }
+        const sortedUpdatedNotes = updatedNotes.sort((a: { checked: boolean; content: string; id: string }, b: { checked: boolean; content: string; id: string }) => Number(a.checked) - Number(b.checked));
+        setNotes(sortedUpdatedNotes);
     };
     const addNote = async () => {
         if (currentNote.trim()) {
