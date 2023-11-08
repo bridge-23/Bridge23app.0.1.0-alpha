@@ -37,8 +37,8 @@ const Home: NextPage = () => {
                                     <LoginComponentJuno />
                                 </Box>
                             )}
-                            <Image src="/ICPLogo.png" alt="ICP Logo" width={263.625} height={16.125}/>
-                            <Image src="/JunoBadge.svg" alt="Juno Badge" width={152} height={32.66}/>
+                            <Image src="/logo-icp.png" alt="ICP Logo" width={263.625} height={16.125}/>
+                            <Image src="/badge-juno.svg" alt="Juno Badge" width={152} height={32.66}/>
                         </Box>
                     </Grid>
                 </Grid>
