@@ -6,7 +6,6 @@ import { Container, Typography, Grid, Box, CircularProgress } from "@mui/materia
 import Image from 'next/image';
 import LoginComponentJuno from "../components/LoginComponentJuno";
 import { AuthContext } from "../contexts/AuthContext";
-
 const Home: NextPage = () => {
     const { user, loading } = useContext(AuthContext);
 
@@ -38,6 +37,20 @@ const Home: NextPage = () => {
                                     <LoginComponentJuno />
                                 </Box>
                             )}
+
+                                <Image
+                                    src="/ICPLogo.png"
+                                    alt="ICP Logo"
+                                    width={263.625}
+                                    height={16.125}
+                                />
+                                <Image
+                                    src="/juno_badge_01.svg"
+                                    alt="Juno Badge"
+                                    width={152}
+                                    height={32.66}
+                                />
+
                         </Box>
                     </Grid>
                 </Grid>

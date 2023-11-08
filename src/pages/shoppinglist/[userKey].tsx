@@ -38,7 +38,7 @@ const ShoppingList: React.FC = () => {
         checked: boolean; content: string, id: string
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
-    const router = useRouter();
+    //const router = useRouter();
     //const { userKey } = router.query;
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
