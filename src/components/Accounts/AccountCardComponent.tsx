@@ -1,6 +1,6 @@
 //..src/components/Accounts/AccountCardComponent.tsx
 import React from 'react';
-import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Box, Paper, CardContent } from '@mui/material';
+import { Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Button, Paper, CardContent } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
 interface AccountCardProps {

@@ -10,9 +10,6 @@ type UserProfileProps = {
 };
 
 const UserProfileComponent: React.FC<UserProfileProps> = ({ }) => {
-    const REWARDS_MULTIPLIER = 0.05;
-    //const rawRewards = totalNFTs * REWARDS_MULTIPLIER;
-    //const rewards = rawRewards.toFixed(2);
 
     return (
         <Card

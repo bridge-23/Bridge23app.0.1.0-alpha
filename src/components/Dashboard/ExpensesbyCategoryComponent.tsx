@@ -1,6 +1,6 @@
 //..src/components/Dashboard/ExpensesbyCategoryComponent.tsx
 import React from "react";
-import { Card, Typography, Box, CardHeader, CardContent } from "@mui/material";
+import { Card, Typography, CardHeader, CardContent } from "@mui/material";
 import dynamic from 'next/dynamic';
 
 const PieChartDynamic = dynamic(() => import('@mui/x-charts').then(mod => mod.PieChart), {

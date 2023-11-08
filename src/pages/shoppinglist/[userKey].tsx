@@ -1,6 +1,6 @@
 //..src/page/shoppinglist/[userKey]tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Container } from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -39,7 +39,7 @@ const ShoppingList: React.FC = () => {
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
     const router = useRouter();
-    const { userKey } = router.query;
+    //const { userKey } = router.query;
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
