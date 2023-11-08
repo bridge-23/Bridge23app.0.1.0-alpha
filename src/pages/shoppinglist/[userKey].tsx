@@ -7,7 +7,7 @@ import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core";
 import { nanoid } from "nanoid";
-import { useRouter } from 'next/router';
+//import { useRouter } from 'next/router';
 
 //TODO: make shopping panel for create shopping list
 //TODO: add edit button for shopping list
