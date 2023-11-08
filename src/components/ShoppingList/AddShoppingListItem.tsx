@@ -8,7 +8,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { setDoc } from "@junobuild/core";
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -43,6 +42,9 @@ const AddShoppingListItem: FC<AddShoppingListNoteProps> = ({ open, onClose }) =>
 
         try {
             const noteId = `${nanoid()}`;
+
+            const {setDoc} = await import("@junobuild/core");
+
             await setDoc({
                 collection: "ShoppingList",
                 doc: {

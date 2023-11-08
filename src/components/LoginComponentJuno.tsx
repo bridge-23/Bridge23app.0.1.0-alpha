@@ -1,9 +1,12 @@
 // src/components/LoginComponent.tsx
 import React from 'react';
 import { Card, Container, Grid, Typography } from '@mui/material';
-import ICPSignInButton from './Buttons/ICPSignInButton';
 import Link from 'next/link';
+import dynamic from "next/dynamic";
 // Define the component as React.FC if there are no props
+
+const DynamicICPSignInButton = dynamic(() => import("./Buttons/ICPSignInButton"));
+
 const LoginComponentJuno: React.FC = () => {
     return (
         <Container style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -12,7 +15,7 @@ const LoginComponentJuno: React.FC = () => {
                     <Typography variant="h5" align="center"  >
                         JOIN TODAY + SECOND LIVE YOUR EXPENSES
                     </Typography>
-                    <ICPSignInButton />
+                    <DynamicICPSignInButton />
                     <Grid item xs={12} style={{ marginTop: '12px' }}>
                         <Typography variant="body2" align="center">
                             By signing in, you agree to our{' '}
