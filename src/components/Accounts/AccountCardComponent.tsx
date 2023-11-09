@@ -31,7 +31,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
                 borderRadius: '24px',
                 boxShadow: 3,
                 display: 'flex',
-                flexDirection: 'column', // Stack children vertically
+                flexDirection: 'column',
             }}
         >
             <TableContainer component={Paper}>

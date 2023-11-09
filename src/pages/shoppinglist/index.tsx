@@ -1,13 +1,13 @@
 //..src/page/shoppinglist/index.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box } from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core";
 import { nanoid } from "nanoid";
-//import { useRouter } from 'next/router';
+
 
 //TODO: make shopping panel for create shopping list
 //TODO: add edit button for shopping list
@@ -38,7 +38,7 @@ const ShoppingList: React.FC = () => {
         checked: boolean; content: string, id: string
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
-    const [junoReady, setJunoReady] = useState<boolean>(false);
+    //const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
     const { user } = useContext(AuthContext);
@@ -50,17 +50,8 @@ const ShoppingList: React.FC = () => {
     };
 
     useEffect(() => {
-        async function init() {
-            setJunoReady(true);
-        }
-        init();
+        fetchShoppingList();
     }, []);
-
-    useEffect(() => {
-        if (junoReady) {
-            fetchShoppingList();
-        }
-    }, [junoReady]);
     const fetchShoppingList = async () => {
         let fetchedNotes: {
             checked: boolean; content: string; id: string;
@@ -89,7 +80,6 @@ const ShoppingList: React.FC = () => {
             alert('Failed to fetch shopping list. Please try again.');
         }
 
-        // Sort fetchedNotes after it's been populated
         const sortedFetchedNotes = fetchedNotes.sort((a, b) => Number(a.checked) - Number(b.checked));
         setNotes(sortedFetchedNotes);
     };
@@ -129,10 +119,10 @@ const ShoppingList: React.FC = () => {
     };
     const addNote = async () => {
         if (currentNote.trim()) {
-            if (!junoReady) {
+/*            if (!junoReady) {
                 alert('Application is initializing, please try again in a moment.');
                 return;
-            }
+            }*/
             if (!user) {
                 alert('You must be logged in to add a note.');
                 return;
@@ -164,10 +154,8 @@ const ShoppingList: React.FC = () => {
     };
     const deleteNote = async (index: number) => {
         const noteId = notes[index].id;  // Get the note's id
-
         // Retrieve the most recent document
         const currentDoc = await getDoc({ collection: "ShoppingList", key: noteId });
-
         // Check if currentDoc exists
         if (!currentDoc) {
             console.error("Error retrieving the current document.");
@@ -195,18 +183,22 @@ const ShoppingList: React.FC = () => {
     };
 
     return (
+
         <Paper elevation={2} style={paperStyle}>
+            <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
             <Typography
-                variant="h3"
+                variant="h5"
                 gutterBottom
                 sx={{
                     fontWeight: 'bold',
                     textAlign: 'center',
-                    color: 'primary.main' //
+                    color: 'primary.main',
+                    m: 2
                 }}
             >
-                List - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
+                my shopping list - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
             </Typography>
+           </Card>
 
             <Box display="flex" alignItems="center" style={{ marginBottom: '20px' }}>
                 <AddIcon style={{ marginRight: '8px' }} />
