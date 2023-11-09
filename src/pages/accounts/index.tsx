@@ -3,7 +3,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import { Container, Grid, Typography } from "@mui/material";
-import {listDocs} from "@junobuild/core";
+import {listDocs} from "@junobuild/core-peer";
 import AccountCard from '../../components/Accounts/AccountCardComponent';
 interface AccountData {
     accountName: string;

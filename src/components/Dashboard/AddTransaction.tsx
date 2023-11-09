@@ -7,7 +7,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
-import { setDoc, getDoc, listDocs } from "@junobuild/core";
+import { setDoc, getDoc, listDocs } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 interface AddTransactionProps {
     open: boolean;

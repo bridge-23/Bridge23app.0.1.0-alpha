@@ -3,7 +3,7 @@ import React, {useContext, useState} from 'react';
 import { Card, IconButton, Typography, Dialog, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import { Alert } from '@mui/material'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { setDoc } from "@junobuild/core";
+import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 

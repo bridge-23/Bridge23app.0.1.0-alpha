@@ -11,7 +11,7 @@ import ExpenseCardComponent from "../../components/Dashboard/IncomeCardComponent
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddTransaction";
-import {listDocs} from "@junobuild/core";
+import {listDocs} from "@junobuild/core-peer";
 
 interface AccountData {
     accountName: string;

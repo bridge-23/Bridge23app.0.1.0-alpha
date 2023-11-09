@@ -2046,17 +2046,17 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@junobuild/core@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@junobuild/core/-/core-0.0.34.tgz#90471f0e7acdeeeb7ae2eb4d108f7bd78a7cf1d6"
-  integrity sha512-nUX9tgao4iKXby/OnhgG/500b0ztv4P1vCE+R8KdWWiL1IrVKpceHXHQhnFlP4nKSpeto1fR1cv6JA3g4ppLjQ==
+"@junobuild/core-peer@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@junobuild/core-peer/-/core-peer-0.0.1.tgz#026e609305d6bb7506385cf6413af848884ddedf"
+  integrity sha512-9py7+98Qp0e9dTY9ONjLFOEPYfDkg0C/LxV9d7MOFtgopsEawEak7U6XiZGMZ7aDGqe7DlxBcT7I41cYWSbKlQ==
   dependencies:
     "@junobuild/utils" "*"
 
 "@junobuild/utils@*":
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/@junobuild/utils/-/utils-0.0.14.tgz#6fe98b45de5770d7794dfedc5d19c3a51de83fe6"
-  integrity sha512-ypSYtd54kFNa0d2hiAAonqjhk4/m2OJtCN/AqNkSZd+InScO2uI9ryDPsQwL4IYpg6JFXRYhABl4onH7PzGlQQ==
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@junobuild/utils/-/utils-0.0.15.tgz#d0999cfc20702f2f0e4f7a21019d177e27a63029"
+  integrity sha512-02+uY3pXmMYyLFO7Tqk0hPMqwgwWFzJbfgtH9KMJ1knlco8Q0ecBXbTohm/c+SmJf7HwuR5yYBbJjVP9KA+L0w==
 
 "@mui/base@5.0.0-beta.14":
   version "5.0.0-beta.14"
