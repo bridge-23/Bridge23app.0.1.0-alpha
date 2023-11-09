@@ -10,7 +10,7 @@ const Admin = () => {
         id: string;
         name: string;
     }
-    //const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const categoriesToAdd: Category[] = [
         { name: "Clothing" },
