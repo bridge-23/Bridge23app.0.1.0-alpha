@@ -1,4 +1,4 @@
-//..src/dashboard/[userKey].tsx
+//..src/dashboard/index.tsx
 import React, {useState, useEffect} from 'react';
 import { NextPage } from "next";
 import { Container, Grid, useMediaQuery, Box } from "@mui/material";

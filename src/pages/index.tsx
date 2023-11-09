@@ -37,8 +37,17 @@ const Home: NextPage = () => {
                                     <LoginComponentJuno />
                                 </Box>
                             )}
-                            <Image src="/logo-icp.png" alt="ICP Logo" width={263.625} height={16.125}/>
-                            <Image src="/badge-juno.svg" alt="Juno Badge" width={152} height={32.66}/>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                                {/* Juno Badge */}
+                                <div>
+                                    <Image src="/logo-icp.png" alt="ICP Logo" width={263.625} height={16.125}/>
+                                </div>
+
+                                {/* ICP Logo */}
+                                <div>
+                                    <Image src="/badge-juno.svg" alt="Juno Badge" width={152} height={32.66}/>
+                                </div>
+                            </div>
                         </Box>
                     </Grid>
                 </Grid>

@@ -1,4 +1,4 @@
-//..src/page/shoppinglist/[userKey]tsx
+//..src/page/shoppinglist/index.tsx
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -38,8 +38,6 @@ const ShoppingList: React.FC = () => {
         checked: boolean; content: string, id: string
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
-    //const router = useRouter();
-    //const { userKey } = router.query;
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
