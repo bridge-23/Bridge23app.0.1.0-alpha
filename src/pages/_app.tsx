@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         (async () => {
             try {
                 await initJuno({
-                    satelliteId: process.env.NEXT_PUBLIC_JUNO_ID as string,
+                    satelliteId: "kuyff-qaaaa-aaaal-ac5uq-cai",
                 });
             } catch (error) {
                 console.error('Failed to initialize Juno:', error);

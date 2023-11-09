@@ -207,7 +207,7 @@ const ShoppingList: React.FC = () => {
                     color: 'primary.main' //
                 }}
             >
-                Shopping List - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
+                List - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
             </Typography>
 
             <Box display="flex" alignItems="center" style={{ marginBottom: '20px' }}>
