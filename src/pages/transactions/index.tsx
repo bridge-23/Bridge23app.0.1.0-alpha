@@ -82,7 +82,7 @@ export default function Transactions () {
                 <AccordionDetails>
                     <Typography>
                         Address: 456 Fashion Ave, New York, NY 10018, United States<br />
-                        Novel 'The Great Gatsby' - $15.00<br />
+                        Novel - The Great Gatsby - $15.00<br />
                         Science Magazine - $5.00<br />
                         Art Supplies - $25.00<br />
                     </Typography>
@@ -185,7 +185,7 @@ export default function Transactions () {
                         <AccordionDetails>
                             <Typography>
                                 Address: 456 Fashion Ave, New York, NY 10018, United States<br />
-                                Novel 'The Great Gatsby' - $15.00<br />
+                                Novel - The Great Gatsby - $15.00<br />
                                 Science Magazine - $5.00<br />
                                 Art Supplies - $25.00<br />
                             </Typography>
