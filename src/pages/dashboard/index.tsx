@@ -1,4 +1,4 @@
-//..src/dashboard/[userKey].tsx
+//..src/dashboard/index.tsx
 import React, {useState, useEffect} from 'react';
 import { NextPage } from "next";
 import { Container, Grid, useMediaQuery, Box } from "@mui/material";
@@ -42,10 +42,10 @@ const Dashboard: NextPage = () => {
     useEffect(() => {
         fetchAccounts(); // Call the fetch function on component mount
     }, []);
-/*    const handleEdit = (accountId: string) => {
-        // Implement your edit logic here
-        console.log('Editing account with ID:', accountId);
-    };*/
+    /*    const handleEdit = (accountId: string) => {
+            // Implement your edit logic here
+            console.log('Editing account with ID:', accountId);
+        };*/
     const fetchAccounts = async () => {
         try {
             const accountsData = await listDocs({

@@ -3,14 +3,12 @@ import React, {useContext} from 'react';
 import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import {AuthContext} from "../../contexts/AuthContext";
-
-
 const Admin = () => {
     interface Category {
         id: string;
         name: string;
     }
-    //const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     const categoriesToAdd: Category[] = [
         { name: "Clothing" },

@@ -23,7 +23,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "node_modules/@sendbird/uikit-react/index.d.ts"
   ],
   "exclude": [
     "node_modules"

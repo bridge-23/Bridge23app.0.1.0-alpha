@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core-peer';
 import { useRouter } from 'next/router';
-
+//TODO: make post to juno to user collection
 type ProviderType = 'internetIdentity' | 'nftId';
 const ICPSignInButton = () => {
     const [isUserSignedIn, setIsUserSignedIn] = useState(false);
@@ -42,7 +42,7 @@ const ICPSignInButton = () => {
                 });
             await signIn({ provider });
             console.log("Sign-in successful!");
-            router.push('/shoppinglist/${user.key}');
+            router.push('/shoppinglist');
         } catch (error) {
             console.error("Sign-in failed:", error);
         }
