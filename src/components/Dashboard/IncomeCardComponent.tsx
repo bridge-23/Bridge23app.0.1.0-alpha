@@ -30,7 +30,7 @@ const IncomeCardComponent: React.FC = () => {
                         Income
                     </Typography>
                     <Typography variant="subtitle2" sx={{ color: 'green' }}>
-                        $4,000.00
+                        IDR 4,140,500
                     </Typography>
                 </Box>
             </CardContent>

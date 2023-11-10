@@ -7,7 +7,7 @@ import UserProfileComponent from "../../components/Dashboard/UserProfileComponen
 import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalanceCardComponent";
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";
 import IncomeCardComponent from "../../components/Dashboard/IncomeCardComponent";
-import ExpenseCardComponent from "../../components/Dashboard/IncomeCardComponent";
+import ExpenseCardComponent from "../../components/Dashboard/ExpenseCardComponent";
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddTransaction";
@@ -101,10 +101,6 @@ const Dashboard: NextPage = () => {
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <AddExpense open={open} onClose={handleClose}/>
-                    </Grid>
-
-                    <Grid item xs={12} md={4}>
-                        <NewAccountComponent />
                     </Grid>
 
                     <Grid item xs={6} md={8}>

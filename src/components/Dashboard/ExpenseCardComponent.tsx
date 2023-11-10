@@ -1,7 +1,7 @@
 //..src/components/Dashboard/ExpenseCardComponent.tsx
 import React from 'react';
 import { Box, Card, CardContent, Typography, Avatar } from "@mui/material";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'; // Importing downward arrow
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const ExpenseCardComponent: React.FC = () => {
     return (
@@ -25,13 +25,13 @@ const ExpenseCardComponent: React.FC = () => {
                     justifyContent="center"
                 >
                     <Avatar sx={{ backgroundColor: 'red', mb: 2 }}>
-                        <KeyboardArrowDownIcon style={{ color: 'white', fontSize: 'large' }} />
+                        <ArrowDownwardIcon style={{ color: 'white', fontSize: 'large' }} />
                     </Avatar>
                     <Typography variant="caption" color="textSecondary">
                         Expense
                     </Typography>
                     <Typography variant="subtitle2" sx={{ color: 'red' }}> {/* Red color for expense */}
-                        $4,000.00
+                        IDR 3,760,000.00
                     </Typography>
                 </Box>
             </CardContent>
