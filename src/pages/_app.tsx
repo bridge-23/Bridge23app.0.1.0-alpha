@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import Navbar from "../components/Navigation/Navbar";
 import { ColorModeProvider } from '../contexts/ColorModeContext';
 import { AuthProvider } from '../contexts/AuthContext';
-import { initJuno } from "@junobuild/core";
+import { initJuno } from "@junobuild/core-peer";
 
 function MyApp({ Component, pageProps }: AppProps) {
     useEffect(() => {

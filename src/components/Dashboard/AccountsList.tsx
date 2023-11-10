@@ -2,7 +2,7 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
 import AccountCard from '../Accounts/AccountCardComponent';
-import { setDoc } from "@junobuild/core";
+import { setDoc } from '@junobuild/core-peer';
 
 interface AccountData {
     accountName: string;

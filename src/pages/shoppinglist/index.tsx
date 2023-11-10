@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
-import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core";
+import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 
 

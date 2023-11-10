@@ -1,7 +1,7 @@
 // src/components/ICPSignInButton.tsx
 import React, { useEffect, useState } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
-import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core';
+import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core-peer';
 import { useRouter } from 'next/router';
 //TODO: make post to juno to user collection
 type ProviderType = 'internetIdentity' | 'nftId';

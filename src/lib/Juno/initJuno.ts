@@ -1,5 +1,5 @@
 // ..src/lib/initJuno.ts
-import { initJuno } from "@junobuild/core";
+import { initJuno } from "@junobuild/core-peer";
 
 let initialized = false;
 export async function initializeJuno() {

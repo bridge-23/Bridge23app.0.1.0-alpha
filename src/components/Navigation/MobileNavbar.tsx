@@ -10,7 +10,7 @@ import {bindMenu, bindTrigger} from "material-ui-popup-state";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
-import { signOut } from '@junobuild/core';
+import { signOut } from '@junobuild/core-peer';
 import {AuthContext} from "../../contexts/AuthContext";
 function MobileNavbar() {
     const router = useRouter();

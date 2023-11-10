@@ -1,10 +1,8 @@
 //..src/admin/index.tsx
 import React, {useContext} from 'react';
-import { setDoc } from "@junobuild/core";
+import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import {AuthContext} from "../../contexts/AuthContext";
-
-
 const Admin = () => {
     interface Category {
         id: string;

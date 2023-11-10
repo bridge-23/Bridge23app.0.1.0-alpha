@@ -8,11 +8,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { setDoc } from "@junobuild/core";
-//import { initializeJuno } from '../../lib/Juno/initJuno';
+import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
-
 interface AddShoppingListNoteProps {
     open: boolean;
     onClose: () => void;
@@ -24,12 +22,12 @@ const AddShoppingListItem: FC<AddShoppingListNoteProps> = ({ open, onClose }) =>
     const [junoReady, setJunoReady] = useState<boolean>(false);
     const { user } = useContext(AuthContext);
 
-    useEffect(() => {
+/*    useEffect(() => {
         async function init() {
             setJunoReady(true);
         }
         init();
-    }, []);
+    }, []);*/
 
     const handleAddNote = async () => {
         if (!note.trim()) {
@@ -37,10 +35,10 @@ const AddShoppingListItem: FC<AddShoppingListNoteProps> = ({ open, onClose }) =>
             return;
         }
 
-        if (!junoReady) {
+/*        if (!junoReady) {
             alert('Application is initializing, please try again in a moment.');
             return;
-        }
+        }*/
 
         try {
             const noteId = `${nanoid()}`;
