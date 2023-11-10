@@ -5,7 +5,6 @@ import Link from 'next/link';
 import HomeIcon from "@mui/icons-material/Home";
 import FormatListBulletedSharpIcon from "@mui/icons-material/FormatListBulletedSharp";
 import {UploadFab} from "../Buttons/UploadFab";
-import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import {bindMenu, bindTrigger} from "material-ui-popup-state";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ChecklistIcon from '@mui/icons-material/Checklist';
@@ -15,7 +14,6 @@ import { signOut } from '@junobuild/core-peer';
 import {AuthContext} from "../../contexts/AuthContext";
 function MobileNavbar() {
     const router = useRouter();
-    const { userKey } = router.query;
     const { user } = useContext(AuthContext);
     const handleFeedbackClick = () => {
         // For demonstration purposes. Replace with your desired logic.

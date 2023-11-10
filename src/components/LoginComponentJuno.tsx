@@ -1,6 +1,6 @@
 // src/components/LoginComponent.tsx
 import React from 'react';
-import { Card, Container, Grid, Typography, Backdrop } from '@mui/material';
+import { Card, Container, Grid, Typography } from '@mui/material';
 import ICPSignInButton from './Buttons/ICPSignInButton';
 import Link from 'next/link';
 import Image from 'next/image';
