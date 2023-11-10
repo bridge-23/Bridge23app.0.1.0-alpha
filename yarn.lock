@@ -2046,6 +2046,13 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@junobuild/core-peer@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@junobuild/core-peer/-/core-peer-0.0.1.tgz#026e609305d6bb7506385cf6413af848884ddedf"
+  integrity sha512-9py7+98Qp0e9dTY9ONjLFOEPYfDkg0C/LxV9d7MOFtgopsEawEak7U6XiZGMZ7aDGqe7DlxBcT7I41cYWSbKlQ==
+  dependencies:
+    "@junobuild/utils" "*"
+
 "@junobuild/core@^0.0.34":
   version "0.0.34"
   resolved "https://registry.yarnpkg.com/@junobuild/core/-/core-0.0.34.tgz#90471f0e7acdeeeb7ae2eb4d108f7bd78a7cf1d6"
