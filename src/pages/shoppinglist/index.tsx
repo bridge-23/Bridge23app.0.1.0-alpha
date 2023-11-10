@@ -183,7 +183,6 @@ const ShoppingList: React.FC = () => {
     };
 
     return (
-
         <Paper elevation={2} style={paperStyle}>
             <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
             <Typography
@@ -199,7 +198,8 @@ const ShoppingList: React.FC = () => {
                 my shopping list - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
             </Typography>
            </Card>
-
+            <br/>
+            <br/>
             <Box display="flex" alignItems="center" style={{ marginBottom: '20px' }}>
                 <AddIcon style={{ marginRight: '8px' }} />
                 <TextField

@@ -1,7 +1,8 @@
 //..src/contexts/AuthContext.tsx
 import React, { createContext, useEffect, useState } from "react";
 import { authSubscribe, User } from "@junobuild/core";
-
+import LoginComponentJuno from "../components/LoginComponentJuno";
+import LoadingComponent from "../components/shared/LoadingComponent";
 interface AuthContextType {
     user: User | null;
     loading: boolean;
@@ -64,15 +65,19 @@ export const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     return (
         <AuthContext.Provider value={{ user, loading, error }}>
             {loading ? (
-                <>
-                </>
+                <LoadingComponent/>
             ) : error ? (
                 <div>Error: {error.message}</div>
+            ) : user ? (
+                // If the user is authenticated, render the children components
+                <>{children}</> // This is a correct use of fragments since you might be wrapping multiple children
             ) : (
-                children
+                // If not loading, no error, and no user, render the login component
+                <LoginComponentJuno />
             )}
         </AuthContext.Provider>
     );
+
 };
 
 
