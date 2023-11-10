@@ -12,6 +12,8 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+  Backdrop,
+  CircularProgress
 } from "@mui/material";
 import { Alert } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -29,7 +31,7 @@ const NewAccountComponent: React.FC = () => {
   const [accountType, setAccountType] = useState<string>("");
   const [financialInstitution, setFinancialInstitution] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
-
+  const [backdropOpen, setBackdropOpen] = useState(false);
   const handleCreateAccount = async () => {
     const parsedInitialBalance = parseFloat(initialBalance.toString());
     setErrorMessage("");
@@ -45,13 +47,13 @@ const NewAccountComponent: React.FC = () => {
       );
       return;
     }
-
+    setBackdropOpen(true);
     try {
       if (!user) {
         console.error("Please sign in to create an account.");
+
         return;
       }
-
       const accountRef = `${user.key}_${nanoid()}`; // This creates a unique reference for the account using the user ID and nanoid
       await setDoc({
         collection: "Accounts",
@@ -70,7 +72,6 @@ const NewAccountComponent: React.FC = () => {
           },
         },
       });
-
       console.log("Account created successfully!");
       setSuccessMessage("Account created successfully!");
       setTimeout(() => {
@@ -80,6 +81,8 @@ const NewAccountComponent: React.FC = () => {
     } catch (error) {
       console.error("Error creating account:", error);
       setErrorMessage("Error creating account. Please try again.");
+    } finally {
+      setBackdropOpen(false); // Ensure the backdrop is closed whether the operation is successful or not
     }
   };
 
@@ -170,6 +173,12 @@ const NewAccountComponent: React.FC = () => {
           >
             Create
           </Button>
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={backdropOpen}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
           {successMessage && (
             <Alert severity="success" sx={{ mt: 2 }}>
               {successMessage}

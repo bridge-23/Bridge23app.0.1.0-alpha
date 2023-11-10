@@ -8,6 +8,7 @@ import {UploadFab} from "../Buttons/UploadFab";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import {bindMenu, bindTrigger} from "material-ui-popup-state";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ChecklistIcon from '@mui/icons-material/Checklist';
 import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import { signOut } from '@junobuild/core-peer';
@@ -47,7 +48,7 @@ function MobileNavbar() {
                 </Link>
                 )}
                 {user && (
-                    <Link href={`/shoppinglist`}>
+                    <Link href={`/transactions`}>
                         <IconButton color="inherit" aria-label="open drawer">
                             <FormatListBulletedSharpIcon fontSize="large" />
                         </IconButton>
@@ -57,9 +58,9 @@ function MobileNavbar() {
                     <UploadFab />
                 )}
                 {user && (
-                    <Link href={`/rewards`}>
+                    <Link href={`/shoppinglist`}>
                         <IconButton color="inherit" aria-label="open drawer">
-                            <CardGiftcardIcon fontSize="large"/>
+                            <ChecklistIcon fontSize="large" />
                         </IconButton>
                     </Link>
                 )}
@@ -80,5 +81,4 @@ function MobileNavbar() {
         </AppBar>
     );
 }
-
 export default MobileNavbar;

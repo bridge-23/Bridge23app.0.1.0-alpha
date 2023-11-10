@@ -71,18 +71,19 @@ const ICPSignInButton = () => {
                         value={providerType}
                         exclusive
                         onChange={handleProviderChange}
-                        style={{ marginBottom: '10px' }}
+                        style={{ marginBottom: '1px' }}
                     >
                         <ToggleButton value="internetIdentity">Internet Identity</ToggleButton>
                         <ToggleButton value="nftId">NFID</ToggleButton>
                     </ToggleButtonGroup>
                 </Grid>
-                <Grid item style={{ marginTop: '2px' }}>
+                <Grid item style={{ marginTop: '1px' }}>
                     {isUserSignedIn ? (
                         <Button
                             variant="contained"
                             color="secondary"
                             onClick={handleSignOut}
+                            style={{ marginBottom: '1px' }}
                         >
                             Sign Out
                         </Button>
@@ -91,6 +92,7 @@ const ICPSignInButton = () => {
                             variant="contained"
                             color="primary"
                             onClick={handleSignIn}
+                            style={{ marginBottom: '5px' }}
                         >
                             Sign In
                         </Button>

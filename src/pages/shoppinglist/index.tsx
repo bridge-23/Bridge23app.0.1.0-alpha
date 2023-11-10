@@ -1,6 +1,6 @@
 //..src/page/shoppinglist/index.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Card } from '@mui/material';
+import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Card, Backdrop, CircularProgress } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -23,7 +23,7 @@ const ShoppingListItem: React.FC<ShoppingListItemProps & { checked: boolean, onC
     const itemStyle = checked ? { backgroundColor: '#f0f0f0', color: '#d0d0d0' } : {};
     return (
         <ListItem style={itemStyle}>
-            <Checkbox edge="start" tabIndex={-1} disableRipple checked={checked} onChange={onCheck} />
+            <Checkbox edge="start" tabIndex={-1} disableRipple checked={checked} onChange={onCheck}/>
             <ListItemText primary={note} />
             <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="delete" onClick={onDelete}>
@@ -42,7 +42,7 @@ const ShoppingList: React.FC = () => {
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
     const { user } = useContext(AuthContext);
-
+    const [backdropOpen, setBackdropOpen] = useState(false);
     const paperStyle = {
         padding: '20px',
         paddingLeft: isDesktop ? '90px' : '20px',
@@ -50,13 +50,19 @@ const ShoppingList: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchShoppingList();
+        (async () => {
+            try {
+                await fetchShoppingList();
+            } catch (error) {
+                console.error("Failed to fetch shopping list:", error);
+                // Handle the error appropriately
+            }
+        })();
     }, []);
     const fetchShoppingList = async () => {
         let fetchedNotes: {
             checked: boolean; content: string; id: string;
         }[] = []; // Declare fetchedNotes here and initialize it as an empty array
-
         try {
             const shoppingListData = await listDocs({
                 collection: "ShoppingList"
@@ -78,12 +84,14 @@ const ShoppingList: React.FC = () => {
         } catch (error) {
             console.error("Error fetching shopping list:", error);
             alert('Failed to fetch shopping list. Please try again.');
+
         }
 
         const sortedFetchedNotes = fetchedNotes.sort((a, b) => Number(a.checked) - Number(b.checked));
         setNotes(sortedFetchedNotes);
     };
     const handleCheckboxChange = async (index: number) => {
+        setBackdropOpen(true);
         const updatedNotes = [...notes];
         updatedNotes[index].checked = !updatedNotes[index].checked;
         const currentDoc = await getDoc({ collection: "ShoppingList", key: updatedNotes[index].id });
@@ -108,27 +116,25 @@ const ShoppingList: React.FC = () => {
             setNotes(updatedNotes);
             // If the checkbox is checked, add a new note
             if (updatedNotes[index].checked) {
-                addNote();
+                await addNote();
             }
         } catch (error) {
             console.error("Error updating note:", error);
             alert('Failed to update note. Please try again.');
+        } finally {
+            setBackdropOpen(false); // Close the backdrop
         }
         const sortedUpdatedNotes = updatedNotes.sort((a: { checked: boolean; content: string; id: string }, b: { checked: boolean; content: string; id: string }) => Number(a.checked) - Number(b.checked));
         setNotes(sortedUpdatedNotes);
     };
     const addNote = async () => {
         if (currentNote.trim()) {
-/*            if (!junoReady) {
-                alert('Application is initializing, please try again in a moment.');
-                return;
-            }*/
             if (!user) {
                 alert('You must be logged in to add a note.');
                 return;
             }
             const noteId = `${nanoid()}`;
-
+            setBackdropOpen(true);
             try {
                 await setDoc({
                     collection: "ShoppingList",
@@ -149,6 +155,8 @@ const ShoppingList: React.FC = () => {
             } catch (error) {
                 console.error("Error adding note:", error);
                 alert('Failed to add note. Please try again.');
+            } finally {
+                setBackdropOpen(false); // Close the backdrop
             }
         }
     };
@@ -210,11 +218,18 @@ const ShoppingList: React.FC = () => {
                     fullWidth
                 />
             </Box>
-
-            <Button variant="contained" color="primary" style={{ marginBottom: '20px', width: '100%' }} onClick={() => addNote()}>
-                Add Item
-            </Button>
-
+            <div>
+                <Button variant="contained" color="primary" style={{ marginBottom: '20px', width: '100%' }} onClick={() => addNote()}>
+                    Add Item
+                </Button>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={backdropOpen}
+                    onClick={() => setBackdropOpen(false)}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            </div>
             <List>
                 {notes.map((note, index) => (
                     <ShoppingListItem
