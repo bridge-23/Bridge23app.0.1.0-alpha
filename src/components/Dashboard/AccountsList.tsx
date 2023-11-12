@@ -27,7 +27,7 @@ const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
         perspective: "1000px",
         mx: "auto",
         my: 2,
-        p: 2,
+        p: 0,
         borderRadius: "24px",
       }}
     >

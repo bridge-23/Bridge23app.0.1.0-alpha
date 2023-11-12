@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 import { NextPage } from "next";
 import { Container, Grid, useMediaQuery, Box } from "@mui/material";
 import { Theme } from '@mui/material/styles';
-import UserProfileComponent from "../../components/Dashboard/UserProfileComponent";
 import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalanceCardComponent";
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";
 import IncomeCardComponent from "../../components/Dashboard/IncomeCardComponent";
@@ -12,6 +11,7 @@ import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddTransaction";
 import {listDocs} from "@junobuild/core-peer";
+//import UserProfileComponent from "../../components/Dashboard/UserProfileComponent";
 
 interface AccountData {
     accountName: string;

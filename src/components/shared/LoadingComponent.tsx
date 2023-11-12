@@ -1,7 +1,7 @@
 //..src/components/shared/LoadingComponent.tsx
 import Image from 'next/image';
 import React from "react";
-import { CircularProgress, Box } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 function LoadingComponent() {
     return (

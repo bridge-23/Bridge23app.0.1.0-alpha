@@ -27,7 +27,9 @@ const AccountCard: React.FC<AccountCardProps> = ({
         <Card
             sx={{
                 perspective: '1000px',
-                maxWidth: 'fit-content', margin: 'auto',
+                maxWidth: 'fit-content',
+                margin: 0,
+                p:0,
                 borderRadius: '24px',
                 boxShadow: 3,
                 display: 'flex',
