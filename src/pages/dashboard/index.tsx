@@ -78,7 +78,7 @@ const Dashboard: NextPage = () => {
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
             <Box px={isMobile ? 2 : 2}>
-                <Grid container spacing={isMobile ? 2 : 2} direction="row" alignItems="stretch">
+                <Grid container spacing={isMobile ? 1 : 3} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
 
                     <Grid item xs={12} md={4}>
                         <AccountBalanceCardComponent currentBalance={formattedTotalBalance} />
@@ -93,23 +93,21 @@ const Dashboard: NextPage = () => {
                     </Grid>
 
                     <Grid item xs={12} md={4}>
-                        <UserProfileComponent/>
-                    </Grid>
-
-                    <Grid item xs={12} md={4}>
                         <ExpensesbyCategoryComponent />
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <AddExpense open={open} onClose={handleClose}/>
                     </Grid>
 
-                    <Grid item xs={6} md={8}>
+                    <Grid item xs={12} md={4}>
+                        <NewAccountComponent />
+                    </Grid>
+
+                    <Grid item xs={12} md={isMobile ? 4 : 8}>
                         <AccountsList accounts={accounts} />
                     </Grid>
 
-                    <Grid item xs={6} md={4}>
-                        <NewAccountComponent />
-                    </Grid>
+
 
                 </Grid>
             </Box>
@@ -118,4 +116,6 @@ const Dashboard: NextPage = () => {
 };
 export default Dashboard;
 
-
+{/*                 <Grid item xs={12} md={4}>
+                        <UserProfileComponent/>
+                    </Grid>*/}

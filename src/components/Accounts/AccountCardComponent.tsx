@@ -27,7 +27,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
         <Card
             sx={{
                 perspective: '1000px',
-                width: '100%', // Ensure it takes full width on all screen sizes
+                maxWidth: 'fit-content', margin: 'auto',
                 borderRadius: '24px',
                 boxShadow: 3,
                 display: 'flex',

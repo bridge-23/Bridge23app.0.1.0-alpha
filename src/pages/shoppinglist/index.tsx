@@ -1,12 +1,12 @@
 //..src/page/shoppinglist/index.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Card, Backdrop, CircularProgress } from '@mui/material';
+import { useTheme, Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Card, Backdrop, CircularProgress, Container, useMediaQuery } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { useTheme, useMediaQuery } from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
+import {Theme} from "@mui/material/styles";
 
 
 //TODO: make shopping panel for create shopping list
@@ -34,6 +34,7 @@ const ShoppingListItem: React.FC<ShoppingListItemProps & { checked: boolean, onC
     );
 };
 const ShoppingList: React.FC = () => {
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [notes, setNotes] = useState<{
         checked: boolean; content: string, id: string
     }[]>([]);
@@ -191,6 +192,7 @@ const ShoppingList: React.FC = () => {
     };
 
     return (
+        <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
         <Paper elevation={2} style={paperStyle}>
             <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
             <Typography
@@ -242,6 +244,7 @@ const ShoppingList: React.FC = () => {
                 ))}
             </List>
         </Paper>
+        </Container>
     );
 };
 export default ShoppingList;

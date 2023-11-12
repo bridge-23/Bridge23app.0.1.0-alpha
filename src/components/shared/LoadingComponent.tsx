@@ -1,12 +1,21 @@
 //..src/components/shared/LoadingComponent.tsx
+import Image from 'next/image';
+import React from "react";
 import { CircularProgress, Box } from '@mui/material';
 
 function LoadingComponent() {
     return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100vh',
+            backgroundColor: '#2d62eb',
+        }}>
+            <Image src="/iconWhiteNew.png" alt="BridgeLogo" width={70} height={40}/>
             <CircularProgress />
-        </Box>
+        </div>
     );
 }
-
 export default LoadingComponent;
