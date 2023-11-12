@@ -2,8 +2,6 @@
 import React from 'react';
 import { Box, Card, CardContent, Typography, Avatar, IconButton } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ArrowDownwardSharpIcon from '@mui/icons-material/ArrowDownwardSharp';
-import ArrowUpwardSharpIcon from '@mui/icons-material/ArrowUpwardSharp';
 
 interface AccountBalanceCardProps {
     currentBalance: string; // Prop for the current balance
@@ -13,7 +11,7 @@ const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ curren
         <Card
             sx={{
                 perspective: '1000px',
-                width: { xs: '100%', sm: '300px' }, // Full width on small devices, 300px on larger devices
+                width: { xs: '100%', sm: '300px' },
                 height: '200px',
                 cursor: 'pointer',
                 borderRadius: '24px'
@@ -25,8 +23,8 @@ const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ curren
                         I
                     </Avatar>
 
-                    <Box display="flex" alignItems="center" marginRight={10}>
-                        <Typography variant="subtitle1" color="textSecondary" >September</Typography>
+                    <Box display="flex" alignItems="center" marginRight={12}>
+                        <Typography variant="subtitle1" color="textSecondary" >November</Typography>
                         <IconButton>
                             <KeyboardArrowDownIcon />
                         </IconButton>

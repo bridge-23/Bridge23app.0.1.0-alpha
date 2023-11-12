@@ -23,13 +23,14 @@ const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
 
   return (
     <Card
-      sx={{
-        perspective: "1000px",
-        mx: "auto",
-        my: 2,
-        p: 0,
-        borderRadius: "24px",
-      }}
+        sx={{
+          perspective: "1000px",
+          mx: "auto",
+          my: 2,
+          p: 0,
+          borderRadius: 0,
+          boxShadow: 'none',
+        }}
     >
       <CardContent>
         <Typography variant="h5" gutterBottom>

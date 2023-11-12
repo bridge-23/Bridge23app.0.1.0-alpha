@@ -6,7 +6,6 @@ import dynamic from 'next/dynamic';
 const PieChartDynamic = dynamic(() => import('@mui/x-charts').then(mod => mod.PieChart), {
     ssr: false,
 });
-
 const ExpensesbyCategoryComponent: React.FC = () => {
     return (
         <Card
@@ -15,7 +14,9 @@ const ExpensesbyCategoryComponent: React.FC = () => {
                 width: { xs: '100%', sm: '300px' },
                 height: '200px',
                 cursor: 'pointer',
-                borderRadius: '24px',
+                p: 0,
+                borderRadius: "24px",
+                boxShadow: 3,
                 display: 'flex',
                 flexDirection: 'column', // Stack children vertically
             }}
@@ -55,5 +56,4 @@ const ExpensesbyCategoryComponent: React.FC = () => {
 
     );
 }
-
 export default ExpensesbyCategoryComponent;

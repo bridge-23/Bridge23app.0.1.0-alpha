@@ -5,14 +5,12 @@ import { Container, Grid, useMediaQuery, Box } from "@mui/material";
 import { Theme } from '@mui/material/styles';
 import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalanceCardComponent";
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";
-import IncomeCardComponent from "../../components/Dashboard/IncomeCardComponent";
-import ExpenseCardComponent from "../../components/Dashboard/ExpenseCardComponent";
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
 import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddTransaction";
+import Amount from "../../components/Dashboard/Amouth";
 import {listDocs} from "@junobuild/core-peer";
 //import UserProfileComponent from "../../components/Dashboard/UserProfileComponent";
-
 interface AccountData {
     accountName: string;
     financialInstitution: string;
@@ -31,16 +29,20 @@ const Dashboard: NextPage = () => {
     const handleClose = () => {
         setOpen(false);
     };
-
     const totalCurrentBalance = accounts.reduce((sum, account) => sum + account.currentBalance, 0);
-
     const formattedTotalBalance = totalCurrentBalance.toLocaleString('en-US', {
         style: 'currency',
         currency: 'IDR', // Change to the actual currency code if necessary
     });
 
     useEffect(() => {
-        fetchAccounts(); // Call the fetch function on component mount
+        fetchAccounts()
+            .then(() => {
+                // Handle success if needed
+            })
+            .catch(error => {
+                console.error('Error fetching accounts:', error);
+            });
     }, []);
     /*    const handleEdit = (accountId: string) => {
             // Implement your edit logic here
@@ -77,26 +79,19 @@ const Dashboard: NextPage = () => {
 
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
-            <Box px={isMobile ? 2 : 2}>
-                <Grid container spacing={isMobile ? 1 : 3} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
+
+                <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
 
                     <Grid item xs={12} md={4}>
                         <AccountBalanceCardComponent currentBalance={formattedTotalBalance} />
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
-                        <IncomeCardComponent/>
-                    </Grid>
-
-                    <Grid item xs={12} md={4}>
-                        <ExpenseCardComponent/>
+                    <Grid xs={12} md={4}>
+                        <Amount />
                     </Grid>
 
                     <Grid item xs={12} md={4}>
                         <ExpensesbyCategoryComponent />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <AddExpense open={open} onClose={handleClose}/>
                     </Grid>
 
                     <Grid item xs={12} md={4}>
@@ -107,10 +102,11 @@ const Dashboard: NextPage = () => {
                         <AccountsList accounts={accounts} />
                     </Grid>
 
-
+                    <Grid item xs={12} md={4}>
+                        <AddExpense open={open} onClose={handleClose}/>
+                    </Grid>
 
                 </Grid>
-            </Box>
         </Container>
     );
 };

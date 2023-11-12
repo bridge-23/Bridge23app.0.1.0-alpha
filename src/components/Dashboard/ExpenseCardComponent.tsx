@@ -7,15 +7,15 @@ const ExpenseCardComponent: React.FC = () => {
     return (
         <Card
             sx={{
-                perspective: '1000px',
-                width: { xs: '100%', sm: '300px' },
-                height: '200px',
-                cursor: 'pointer',
-                borderRadius: '24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: 3
+                perspective: "1000px",
+                width: { xs: '45%', sm: '150px' },
+                height: '150px',
+                cursor: "pointer",
+                borderRadius: "24px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: 3,
             }}>
             <CardContent sx={{ textAlign: 'center' }}> {/* Add textAlign to center content */}
                 <Box

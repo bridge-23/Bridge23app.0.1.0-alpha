@@ -1,21 +1,6 @@
 //src/components/Accounts/NewAccountComponent.tsx
 import React, { useContext, useState } from "react";
-import {
-  Card,
-  IconButton,
-  Typography,
-  Dialog,
-  TextField,
-  Button,
-  Box,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Backdrop,
-  CircularProgress
-} from "@mui/material";
-import { Alert } from "@mui/material";
+import { Card,IconButton, Typography, Dialog, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl, Backdrop, CircularProgress, Alert } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
@@ -91,8 +76,8 @@ const NewAccountComponent: React.FC = () => {
       <Card
         sx={{
           perspective: "1000px",
-          width: { xs: "100%", sm: "300px" },
-          height: "200px",
+          width: { xs: '100%', sm: '150px' },
+          height: '110px',
           cursor: "pointer",
           borderRadius: "24px",
           display: "flex",
