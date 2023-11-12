@@ -1,7 +1,7 @@
 //..src/dashboard/index.tsx
 import React, {useState, useEffect} from 'react';
 import { NextPage } from "next";
-import { Container, Grid, useMediaQuery, Box } from "@mui/material";
+import { Container, Grid, useMediaQuery } from "@mui/material";
 import { Theme } from '@mui/material/styles';
 import AccountBalanceCardComponent from "../../components/Dashboard/AccountBalanceCardComponent";
 import ExpensesbyCategoryComponent from "../../components/Dashboard/ExpensesbyCategoryComponent";

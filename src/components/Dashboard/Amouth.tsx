@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Card, CardContent, Typography, Avatar, IconButton } from "@mui/material";
+import { Card } from "@mui/material";
 import IncomeCardComponent from "../../components/Dashboard/IncomeCardComponent";
 import ExpenseCardComponent from "../../components/Dashboard/ExpenseCardComponent";
 
