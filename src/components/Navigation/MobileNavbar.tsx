@@ -1,10 +1,9 @@
 //..src/components/Navigation/AppBarUser.tsx
 import React, {useContext} from 'react';
-import {AppBar, Toolbar, IconButton, Menu, MenuItem} from '@mui/material';
+import {AppBar, Toolbar, IconButton, Menu, MenuItem, Fab, Dialog} from '@mui/material';
 import Link from 'next/link';
 import HomeIcon from "@mui/icons-material/Home";
 import FormatListBulletedSharpIcon from "@mui/icons-material/FormatListBulletedSharp";
-import {UploadFab} from "../Buttons/UploadFab";
 import {bindMenu, bindTrigger} from "material-ui-popup-state";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ChecklistIcon from '@mui/icons-material/Checklist';
@@ -12,9 +11,20 @@ import {useRouter} from "next/router";
 import { usePopupState } from "material-ui-popup-state/hooks";
 import { signOut } from '@junobuild/core-peer';
 import {AuthContext} from "../../contexts/AuthContext";
+import TransactionList from './TransactionList';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+//import {UploadFab} from "../Buttons/UploadFab";
+
 function MobileNavbar() {
+    const [dialogOpen, setDialogOpen] = React.useState(false);
     const router = useRouter();
     const { user } = useContext(AuthContext);
+    const handleModalOpen = () => {
+        setDialogOpen(true);
+    };
+    const handleModalClose = () => {
+        setDialogOpen(false);
+    };
     const handleFeedbackClick = () => {
         // For demonstration purposes. Replace with your desired logic.
         alert("Thank you for your feedback!");
@@ -53,8 +63,19 @@ function MobileNavbar() {
                     </Link>
                 )}
                 {user && (
-                    <UploadFab />
+                    <Fab
+                        size="large"
+                        color="secondary"
+                        aria-label="add"
+                        onClick={handleModalOpen}
+                        sx={{ position: 'relative', bottom: '25px' }}
+                    >
+                        <ReceiptIcon />
+                    </Fab>
                 )}
+{/*                {user && (
+                    <UploadFab />
+                )}*/}
                 {user && (
                     <Link href={`/shoppinglist`}>
                         <IconButton color="inherit" aria-label="open drawer">
@@ -76,6 +97,9 @@ function MobileNavbar() {
                     </>
                 )}
             </Toolbar>
+            <Dialog open={dialogOpen} onClose={handleModalClose}>
+                <TransactionList/>
+            </Dialog>
         </AppBar>
     );
 }

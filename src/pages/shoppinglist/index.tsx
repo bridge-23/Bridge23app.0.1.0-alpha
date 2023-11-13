@@ -7,8 +7,6 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import {Theme} from "@mui/material/styles";
-
-
 //TODO: make shopping panel for create shopping list
 //TODO: add edit button for shopping list
 interface ShoppingListItemProps {
@@ -39,7 +37,6 @@ const ShoppingList: React.FC = () => {
         checked: boolean; content: string, id: string
     }[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
-    //const [junoReady, setJunoReady] = useState<boolean>(false);
     const theme = useTheme();
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
     const { user } = useContext(AuthContext);

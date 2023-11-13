@@ -3,7 +3,10 @@ import React from 'react';
 import { Box, Card, CardContent, Typography, Avatar } from "@mui/material";
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-const ExpenseCardComponent: React.FC = () => {
+interface ExpenseCardComponentProps {
+    totalExpenses: number;
+}
+const ExpenseCardComponent: React.FC<ExpenseCardComponentProps> = ({ totalExpenses }) => {
     return (
         <Card
             sx={{
@@ -30,8 +33,8 @@ const ExpenseCardComponent: React.FC = () => {
                     <Typography variant="caption" color="textSecondary">
                         Expense
                     </Typography>
-                    <Typography variant="subtitle2" sx={{ color: 'red' }}> {/* Red color for expense */}
-                        IDR 3,760,000.00
+                    <Typography variant="subtitle2" sx={{ color: 'red' }}>
+                        IDR {totalExpenses.toLocaleString()}
                     </Typography>
                 </Box>
             </CardContent>

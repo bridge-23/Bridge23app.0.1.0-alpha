@@ -7,14 +7,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
-import { setDoc, getDoc, listDocs } from "@junobuild/core-peer";
+import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 interface AddTransactionProps {
     open: boolean;
     onClose: () => void;
+    initialTransactionType?: string;
 }
-//TODO: fix error with data key
-//TODO: make transaction list
 interface AccountData {
     key: string;
     data: {
@@ -26,16 +25,23 @@ interface AccountData {
         userId: string;
     };
 }
-
-function AddTransaction({ open, onClose }: AddTransactionProps) {
+function AddTransaction({ open, onClose, initialTransactionType }: AddTransactionProps) {
     const { user } = useContext(AuthContext);
     const [transactionName, setTransactionName] = useState('');
     const [transactionAmount, setTransactionAmount] = useState('');
     const [transactionCategory, setTransactionCategory] = useState('');
-    const [transactionType, setTransactionType] = useState('');
+    const [transactionType, setTransactionType] = useState(initialTransactionType || ''); // Set initial value
     const [accounts, setAccounts] = useState<AccountData[]>([]);
     const [selectedAccount, setSelectedAccount] = useState('');
+    const [selectedAccountKey, setSelectedAccountKey] = useState('');
+
     //const [selectedAccountId, setSelectedAccountId] = useState('');
+
+    useEffect(() => {
+        if (initialTransactionType !== undefined) {
+            setTransactionType(initialTransactionType);
+        }
+    }, [initialTransactionType]);
 
     useEffect(() => {
     const fetchAccounts = async () => {
@@ -51,7 +57,11 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
                 if (accountsData && accountsData.items) {
                     // Map the fetched data to the AccountData structure
                     const fetchedAccounts = accountsData.items.map(doc => {
+
                         const data = doc.data as AccountData['data'];
+
+                        console.log("Account Name:", data.accountName, "| Current Balance:", data.currentBalance);
+
                         return {
                             key: doc.key,
                             data: {
@@ -63,6 +73,7 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
                                 userId: user.key,
                             },
                         };
+
                     });
 
                     setAccounts(fetchedAccounts); // Update state with the fetched accounts
@@ -76,8 +87,28 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
             }
         }
     };
-        fetchAccounts();
-    }, [user]);
+        fetchAccounts()
+            .then(() => {
+                // Handle success if needed
+            })
+            .catch(error => {
+                console.error('Error fetching accounts:', error);
+            });
+    }, []);
+    const getCollectionName = (): string => {
+        switch (transactionType) {
+            case 'Expense':
+                return 'Expenses';
+            case 'Income':
+                return 'Incomes';
+            case 'Transfer':
+                return 'Transfers';
+            default:
+                // Handle other cases or throw an error
+                throw new Error(`Invalid transaction type: ${transactionType}`);
+        }
+    };
+
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
             alert('Please provide valid expense details.');
@@ -89,8 +120,19 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
             return;
         }
             const transactionId = nanoid();
+            const collectionName = getCollectionName();
+            const selectedAccountDoc = accounts.find(account => account.data.accountName === selectedAccount)?.key;
+
+            if (!selectedAccountDoc) {
+                console.error('Selected account not found.');
+                alert('Failed to find the selected account. Please try again.');
+                return;
+            }
+
+            await updateAccountBalance(selectedAccountKey, parseFloat(transactionAmount), transactionType);
+
             await setDoc({
-                collection: "Transactions",
+                collection: collectionName,
                 doc: {
                     key: transactionId,
                     //description:,
@@ -98,6 +140,7 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
                     data: {
                         transactionId:transactionId,
                         userId: user.key,
+                        accountId: selectedAccountKey,
                         accountName:selectedAccount,
                         name: transactionName,
                         transactionType: transactionType,
@@ -108,7 +151,8 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
                     }
                 }
             });
-            alert('Expense added successfully!');
+
+            alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition
             setTransactionName('');
             setTransactionAmount('');
@@ -118,14 +162,75 @@ function AddTransaction({ open, onClose }: AddTransactionProps) {
             // Close the dialog after adding
             onClose();
         } catch (error) {
-            console.error("Error adding expense:", error);
-            alert('Failed to add expense. Please try again.');
+            console.error(`Error adding ${transactionType}:`, error);
+            alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
+    async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
+        try {
+            // Fetch the current account document
+            const accountDocResponse = await getDoc({ collection: "Accounts", key: accountKey });
+
+            if (!accountDocResponse) {
+                console.error('Account not found.');
+                return;
+            }
+
+            // Extracting data from the account document response
+            const accountData = accountDocResponse.data as AccountData['data'];
+
+            const currentBalance = accountData.currentBalance;
+            let updatedBalance;
+
+            // Calculate the updated balance
+            switch (transactionType) {
+                case 'Income':
+                    updatedBalance = currentBalance + transactionAmount;
+                    break;
+                case 'Expense':
+                    updatedBalance = currentBalance - transactionAmount;
+                    break;
+                case 'Transfer':
+                    updatedBalance = currentBalance - transactionAmount;
+                    break;
+                default:
+                    throw new Error(`Unsupported transaction type: ${transactionType}`);
+            }
+
+            // Update the account with the new balance
+            await setDoc({
+                collection: 'Accounts',
+                doc: {
+                    key: accountKey,
+                    updated_at: accountDocResponse.updated_at,
+                    data: {
+                        ...accountData,
+                        currentBalance: updatedBalance,
+                    },
+                },
+            });
+        } catch (error) {
+            console.error("Error updating account balance:", error);
+            throw error;
+        }
+    }
+
 
     const handleChange = (event: SelectChangeEvent) => {
-        console.log("Selected account ID: ", event.target.value); // Debugging line
-        setSelectedAccount(event.target.value);
+        const accountName = event.target.value;
+        const account = accounts.find(acc => acc.data.accountName === accountName);
+
+        console.log("Selected account name: ", accountName);
+
+        if (account) {
+            console.log("Selected account key: ", account.key);
+            setSelectedAccount(accountName); // Set the selected account name
+            setSelectedAccountKey(account.key); // Set the selected account key
+        } else {
+            // Handle the case where the account is not found
+            setSelectedAccount('');
+            setSelectedAccountKey('');
+        }
     };
 
 

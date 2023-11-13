@@ -3,7 +3,10 @@ import React from 'react';
 import { Box, Card, CardContent, Typography, Avatar } from "@mui/material";
 import ArrowUpwardSharpIcon from '@mui/icons-material/ArrowUpwardSharp';
 
-const IncomeCardComponent: React.FC = () => {
+interface IncomeCardComponentProps {
+    totalIncomes: number;
+}
+const IncomeCardComponent: React.FC<IncomeCardComponentProps> = ({ totalIncomes }) => {
     return (
         <Card
             sx={{
@@ -31,7 +34,7 @@ const IncomeCardComponent: React.FC = () => {
                         Income
                     </Typography>
                     <Typography variant="subtitle2" sx={{ color: 'green' }}>
-                        IDR 4,140,500
+                        IDR {totalIncomes.toLocaleString()} {/* Use totalExpenses here */}
                     </Typography>
                 </Box>
             </CardContent>

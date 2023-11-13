@@ -10,7 +10,6 @@ import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddTransaction";
 import Amount from "../../components/Dashboard/Amouth";
 import {listDocs} from "@junobuild/core-peer";
-//import UserProfileComponent from "../../components/Dashboard/UserProfileComponent";
 interface AccountData {
     accountName: string;
     financialInstitution: string;
@@ -22,7 +21,6 @@ const Dashboard: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<AccountData[]>([]);
-
     /*    const handleOpen = () => {
         setOpen(true);
     };*/
@@ -34,6 +32,7 @@ const Dashboard: NextPage = () => {
         style: 'currency',
         currency: 'IDR', // Change to the actual currency code if necessary
     });
+
 
     useEffect(() => {
         fetchAccounts()
@@ -76,6 +75,7 @@ const Dashboard: NextPage = () => {
             alert('Failed to fetch accounts. Please try again.');
         }
     };
+
 
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
