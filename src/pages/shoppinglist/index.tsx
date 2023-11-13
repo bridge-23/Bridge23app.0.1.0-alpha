@@ -44,7 +44,7 @@ const ShoppingList: React.FC = () => {
     const paperStyle = {
         padding: '20px',
         paddingLeft: isDesktop ? '90px' : '20px',
-        paddingTop: isDesktop ? '20px' : '50px',
+        paddingTop: isDesktop ? '20px' : '10px',
     };
 
     useEffect(() => {
@@ -189,24 +189,23 @@ const ShoppingList: React.FC = () => {
     };
 
     return (
-        <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
-        <Paper elevation={2} style={paperStyle}>
-            <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
-            <Typography
-                variant="h5"
-                gutterBottom
-                sx={{
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: 'primary.main',
-                    m: 2
-                }}
-            >
-                my shopping list - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
-            </Typography>
-           </Card>
-            <br/>
-            <br/>
+        <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px'}}>
+            <Paper elevation={2} style={paperStyle}>
+                <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        sx={{
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            color: 'primary.main',
+                            m: 2
+                        }}
+                    >
+                        My shopping list - {user && `${user.key.substring(0, 3)}...${user.key.substring(user.key.length - 3)}`}
+                    </Typography>
+                </Card>
+                <br/>
             <Box display="flex" alignItems="center" style={{ marginBottom: '20px' }}>
                 <AddIcon style={{ marginRight: '8px' }} />
                 <TextField
