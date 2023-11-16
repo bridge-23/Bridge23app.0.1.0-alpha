@@ -77,7 +77,7 @@ function MobileNavbar() {
                     <UploadFab />
                 )}*/}
                 {user && (
-                    <Link href={`/shoppinglist`}>
+                    <Link href={`/magiclist`}>
                         <IconButton color="inherit" aria-label="open drawer">
                             <ChecklistIcon fontSize="large" />
                         </IconButton>

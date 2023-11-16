@@ -13,7 +13,7 @@ function LoadingComponent() {
             height: '100vh',
             backgroundColor: '#2d62eb',
         }}>
-            <Image src="/iconWhiteNew.png" alt="BridgeLogo" width={70} height={40}/>
+            <Image src="/iconWhiteNew.png" alt="BridgeLogo" width={140} height={80}/>
             <CircularProgress />
         </div>
     );

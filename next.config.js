@@ -9,7 +9,7 @@ const withPWA = require("next-pwa")({
 const nextConfig = withPWA({
   basePath: "",
   reactStrictMode: true,
-  output: "export",
+  //output: "export",
   images: {
     domains: ['bridge23.app', 'localhost'],
     unoptimized: true,

@@ -46,9 +46,7 @@ const AccountCard: React.FC<AccountCardProps> = ({
                         <TableRow>
                             {isMobile ? (
                                 <>
-                                    <TableCell component="th" scope="row">
-                                        Account Name
-                                    </TableCell>
+                                    <TableCell component="th" scope="row">Account Name</TableCell>
                                     <TableCell align="right">Current Balance</TableCell>
                                     <TableCell align="right">Edit</TableCell>
                                 </>
@@ -64,26 +62,28 @@ const AccountCard: React.FC<AccountCardProps> = ({
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                            <TableCell component="th" scope="row">
-                                {accountName}
-                            </TableCell>
-                            <TableCell align="right">{formattedBalance}</TableCell>
-                            <TableCell align="right">
-                                <IconButton onClick={onEdit} size="small">
-                                    <EditIcon />
-                                </IconButton>
-                            </TableCell>
-                            {!isMobile && (
+                        <TableRow>
+                            {isMobile ? (
                                 <>
-                                    <TableCell align="right">{financialInstitution}</TableCell>
-                                    <TableCell align="right">{accountCurrency}</TableCell>
+                                    <TableCell component="th" scope="row">{accountName}</TableCell>
                                     <TableCell align="right">{formattedBalance}</TableCell>
                                     <TableCell align="right">
                                         <IconButton onClick={onEdit} size="small">
                                             <EditIcon />
                                         </IconButton>
                                     </TableCell>
+                                </>
+                            ) : (
+                                <>
+                                    <TableCell component="th" scope="row">{accountName}</TableCell>
+                                    <TableCell align="right">{financialInstitution}</TableCell>
+                                    <TableCell align="right">{accountCurrency}</TableCell>
+                                    <TableCell align="right">{formattedBalance}</TableCell>
+                                    <TableCell align="right">
+                                    <IconButton onClick={onEdit} size="small">
+                                        <EditIcon />
+                                    </IconButton>
+                                </TableCell>
                                 </>
                             )}
                         </TableRow>
