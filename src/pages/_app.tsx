@@ -7,8 +7,10 @@ import Navbar from "../components/Navigation/Navbar";
 import { ColorModeProvider } from '../contexts/ColorModeContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { initJuno } from "@junobuild/core-peer";
-
+import {useRouter} from "next/router";
 function MyApp({ Component, pageProps }: AppProps) {
+    const router = useRouter();
+
     useEffect(() => {
         (async () => {
             try {
@@ -20,7 +22,11 @@ function MyApp({ Component, pageProps }: AppProps) {
                 // Handle the error appropriately
             }
         })();
-    }, []);
+        const lastPage = localStorage.getItem('lastPage');
+        if (lastPage && router.pathname === '/') {
+            router.push(lastPage);
+        }
+    }, [router]);
 
     return (
         <AuthProvider>

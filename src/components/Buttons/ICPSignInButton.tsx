@@ -2,10 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core-peer';
+import LoadingComponent from '../shared/LoadingComponent';
 import { useRouter } from 'next/router';
+
 //TODO: make post to juno to user collection
 type ProviderType = 'internetIdentity' | 'nftId';
 const ICPSignInButton = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [isUserSignedIn, setIsUserSignedIn] = useState(false);
     const [providerType, setProviderType] = useState<ProviderType>('internetIdentity');
     const router = useRouter();
@@ -34,25 +37,35 @@ const ICPSignInButton = () => {
 
     const handleSignIn = async () => {
         try {
+            setIsLoading(true);
+            const twentyDaysInNanoseconds = BigInt(480 * 3600 * 1000000000);
             const provider = providerType === 'internetIdentity'
                 ? new InternetIdentityProvider({ domain: "internetcomputer.org" })
                 : new NFIDProvider({
                     appName: "ReFinityapp",
                     logoUrl: "https://somewhere.com/your_logo.png",
                 });
-            await signIn({ provider });
+            await signIn({
+                provider,
+                maxTimeToLive: twentyDaysInNanoseconds
+            });
             console.log("Sign-in successful!");
-            router.push('/magiclist');
+            await router.push('/magiclist');
         } catch (error) {
             console.error("Sign-in failed:", error);
+        } finally {
+            setIsLoading(false); // Stop loading regardless of success or failure
         }
     };
     const handleSignOut = async () => {
         try {
+            setIsLoading(true);
             await signOut();
             console.log("Sign-out successful!");
         } catch (error) {
             console.error("Sign-out failed:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -78,25 +91,15 @@ const ICPSignInButton = () => {
                     </ToggleButtonGroup>
                 </Grid>
                 <Grid item style={{ marginTop: '1px' }}>
-                    {isUserSignedIn ? (
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={handleSignOut}
-                            style={{ marginBottom: '1px' }}
-                        >
-                            Sign Out
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSignIn}
-                            style={{ marginBottom: '5px' }}
-                        >
-                            Sign In
-                        </Button>
-                    )}
+                    <Button
+                        variant="contained"
+                        color={isUserSignedIn ? "secondary" : "primary"}
+                        onClick={isUserSignedIn ? handleSignOut : handleSignIn}
+                        disabled={isLoading}
+                        style={{ marginBottom: '1px' }}
+                    >
+                        {isUserSignedIn ? "Sign Out" : "Sign In"}
+                    </Button>
                 </Grid>
             </Grid>
         </Box>
