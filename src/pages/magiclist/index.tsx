@@ -31,6 +31,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import {Theme} from "@mui/material/styles";
+import usePullToRefresh from '../../hooks/usePullToRefresh';
 //import CreateMagicList from "../../components/Magiclist/CreateMagicList";
 
 //TODO: make shopping panel for create shopping list
@@ -110,6 +111,7 @@ const EditDialog: React.FC<EditDialogProps> = ({ isOpen, content, setContent, on
 }*/
 const ShoppingList: React.FC = () => {
     const { user } = useContext(AuthContext);
+    usePullToRefresh();
     //const [magicLists, setMagicLists] = useState<MagicList[]>([]);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [notes, setNotes] = useState<{

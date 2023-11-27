@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             }
         })();
         const lastPage = localStorage.getItem('lastPage');
-        if (lastPage && router.pathname === '/') {
+        if (lastPage && router.pathname === '/dashboard') {
             router.push(lastPage);
         }
     }, [router]);

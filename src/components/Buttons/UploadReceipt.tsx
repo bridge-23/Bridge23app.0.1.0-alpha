@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { uploadFile, setDoc  } from '@junobuild/core-peer';
 import { Button, Typography, Paper, Box, CircularProgress } from '@mui/material';
 import {nanoid} from "nanoid";
-import {padding} from "@mui/system";
 interface ILineItem {
     description: string;
     totalAmount: number;
@@ -41,6 +40,9 @@ interface IMindeeResponse {
     };
     subcategory?: { value: string };
 }
+
+//TODO: display currency like $, €, £, etc. with correct symbol and numbers after . (dot) like 0.00
+//TODO: repost amount to transaction page and calculate total amount
 const FileUploadAndRecognize = () => {
     const [file, setFile] = useState<File | null>(null);
     const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
