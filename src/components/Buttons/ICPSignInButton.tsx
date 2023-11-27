@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/material';
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core-peer';
-import LoadingComponent from '../shared/LoadingComponent';
+import { useLoading } from '../../contexts/LoadingContext';
 import { useRouter } from 'next/router';
 
 //TODO: make post to juno to user collection
 type ProviderType = 'internetIdentity' | 'nftId';
 const ICPSignInButton = () => {
+    const { setLoading } = useLoading();
     const [isLoading, setIsLoading] = useState(false);
     const [isUserSignedIn, setIsUserSignedIn] = useState(false);
     const [providerType, setProviderType] = useState<ProviderType>('internetIdentity');
@@ -37,8 +38,8 @@ const ICPSignInButton = () => {
 
     const handleSignIn = async () => {
         try {
-            setIsLoading(true);
-            const twentyDaysInNanoseconds = BigInt(480 * 3600 * 1000000000);
+            setLoading(true);
+            //const SEVEN_DAYS_IN_NANOSECONDS = BigInt(7 * 24 * 60 * 60) * BigInt(1000000000);
             const provider = providerType === 'internetIdentity'
                 ? new InternetIdentityProvider({ domain: "internetcomputer.org" })
                 : new NFIDProvider({
@@ -47,25 +48,25 @@ const ICPSignInButton = () => {
                 });
             await signIn({
                 provider,
-                maxTimeToLive: twentyDaysInNanoseconds
+                maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000)
             });
             console.log("Sign-in successful!");
             await router.push('/magiclist');
         } catch (error) {
             console.error("Sign-in failed:", error);
         } finally {
-            setIsLoading(false); // Stop loading regardless of success or failure
+            setLoading(false); // Stop loading regardless of success or failure
         }
     };
     const handleSignOut = async () => {
         try {
-            setIsLoading(true);
+            setLoading(true);
             await signOut();
             console.log("Sign-out successful!");
         } catch (error) {
             console.error("Sign-out failed:", error);
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     };
 

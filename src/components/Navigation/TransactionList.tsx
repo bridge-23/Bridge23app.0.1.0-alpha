@@ -1,21 +1,26 @@
 //..src/components/TransactionList.tsx
 import React, { useState } from 'react';
-import { List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemIcon, Dialog, DialogContent, DialogTitle } from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import AddTransaction from "../Dashboard/AddTransaction";
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import AddTransaction from "../Dashboard/AddTransaction";
+import FileUploadAndRecognize from '../Buttons/UploadReceipt';
 
 export default function TransactionList() {
     const [isDialogOpen, setDialogOpen] = useState(false);
+    const [isUploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [initialTransactionType, setInitialTransactionType] = useState<string>(''); // Explicitly specify the type
-
     // Inside your handleListItemClick function
     // Inside your handleListItemClick function
     const handleListItemClick = (type: string) => {
-        setInitialTransactionType(type);
-        setDialogOpen(true);
+        if (type === 'UploadReceipt') {
+            setUploadDialogOpen(true); // Open the upload dialog
+        } else {
+            setInitialTransactionType(type);
+            setDialogOpen(true);
+        }
     };
 
     return (
@@ -47,7 +52,7 @@ export default function TransactionList() {
                     </ListItemIcon>
                     <ListItemText primary="Transfer" />
                 </ListItem>
-                <ListItem>
+                <ListItem button onClick={() => handleListItemClick('UploadReceipt')}>
                     <ListItemIcon>
                         <ReceiptIcon sx={{ color: 'blue' }} />
                     </ListItemIcon>
@@ -55,6 +60,14 @@ export default function TransactionList() {
                 </ListItem>
             </List>
             <AddTransaction open={isDialogOpen} onClose={() => setDialogOpen(false)} initialTransactionType={initialTransactionType} />
+
+            {/* Dialog for File Upload and Recognize */}
+            <Dialog open={isUploadDialogOpen} onClose={() => setUploadDialogOpen(false)}>
+                <DialogTitle>Upload and Recognize Receipt</DialogTitle>
+                <DialogContent>
+                    <FileUploadAndRecognize />
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

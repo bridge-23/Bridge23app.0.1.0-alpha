@@ -13,8 +13,6 @@ import { signOut } from '@junobuild/core-peer';
 import {AuthContext} from "../../contexts/AuthContext";
 import TransactionList from './TransactionList';
 import ReceiptIcon from '@mui/icons-material/Receipt';
-//import {UploadFab} from "../Buttons/UploadFab";
-
 function MobileNavbar() {
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const router = useRouter();

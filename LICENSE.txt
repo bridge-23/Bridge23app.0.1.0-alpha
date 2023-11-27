@@ -5,6 +5,36 @@ Copyright 2023 Bridge23 Inc.
 
 All Rights Reserved.
 
-No part of the Bridge 23 app or any of its contents may be reproduced, copied, modified, or adapted, without the prior written consent of the author (Konstantin Nezovskii), unless otherwise indicated for stand-alone materials.
+This License governs the use of the Bridge 23 app (the "Software") and any associated documentation and materials.
 
-For any other mode of sharing, please contact the author at nezovskii@bridge23.app.
+1. Grant of License:
+
+This License grants a non-exclusive, non-transferable, limited right to use the Software solely for internal business operations by the licensee. Any other use is strictly prohibited.
+2. Restrictions:
+
+The Software may not be used for any purpose not expressly permitted by this License.
+You may not rent, lease, lend, sell, redistribute, or sublicense the Software.
+You may not reverse engineer, decompile, disassemble, or attempt to derive the source code of the Software, except as permitted by law.
+Modifications, derivative works, and merging of the Software into other software are not permitted.
+3. Intellectual Property:
+
+The Software and all intellectual property rights therein are and shall remain the property of Bridge23 Inc.
+The structure, organization, and code of the Software are valuable trade secrets and confidential information of Bridge23 Inc.
+4. Disclaimer of Warranties:
+
+The Software is provided "AS IS," without warranty of any kind, express or implied.
+5. Limitation of Liability:
+
+In no event shall Bridge23 Inc., its directors, employees, or licensors be liable for any direct, indirect, incidental, special, exemplary, or consequential damages.
+6. Termination:
+
+This License is effective until terminated. Your rights under this License will terminate automatically without notice from Bridge23 Inc. if you fail to comply with any term(s) of this License.
+7. General:
+
+This License constitutes the entire agreement between the parties with respect to the use of the Software and supersedes all prior or contemporaneous understandings.
+Contact Information:
+
+Contact Information:
+
+For any inquiries or requests for permissions that extend beyond the limitations of this License, please direct your correspondence to Konstantin Nezovskii at Bridge 23 Inc. Contact can be made via email at info@bridge23.app.
+We encourage open communication for any clarifications or discussions regarding the usage of the Bridge 23 App software and its associated materials.

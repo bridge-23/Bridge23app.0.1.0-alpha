@@ -1,7 +1,7 @@
 {
   "name": "bridge23-app",
   "version": "0.1.0",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -35,6 +35,7 @@
     "ethers": "^5",
     "i": "^0.3.7",
     "material-ui-popup-state": "^5.0.9",
+    "mindee": "^4.4.0",
     "nanoid": "^4.0.2",
     "next": "^13",
     "next-pwa": "^5.6.0",
@@ -59,5 +60,7 @@
     "@dfinity/candid": "^0.19.3",
     "@dfinity/identity": "^0.19.3",
     "@dfinity/principal": "^0.19.3"
-  }
+  },
+  "author": "Bridge 23 Inc.",
+  "description": "Bridge 23 App - proprietary project management software"
 }
