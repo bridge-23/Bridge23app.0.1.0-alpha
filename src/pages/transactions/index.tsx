@@ -2,7 +2,7 @@
 import React from 'react';
 import {useState} from "react"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Container, Typography, Grid, useMediaQuery, AccordionDetails, AccordionSummary, Accordion, Card, ToggleButtonGroup, ToggleButton} from "@mui/material";
+import {Container, Typography, Grid, useMediaQuery, AccordionDetails, AccordionSummary, Accordion, Card, ToggleButtonGroup, ToggleButton, Box, Divider} from "@mui/material";
 import {Theme} from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import CheckroomIcon from '@mui/icons-material/Checkroom';
@@ -25,7 +25,7 @@ export default function Transactions () {
 
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
-            <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
+            <Box sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
                 <Typography
                     variant="h5"
                     gutterBottom
@@ -38,7 +38,8 @@ export default function Transactions () {
                 >
                     Transactions
                 </Typography>
-            </Card>
+            </Box>
+            <Divider/>
             <br/>
             <Grid item style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <ToggleButtonGroup

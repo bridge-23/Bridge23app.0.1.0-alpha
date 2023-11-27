@@ -1,6 +1,29 @@
 //..src/page/magiclist/index.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { useTheme, Button, TextField, List, ListItem, ListItemText, ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Card, Backdrop, CircularProgress, Container, useMediaQuery,Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {
+    useTheme,
+    Button,
+    TextField,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemSecondaryAction,
+    Checkbox,
+    IconButton,
+    Paper,
+    Typography,
+    Box,
+    Card,
+    Backdrop,
+    CircularProgress,
+    Container,
+    useMediaQuery,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Divider
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -308,7 +331,7 @@ const ShoppingList: React.FC = () => {
             {/*<div>
                 <CreateMagicList onListCreated={onListCreated} />
             </div>*/}
-            <Card sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
+            <Box sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto' }}>
                 <Typography
                     variant="h5"
                     gutterBottom
@@ -321,7 +344,8 @@ const ShoppingList: React.FC = () => {
                 >
                     Magic Lists
                 </Typography>
-            </Card>
+            </Box>
+            <Divider/>
             <br/>
             <Paper elevation={2} style={paperStyle}>
 

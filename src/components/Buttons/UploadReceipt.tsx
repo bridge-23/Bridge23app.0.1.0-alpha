@@ -16,11 +16,10 @@ interface IOcrResult {
     purchaseDate: string;
     purchaseTime: string;
     summary: string;
-    lineItems: string;
+    documentType?: string;
+    lineItems?: ILineItem[];
 }
 interface IMindeeResponse {
-    // Define the structure of the Mindee response here
-    // Example:
     documentType?: { value: string };
     date?: { value: string };
     time?: { value: string };
@@ -44,6 +43,40 @@ const FileUploadAndRecognize = () => {
             console.log("File preview URL:", previewUrl);
         }
     };
+    const prepareDataForDatastore = (ocrResult: IOcrResult): IMindeeResponse => {
+
+        return {
+            documentType: ocrResult.documentType ? { value: ocrResult.documentType } : undefined,
+            date: ocrResult.purchaseDate ? { value: ocrResult.purchaseDate } : undefined,
+            time: ocrResult.purchaseTime ? { value: ocrResult.purchaseTime } : undefined,
+            supplierName: ocrResult.supplierName ? { value: ocrResult.supplierName } : undefined,
+            supplierAddress: ocrResult.supplierAddress ? { value: ocrResult.supplierAddress } : undefined,
+            totalAmount: ocrResult.totalAmount ? { value: ocrResult.totalAmount } : undefined,
+            lineItems: ocrResult.lineItems ? ocrResult.lineItems.map(item => ({
+                description: item.description,
+                totalAmount: item.totalAmount,
+            })) : undefined,
+        };
+    };
+    const postDataToDatastore = async (formattedData: IMindeeResponse) => {
+        try {
+            const docKey = nanoid();
+            console.log("Formatted Data for Juno:", JSON.stringify(formattedData, null, 2)); // Detailed log
+
+            await setDoc({
+                collection: "Receipts",
+                doc: {
+                    key: docKey,
+                    data: formattedData,
+                    description: "Optional description about the receipt"
+                },
+            });
+
+            console.log("Data posted to Juno Datastore successfully");
+        } catch (error) {
+            console.error("Error posting data to Juno Datastore:", error);
+        }
+    };
     const handleUploadAndRecognize = async () => {
         if (file) {
             setIsLoading(true);
@@ -65,85 +98,46 @@ const FileUploadAndRecognize = () => {
                     const resp = await response.json();
                     console.log("OCR Response:", resp);
 
-                    if (resp && resp.document && resp.document.inference) {
-                        const { prediction } = resp.document.inference;
-                        // Correctly mapping each item
-                        const lineItems = prediction.line_items?.map((item: ILineItem) =>
-                            `${item.description}: $${item.totalAmount}`
-                        ).join(', ') || 'No line items';
-                        const formattedData = prepareDataForDatastore(prediction);
+                    if (resp && resp.lineItems && resp.date && resp.documentType) {
+                        const ocrResult: IOcrResult = {
+                            documentId: resp.documentId, // Assuming 'documentId' is a direct property of resp
+                            filename: resp.filename, // Replace with actual logic if 'filename' is nested or structured differently
+                            supplierName: resp.supplierName?.value, // Extracting 'supplierName' from the nested object
+                            supplierAddress: resp.supplierAddress?.value, // Extracting 'supplierAddress' from the nested object
+                            totalAmount: resp.totalAmount?.value, // Extracting 'totalAmount' from the nested object
+                            purchaseDate: resp.date?.value, // Extracting 'purchaseDate' from the nested 'date' object
+                            purchaseTime: resp.time?.value, // Extracting 'purchaseTime' from the nested 'time' object
+                            summary: `${resp.supplierName?.value || 'Unknown Supplier'} - $${resp.totalAmount?.value || '0.00'} - ${resp.date?.value || 'Date Unknown'} at ${resp.time?.value || 'Time Unknown'}`,
+                            documentType: resp.documentType?.value, // Extracting 'documentType' from the nested object
+                            lineItems: resp.lineItems?.map((item: ILineItem) => ({
+                                description: item.description,
+                                totalAmount: item.totalAmount
+                            })) || []
+                        };
 
-                        setOcrResult({
-                            documentId: resp.document.id,
-                            filename: resp.document.filename,
-                            supplierName: prediction.supplier_name?.value || 'Unknown Supplier',
-                            supplierAddress: prediction.supplier_address?.value || 'Address Unknown',
-                            totalAmount: prediction.total_amount?.value || 0,
-                            purchaseDate: prediction.date?.value || 'Date Unknown',
-                            purchaseTime: prediction.time?.value || 'Time Unknown',
-                            summary: `${prediction.supplier_name?.value || 'Unknown Supplier'} - $${prediction.total_amount?.value || '0.00'} - ${prediction.date?.value || 'Date Unknown'} at ${prediction.time?.value || 'Time Unknown'}`,
-                            lineItems: prediction.line_items?.map((item: { description: any; total_amount: any; }) => `${item.description}: $${item.total_amount}`).join(', ') || 'No line items'
-                        });
-                        //const formattedData = prepareDataForDatastore(prediction);
-                        await postDataToDatastore(formattedData);
+                        setOcrResult(ocrResult);
+
+                        if (ocrResult) {
+                            const formattedData = prepareDataForDatastore(ocrResult);
+                            console.log("Data to be posted:", JSON.stringify(formattedData, null, 2));
+                            await postDataToDatastore(formattedData);
+                        }
                     } else {
-                        setError('Error processing document');
+                        setError('Error processing document1');
                     }
                 } else {
-                    setError('Error processing document');
+                    setError('Error processing document2');
                 }
-            } catch (error: any) {
-                setError('Error processing document');
-                console.error('Error processing document:', error);
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    console.error('Error processing document:', error.message);
+                } else {
+                    console.error('An unexpected error occurred:', error);
+                }
+                setError('Error processing document4');
             } finally {
                 setIsLoading(false);
             }
-        }
-    };
-    const prepareDataForDatastore = (mindeeResponse: IMindeeResponse) => {
-        // Extract necessary fields from the Mindee response
-        const {
-            documentType,
-            date,
-            time,
-            supplierName,
-            supplierAddress,
-            totalAmount,
-            lineItems,
-        } = mindeeResponse;
-
-        // Prepare the data structure for the Datastore
-        let formattedData: { date: string | undefined; supplierName: string | undefined; lineItems: { totalAmount: number; description: string }[] | undefined; supplierAddress: string | undefined; totalAmount: number | undefined; documentType: string | undefined; time: string | undefined };
-        formattedData = {
-            documentType: documentType?.value,
-            date: date?.value,
-            time: time?.value,
-            supplierName: supplierName?.value,
-            supplierAddress: supplierAddress?.value,
-            totalAmount: totalAmount?.value,
-            lineItems: lineItems?.map(item => ({
-                description: item.description,
-                totalAmount: item.totalAmount,
-            })),
-            // Add any additional fields you need
-        };
-
-        return formattedData;
-    };
-    const postDataToDatastore = async (ocrData: { date: string | undefined; supplierName: string | undefined; lineItems: { totalAmount: number; description: string }[] | undefined; supplierAddress: string | undefined; totalAmount: number | undefined; documentType: string | undefined; time: string | undefined }) => {
-        try {
-            const docKey = nanoid();
-            await setDoc({
-                collection: "receipts",
-                doc: {
-                    key: docKey,
-                    data: ocrData,
-                    description: "OCR result for receipt"
-                },
-            });
-            console.log("Data posted to Datastore successfully");
-        } catch (error) {
-            console.error("Error posting data to Datastore:", error);
         }
     };
 
@@ -189,9 +183,17 @@ const FileUploadAndRecognize = () => {
 
             {ocrResult && (
                 <Paper elevation={3} sx={{ padding: 2, width: '100%' }}>
-                    <Typography variant="h6" textAlign="center">OCR Result:</Typography>
+                    <Typography variant="h6" textAlign="center">Purchase data:</Typography>
                     <Typography paragraph><strong>Summary:</strong> {ocrResult.summary}</Typography>
-                    <Typography paragraph><strong>Line Items:</strong> {ocrResult.lineItems}</Typography>
+                    <Typography paragraph>
+                        <strong>Line Items:</strong>
+                        {Array.isArray(ocrResult.lineItems) ? ocrResult.lineItems.map((item, index) => (
+                            <React.Fragment key={index}>
+                                {item.description}: ${item.totalAmount}
+                                <br/>
+                            </React.Fragment>
+                        )) : 'No line items'}
+                    </Typography>
                 </Paper>
             )}
         </Box>
