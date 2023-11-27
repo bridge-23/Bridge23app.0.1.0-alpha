@@ -27,7 +27,6 @@ For a complete list of dependencies, please refer to the `package.json` file in 
 ## 🚀 Installation and Setup
 ### Cloning and Installation
 To get started with Bridge23, clone the repository and install dependencies:
-```bash
 
 git clone [repository-url]
 cd bridge23
@@ -37,20 +36,17 @@ cd bridge23
 
 ### Development Mode
 For testing and development purposes, run the application in development mode:
-```bash
+
 yarn dev
 Production Mode
 To build and start the app for production deployment:
 
-bash
 yarn build
 yarn start
 🧾 Tesseract OCR Integration
 Adding OCR Functionality
 Bridge23 features Tesseract OCR for automated text extraction from images, aiding in efficient expense tracking. To integrate Tesseract OCR:
 
-bash
-Copy code
 yarn add tesseract.js
 Usage
 Use Tesseract OCR to scan and interpret text from receipts and invoices, easily adding them to your expense tracker.
