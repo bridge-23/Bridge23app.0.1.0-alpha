@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { uploadFile, setDoc  } from '@junobuild/core-peer';
 import { Button, Typography, Paper, Box, CircularProgress } from '@mui/material';
 import {nanoid} from "nanoid";
+import {padding} from "@mui/system";
 interface ILineItem {
     description: string;
     totalAmount: number;
@@ -18,6 +19,12 @@ interface IOcrResult {
     summary: string;
     documentType?: string;
     lineItems?: ILineItem[];
+    locale: {
+        language: string;
+        country: string | null;
+        currency: string;
+    };
+    subcategory: string;
 }
 interface IMindeeResponse {
     documentType?: { value: string };
@@ -27,6 +34,12 @@ interface IMindeeResponse {
     supplierAddress?: { value: string };
     totalAmount?: { value: number };
     lineItems?: ILineItem[];
+    locale?: {
+        language: { value: string };
+        country: { value: string | null };
+        currency: { value: string };
+    };
+    subcategory?: { value: string };
 }
 const FileUploadAndRecognize = () => {
     const [file, setFile] = useState<File | null>(null);
@@ -34,6 +47,7 @@ const FileUploadAndRecognize = () => {
     const [ocrResult, setOcrResult] = useState<IOcrResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const selectedFile = event.target.files[0];
@@ -44,7 +58,6 @@ const FileUploadAndRecognize = () => {
         }
     };
     const prepareDataForDatastore = (ocrResult: IOcrResult): IMindeeResponse => {
-
         return {
             documentType: ocrResult.documentType ? { value: ocrResult.documentType } : undefined,
             date: ocrResult.purchaseDate ? { value: ocrResult.purchaseDate } : undefined,
@@ -56,6 +69,12 @@ const FileUploadAndRecognize = () => {
                 description: item.description,
                 totalAmount: item.totalAmount,
             })) : undefined,
+            locale: ocrResult.locale ? {
+                language: { value: ocrResult.locale.language },
+                country: { value: ocrResult.locale.country || null },
+                currency: { value: ocrResult.locale.currency }
+            } : undefined,
+            subcategory: ocrResult.subcategory ? { value: ocrResult.subcategory } : undefined,
         };
     };
     const postDataToDatastore = async (formattedData: IMindeeResponse) => {
@@ -107,8 +126,14 @@ const FileUploadAndRecognize = () => {
                             totalAmount: resp.totalAmount?.value, // Extracting 'totalAmount' from the nested object
                             purchaseDate: resp.date?.value, // Extracting 'purchaseDate' from the nested 'date' object
                             purchaseTime: resp.time?.value, // Extracting 'purchaseTime' from the nested 'time' object
-                            summary: `${resp.supplierName?.value || 'Unknown Supplier'} - $${resp.totalAmount?.value || '0.00'} - ${resp.date?.value || 'Date Unknown'} at ${resp.time?.value || 'Time Unknown'}`,
+                            summary: `${resp.supplierName?.value || 'Unknown Supplier'} - ${resp.locale?.currency || ''}${resp.totalAmount?.value || '0.00000'} - ${resp.date?.value || 'Date Unknown'} at ${resp.time?.value || 'Time Unknown'}`,
                             documentType: resp.documentType?.value, // Extracting 'documentType' from the nested object
+                            locale: {
+                                language: resp.locale?.language,
+                                country: resp.locale?.country,
+                                currency: resp.locale?.currency
+                            },
+                            subcategory: resp.subcategory?.value,
                             lineItems: resp.lineItems?.map((item: ILineItem) => ({
                                 description: item.description,
                                 totalAmount: item.totalAmount
@@ -140,42 +165,50 @@ const FileUploadAndRecognize = () => {
             }
         }
     };
+    const handleClose = () => {
+        setFile(null);
+        setFilePreviewUrl(null);
+        setOcrResult(null);
+        setError('');
+    };
 
     return (
-        <Box sx={{ padding: 2 }}>
+        <Box>
             {filePreviewUrl && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, padding: 2 }}>
                     <img src={filePreviewUrl} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
                 </Box>
             )}
-            <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-                <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
-                    Upload Receipt
-                </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <input
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        id="raised-button-file"
-                        multiple
-                        type="file"
-                        onChange={handleFileChange}
-                    />
-                    <label htmlFor="raised-button-file">
-                        <Button variant="contained" component="span">
-                            Choose File
+            {!ocrResult && (
+                <Paper elevation={3} sx={{  marginBottom: 2 }}>
+                    <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
+                        Upload Receipt
+                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, padding: 2 }}>
+                        <input
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="raised-button-file"
+                            multiple
+                            type="file"
+                            onChange={handleFileChange}
+                        />
+                        <label htmlFor="raised-button-file">
+                            <Button variant="contained" component="span">
+                                Choose File
+                            </Button>
+                        </label>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleUploadAndRecognize}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <CircularProgress size={24} /> : 'Upload'}
                         </Button>
-                    </label>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleUploadAndRecognize}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? <CircularProgress size={24} /> : 'Upload'}
-                    </Button>
-                </Box>
-            </Paper>
+                    </Box>
+                </Paper>
+            )}
 
             {error && (
                 <Typography color="error">{error}</Typography>
@@ -183,19 +216,48 @@ const FileUploadAndRecognize = () => {
 
             {ocrResult && (
                 <Paper elevation={3} sx={{ padding: 2, width: '100%' }}>
-                    <Typography variant="h6" textAlign="center">Purchase data:</Typography>
-                    <Typography paragraph><strong>Summary:</strong> {ocrResult.summary}</Typography>
+                    <Typography variant="h6" textAlign="center">Purchase Data:</Typography>
+                    <Typography variant="h6">Summary:</Typography>
+                    <Typography>Supplier: {ocrResult.supplierName || 'Unknown Supplier'}</Typography>
+                    <Typography>Supplier Address: {ocrResult.supplierAddress || 'Address Unknown'}</Typography>
+                    <Typography>Currency: {ocrResult.locale?.currency || ''}</Typography>
+                    <Typography>Total Amount: {ocrResult.totalAmount || '0.00'}</Typography>
+                    <Typography>Date: {ocrResult.purchaseDate || 'Date Unknown'}</Typography>
+                    <Typography>Time: {ocrResult.purchaseTime || 'Time Unknown'}</Typography>
+                    <br/>
                     <Typography paragraph>
-                        <strong>Line Items:</strong>
+                        <strong>Locale:</strong>
+                        <br/>
+                        Language: {ocrResult.locale.language},
+                        <br/>
+                        Country: {ocrResult.locale.country || 'Not specified'},
+                        <br/>
+                        Currency: {ocrResult.locale.currency}
+                        <br/>
+                    </Typography>
+                    <Typography paragraph>
+                        <strong>Subcategory:</strong>
+                        <br/>
+                        {ocrResult.subcategory}
+                        <br/>
+                    </Typography>
+                    <Typography paragraph>
+                        <strong>Items:</strong>
+                        <br/>
                         {Array.isArray(ocrResult.lineItems) ? ocrResult.lineItems.map((item, index) => (
                             <React.Fragment key={index}>
-                                {item.description}: ${item.totalAmount}
+                                {item.description}: {ocrResult.locale.currency} {item.totalAmount}
                                 <br/>
                             </React.Fragment>
                         )) : 'No line items'}
                     </Typography>
                 </Paper>
             )}
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                <Button variant="contained" color="secondary" onClick={handleClose}>
+                    Accept
+                </Button>
+            </Box>
         </Box>
     );
 };
