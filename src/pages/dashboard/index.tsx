@@ -10,7 +10,7 @@ import AccountsList from "../../components/Dashboard/AccountsList";
 import AddExpense from "../../components/Dashboard/AddTransaction";
 import Amount from "../../components/Dashboard/Amouth";
 import {listDocs} from "@junobuild/core-peer";
-import usePullToRefresh from '../../hooks/usePullToRefresh';
+//import usePullToRefresh from '../../hooks/usePullToRefresh';
 interface AccountData {
     accountName: string;
     financialInstitution: string;
@@ -19,7 +19,7 @@ interface AccountData {
     id: string;
 }
 const Dashboard: NextPage = () => {
-    usePullToRefresh();
+    //usePullToRefresh();
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<AccountData[]>([]);
