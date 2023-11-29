@@ -3,8 +3,8 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-    Container, Typography, Grid, useMediaQuery, Backdrop, CircularProgress, AccordionActions,
-    AccordionDetails, AccordionSummary, Accordion, Card, ToggleButtonGroup, ToggleButton,Box,Divider,
+    Container, Typography, Grid, useMediaQuery,
+    AccordionDetails, AccordionSummary, Accordion, ToggleButtonGroup, ToggleButton,Box,Divider,
     IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Snackbar
 } from "@mui/material";
 import {Theme} from "@mui/material/styles";
@@ -17,7 +17,6 @@ import StoreIcon from '@mui/icons-material/Store';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 //import MoreVertIcon from "@mui/icons-material/MoreVert";
 interface EditDialogProps {
@@ -71,9 +70,7 @@ export default function Transactions () {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [selectedToggle, setSelectedToggle] = useState('WEB2');
     const [editDialogOpen, setEditDialogOpen] = useState(false);
-    const [backdropOpen, setBackdropOpen] = useState(false);
     const [currentReceipt, setCurrentReceipt] = useState<ReceiptData | null>(null);
-    //const [newSupplierValue, setNewSupplierValue] = useState("");
     const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [receipts, setReceipts] = useState<Array<ReceiptData>>([]);
@@ -87,7 +84,6 @@ export default function Transactions () {
                 const transformedReceipts = receiptsData.items.map(doc => {
                     const data = doc.data as any; // Assuming data structure is unknown
                     console.log("Raw data for receipt:", data);
-
                     // Check if the expected fields are directly accessible or nested
                     const supplier = data.supplierName?.value || data.supplier || 'Unknown Supplier';
                     const address = data.supplierAddress?.value || data.address || 'Address Unknown';
@@ -96,7 +92,6 @@ export default function Transactions () {
                     const time = data.time?.value || data.time || 'Unknown Time';
                     const subcategory = data.subcategory?.value || data.subcategory || 'Unknown Subcategory';
                     const currency = data.locale?.currency?.value || data.locale?.currency || 'Unknown Currency';
-
                     // Assuming items are always an array
                     const items = data.lineItems || data.items || [];
                     const formattedItems = items.map((item: any) => ({
@@ -142,8 +137,6 @@ export default function Transactions () {
             console.error("No receipt selected for editing.");
             return;
         }
-        setBackdropOpen(true);
-
         try {
             const currentDoc = await getDoc({ collection: "Receipts", key: currentReceipt.id });
 
@@ -182,7 +175,6 @@ export default function Transactions () {
             setSnackbarMessage("Failed to update receipt. Please try again.");
             setIsSnackbarOpen(true);
         } finally {
-            setBackdropOpen(false);
             setEditDialogOpen(false);
         }
     };
@@ -195,7 +187,6 @@ export default function Transactions () {
         }
     };
     const deleteReceipt = async (receiptId: string) => {
-        setBackdropOpen(true);
         // Retrieve the most recent document
         const currentDoc = await getDoc({ collection: "Receipts", key: receiptId });
 
@@ -224,8 +215,6 @@ export default function Transactions () {
         } catch (error) {
             console.error("Error deleting receipt:", error);
             alert('Failed to delete receipt. Please try again.');
-        } finally {
-            setBackdropOpen(false);
         }
     };
     return (
@@ -446,6 +435,7 @@ export default function Transactions () {
                         console.log("New content type:", typeof newContent); // Check the type of newContent
                         console.log("New content value:", newContent); // Check the value of newContent
                         // Update the receipt
+                        // @ts-ignore
                         setCurrentReceipt(prevReceipt => {
                             if (prevReceipt) {
                                 return { ...prevReceipt, supplier: newContent };
