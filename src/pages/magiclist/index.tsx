@@ -331,8 +331,8 @@ const ShoppingList: React.FC = () => {
                 </Typography>
             </Box>
             <Divider/>
-            <br/>
             <Paper elevation={2} style={paperStyle}>
+                <br/>
             <Box display="flex" alignItems="center" style={{ marginBottom: '20px' }}>
                 <AddIcon style={{ marginRight: '8px' }} />
                 <TextField
