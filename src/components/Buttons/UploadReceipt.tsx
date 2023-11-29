@@ -40,7 +40,6 @@ interface IMindeeResponse {
     };
     subcategory?: { value: string };
 }
-
 //TODO: display currency like $, €, £, etc. with correct symbol and numbers after . (dot) like 0.00
 //TODO: repost amount to transaction page and calculate total amount
 const FileUploadAndRecognize = () => {
@@ -128,7 +127,7 @@ const FileUploadAndRecognize = () => {
                             totalAmount: resp.totalAmount?.value, // Extracting 'totalAmount' from the nested object
                             purchaseDate: resp.date?.value, // Extracting 'purchaseDate' from the nested 'date' object
                             purchaseTime: resp.time?.value, // Extracting 'purchaseTime' from the nested 'time' object
-                            summary: `${resp.supplierName?.value || 'Unknown Supplier'} - ${resp.locale?.currency || ''}${resp.totalAmount?.value || '0.00000'} - ${resp.date?.value || 'Date Unknown'} at ${resp.time?.value || 'Time Unknown'}`,
+                            summary: `${resp.supplierName?.value || 'Unknown Supplier'} - ${resp.locale?.currency ? resp.locale.currency : 'Unknown Currency'}${resp.totalAmount?.value?.toFixed(2) || '0.00'} - ${resp.date?.value || 'Date Unknown'} at ${resp.time?.value || 'Time Unknown'}`,
                             documentType: resp.documentType?.value, // Extracting 'documentType' from the nested object
                             locale: {
                                 language: resp.locale?.language,
@@ -186,28 +185,34 @@ const FileUploadAndRecognize = () => {
                     <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
                         Upload Receipt
                     </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, padding: 2 }}>
-                        <input
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            id="raised-button-file"
-                            multiple
-                            type="file"
-                            onChange={handleFileChange}
-                        />
-                        <label htmlFor="raised-button-file">
-                            <Button variant="contained" component="span">
-                                Choose File
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, padding: 2 }}>
+                        {!file && (
+                            <>
+                                <input
+                                    accept="image/*"
+                                    style={{ display: 'none' }}
+                                    id="raised-button-file"
+                                    multiple
+                                    type="file"
+                                    onChange={handleFileChange}
+                                />
+                                <label htmlFor="raised-button-file">
+                                    <Button variant="contained" component="span">
+                                        Choose File
+                                    </Button>
+                                </label>
+                            </>
+                        )}
+                        {file && (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleUploadAndRecognize}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? <CircularProgress size={24} /> : 'Read'}
                             </Button>
-                        </label>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleUploadAndRecognize}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? <CircularProgress size={24} /> : 'Upload'}
-                        </Button>
+                        )}
                     </Box>
                 </Paper>
             )}
@@ -248,18 +253,20 @@ const FileUploadAndRecognize = () => {
                         <br/>
                         {Array.isArray(ocrResult.lineItems) ? ocrResult.lineItems.map((item, index) => (
                             <React.Fragment key={index}>
-                                {item.description}: {ocrResult.locale.currency} {item.totalAmount}
+                                {item.description}:{ocrResult.locale.currency} {item.totalAmount}
                                 <br/>
                             </React.Fragment>
                         )) : 'No line items'}
                     </Typography>
                 </Paper>
             )}
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-                <Button variant="contained" color="secondary" onClick={handleClose}>
-                    Accept
-                </Button>
-            </Box>
+            {file && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                    <Button variant="contained" color="secondary" onClick={handleClose}>
+                        Done
+                    </Button>
+                </Box>
+            )}
         </Box>
     );
 };

@@ -7,21 +7,8 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction,
-    Checkbox,
-    IconButton,
-    Paper,
-    Typography,
-    Box,
-    Backdrop,
-    CircularProgress,
-    Container,
-    useMediaQuery,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Divider
+    ListItemSecondaryAction, Checkbox, IconButton, Paper, Typography, Box, Backdrop,
+    CircularProgress, Container, useMediaQuery, Dialog, DialogTitle, DialogContent, DialogActions, Divider
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -101,7 +88,6 @@ const EditDialog: React.FC<EditDialogProps> = ({ isOpen, content, setContent, on
         </Dialog>
     );
 };
-
 /*interface MagicList {
     // Define the structure of your magic list items here
     id: string;
@@ -146,7 +132,6 @@ const ShoppingList: React.FC = () => {
         paddingTop: isDesktop ? '20px' : '10px',
     };
 
-    //this list row
     useEffect(() => {
         (async () => {
             try {
@@ -157,7 +142,6 @@ const ShoppingList: React.FC = () => {
             }
         })();
     }, []);
-
     const fetchShoppingList = async () => {
         let fetchedNotes: {
             checked: boolean; content: string; id: string;
@@ -349,8 +333,6 @@ const ShoppingList: React.FC = () => {
             <Divider/>
             <br/>
             <Paper elevation={2} style={paperStyle}>
-
-
             <Box display="flex" alignItems="center" style={{ marginBottom: '20px' }}>
                 <AddIcon style={{ marginRight: '8px' }} />
                 <TextField
