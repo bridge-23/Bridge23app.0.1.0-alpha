@@ -114,13 +114,13 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({}) => {
         setBackdropOpen(true);
         try {
             await setDoc({
-                collection: "ShoppingList",
+                collection: "MagicListItems",
                 doc: {
                     key: noteId,
                     data: {
                         ...newItem,
-                        checked: false,
                         listId: newItem.listId,
+                        checked: false,
                         listName: selectedListName,
                         owner: { userId: user.key }
                     }
@@ -210,7 +210,6 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({}) => {
                                 <MenuItem key={list.id} value={list.id}>{list.name}</MenuItem>
                             ))}
                         </Select>
-
                     </FormControl>
 
                     <FormControl fullWidth margin="dense">

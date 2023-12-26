@@ -24,19 +24,13 @@ const MagicListComponent: React.FC = () => {
     const handleEditOpen = (item: Item) => {
         setEditingItem(item);
     };
- /*   const handleEditSave = (updatedItem: Item) => {
-        const updatedNotes = notes.map(note => note.id === updatedItem.id ? updatedItem : note);
-        setNotes(updatedNotes);
-        setEditingItem(null); // Close the edit dialog
-        setSnackbarMessage("Item updated successfully.");
-        setSnackbarOpen(true);
-    };*/
     const handleEditClose = () => {
         setEditingItem(null);
     };
     const handleAddItem = (newItem: Item) => {
         setNotes(prevNotes => [...prevNotes, { ...newItem, id: nanoid() }]);
     };
+
     useEffect(() => {
         (async () => {
             try {
@@ -75,7 +69,7 @@ const MagicListComponent: React.FC = () => {
         let fetchedNotes: Item[] = []; // Use Item[] as the type
         try {
             const shoppingListData = await listDocs({
-                collection: "ShoppingList"
+                collection: "MagicListItems"
             });
 
             if (shoppingListData && shoppingListData.items) {
@@ -115,22 +109,21 @@ const MagicListComponent: React.FC = () => {
         }
         try {
             await setDoc({
-                collection: "ShoppingList",
+                collection: "MagicListItems",
                 doc: {
                     key: updatedNotes[index].id,
                     updated_at: currentDoc.updated_at,
                     data: {
+                        price:updatedNotes[index].price,
+                        currency:updatedNotes[index].currency,
                         itemName:updatedNotes[index].itemName,
                         itemLink:updatedNotes[index].itemLink,
                         description:updatedNotes[index].description,
-                        price:updatedNotes[index].price,
-                        currency:updatedNotes[index].currency,
                         listId:updatedNotes[index].listId,
                         checked: updatedNotes[index].checked,
                         listName:updatedNotes[index].listName,
                         owner: {
                             userId: user.key,
-                            provider: user.data.provider
                         },
                     }
                 }
@@ -138,7 +131,6 @@ const MagicListComponent: React.FC = () => {
             setNotes(updatedNotes);
             // If the checkbox is checked, add a new note
             if (updatedNotes[index].checked) {
-                const noteText = "Some text for the new note"; // Replace this with the actual note text
                 await addNote(index);
             }
         } catch (error) {
@@ -156,12 +148,11 @@ const MagicListComponent: React.FC = () => {
                 alert('You must be logged in to add a note.');
                 return;
             }
-
-            const noteId = nanoid();
+            const noteId = `${nanoid()}`;
             setBackdropOpen(true);
             try {
                 await setDoc({
-                    collection: "ShoppingList",
+                    collection: "MagicListItems",
                     doc: {
                         key: noteId,
                         data: {
@@ -175,12 +166,14 @@ const MagicListComponent: React.FC = () => {
                             listName:'',
                             owner: {
                                 userId: user.key,
-                                provider: user.data.provider
                             },
                         }
                     }
                 });
                 setNotes(prevNotes => prevNotes.filter((_, i) => i !== index));
+                setCurrentNote('');
+                setSnackbarMessage('Note added successfully');
+                setSnackbarOpen(true);
                 // Reset current note input field if you have one
             } catch (error) {
                 console.error("Error adding note:", error);
@@ -210,7 +203,7 @@ const MagicListComponent: React.FC = () => {
             }
 
             await setDoc({
-                collection: "ShoppingList",
+                collection: "MagicListItems",
                 doc: {
                     key: updatedItem.id,
                     updated_at: currentDoc.updated_at,
