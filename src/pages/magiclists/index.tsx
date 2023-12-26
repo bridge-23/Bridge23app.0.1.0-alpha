@@ -1,12 +1,11 @@
 //..src/page/magiclists/index.tsx
 import React, {useContext, useState} from 'react';
-import {useTheme, Paper, Typography, Box, Container, useMediaQuery, Divider} from '@mui/material';
+import { Typography, Box, Container, useMediaQuery, Divider} from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { listDocs } from "@junobuild/core-peer";
 import {Theme} from "@mui/material/styles";
 import MagicListComponent from "../../components/Magiclist/MagicListComponent";
 import CreateMagicList from "../../components/Magiclist/CreateMagicList";
-import {Item} from "../../types";
 import {MagicList} from "../../types";
 import theme from "../../utils/theme";
 
@@ -74,7 +73,9 @@ const MagicLists: React.FC = () => {
             >
                 <CreateMagicList onListCreated={onListCreated}/>
             </Box>
+            <Box sx={{borderRadius: '24px', maxWidth: 'auto', margin: 'auto'}}>
             <MagicListComponent/>
+            </Box>
         </Container>
     );
 };

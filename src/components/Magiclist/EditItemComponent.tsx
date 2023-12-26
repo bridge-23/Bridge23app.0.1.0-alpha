@@ -73,7 +73,7 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
             itemName: '', // default value
             itemLink: '', // default value
             description: '', // default value
-            price: '', // default value
+            price: 0, // default value
             currency: '',
             listId: '', // default value
             listName: '', // default value

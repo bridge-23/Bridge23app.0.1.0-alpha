@@ -1,6 +1,6 @@
 //..src/components/MagicList/MagicListComponent.tsx
 import React, {useContext, useEffect, useState} from 'react';
-import {List, Typography, Box, Snackbar} from '@mui/material';
+import {List, Typography, Box, Snackbar, Divider} from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import {setDoc, listDocs, getDoc, deleteDoc} from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
@@ -266,6 +266,7 @@ const MagicListComponent: React.FC = () => {
 
     return (
         <List>
+            <Divider />
             {magicLists.map((list) => (
                 <li key={list.id}>
                     <Box

@@ -27,7 +27,7 @@ export interface Item {
     itemName: string;
     itemLink: string;
     description: string;
-    price: string;
+    price: number;
     currency: string;
     listId: string;
     listName: string;

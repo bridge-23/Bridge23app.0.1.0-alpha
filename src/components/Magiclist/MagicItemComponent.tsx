@@ -16,9 +16,41 @@ interface MagicItemProps {
 }
 const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck, onEdit }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
+    const formatCurrency = (amount: number, currency: string): string => {
+        // Define the locale based on the currency or user preference
+        let locale =  'en-US'; // Default locale
 
+        switch (currency) {
+            case 'EUR':
+                locale = 'de-DE'; // Example: German format for Euro
+                break;
+            // Add more cases for different currencies if needed
+            default:
+                locale = 'en-US';
+        }
+
+        return new Intl.NumberFormat(locale, {
+            style: 'currency',
+            currency: currency,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(amount);
+    }
+    const formattedPrice = formatCurrency(item.price, item.currency);
     const handleExpandClick = () => {
         setExpanded(!expanded);
+    };
+    const extractDomain = (url: string): string => {
+        let domain: string;
+        // Remove protocol (http, https, etc.)
+        if (url.indexOf("://") > -1) {
+            domain = url.split('/')[2];
+        } else {
+            domain = url.split('/')[0];
+        }
+        // Remove port number
+        domain = domain.split(':')[0];
+        return domain;
     };
 
     return (
@@ -26,10 +58,10 @@ const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck,
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Checkbox edge="start" tabIndex={-1} disableRipple checked={item.checked} onChange={onCheck}/>
                 <ListItemText
-                    primary={`${item.currency} ${item.price} ${item.itemName}`}
+                    primary={`${formattedPrice} ${item.itemName}`}
                     secondary={item.itemLink && (
                         <Link href={item.itemLink} target="_blank" style={{ color: 'blue' }}>
-                            {item.itemLink}
+                            {extractDomain(item.itemLink)}
                         </Link>
                     )}
                 />
