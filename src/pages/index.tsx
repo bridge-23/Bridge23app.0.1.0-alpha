@@ -21,21 +21,10 @@ interface AccountData {
     id: string;
 }
 const Home: NextPage = () => {
-    //usePullToRefresh();
     const { user, loading } = useContext(AuthContext);
-    if (loading) {
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <CircularProgress />
-            </Box>
-        );
-    }
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [open, setOpen] = useState(false);
     const [accounts, setAccounts] = useState<AccountData[]>([]);
-    /*    const handleOpen = () => {
-        setOpen(true);
-    };*/
     const handleClose = () => {
         setOpen(false);
     };
@@ -45,8 +34,8 @@ const Home: NextPage = () => {
         currency: 'IDR', // Change to the actual currency code if necessary
     });
 
-
     useEffect(() => {
+        if (!user) return; // If there's no user, skip the fetch
         fetchAccounts()
             .then(() => {
                 // Handle success if needed
@@ -54,11 +43,8 @@ const Home: NextPage = () => {
             .catch(error => {
                 console.error('Error fetching accounts:', error);
             });
-    }, []);
-    /*    const handleEdit = (accountId: string) => {
-            // Implement your edit logic here
-            console.log('Editing account with ID:', accountId);
-        };*/
+    }, [user]); // dependency array includes user
+
     const fetchAccounts = async () => {
         try {
             const accountsData = await listDocs({
@@ -87,7 +73,13 @@ const Home: NextPage = () => {
             alert('Failed to fetch accounts. Please try again.');
         }
     };
-
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
         <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
