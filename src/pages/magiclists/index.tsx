@@ -4,7 +4,7 @@ import {useTheme, Paper, Typography, Box, Container, useMediaQuery, Divider} fro
 import { AuthContext } from "../../contexts/AuthContext";
 import { listDocs } from "@junobuild/core-peer";
 import {Theme} from "@mui/material/styles";
-import MagicListComponent from '../../components/Magiclist/MagicListComponent'
+import MagicListComponent from "../../components/Magiclist/MagicListComponent";
 import CreateMagicList from "../../components/Magiclist/CreateMagicList";
 import {Item} from "../../types";
 import {MagicList} from "../../types";
