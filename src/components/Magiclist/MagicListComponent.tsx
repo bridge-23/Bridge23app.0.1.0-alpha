@@ -273,7 +273,10 @@ const MagicListComponent: React.FC = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
-                        style={{ margin: '20px 0' }} // Margin of 20 pixels on top and bottom
+                        sx={{
+                        margin: '20px 0', // Margin of 20 pixels on top and bottom
+                        paddingX: '10px' // Horizontal padding of 20 pixels
+                    }}
                     >
                         <Typography variant="h6">{list.name}</Typography>
                         <AddItemComponent onAddItem={handleAddItem} />

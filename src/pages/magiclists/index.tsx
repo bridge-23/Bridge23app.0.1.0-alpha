@@ -44,12 +44,11 @@ const MagicLists: React.FC = () => {
         setMagicLists(fetchedLists);
     };
     const onListCreated = () => {
-        fetchMagicList();
+        fetchMagicList().then(r => console.log("Magic lists fetched:", r));
     };
 
     return (
         <Container sx={{marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px'}}>
-
             <Box sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto'}}>
                 <Typography
                     variant="h5"
@@ -69,7 +68,10 @@ const MagicLists: React.FC = () => {
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
-                style={{ margin: '20px 0' }}
+                sx={{
+                    margin: '20px 0', // Margin of 20 pixels on top and bottom
+                    paddingX: '10px' // Horizontal padding of 20 pixels
+                }}
             >
                 <CreateMagicList onListCreated={onListCreated}/>
             </Box>
