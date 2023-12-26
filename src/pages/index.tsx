@@ -1,14 +1,28 @@
 //..src/pages/index.tsx
+import React, {useState, useEffect, useContext} from 'react';
 import { NextPage } from "next";
-import Head from 'next/head';
-import React, { useContext } from 'react';
-import { Container, Typography, Grid, Box, CircularProgress } from "@mui/material";
-import Image from 'next/image';
+import {Box, CircularProgress, Container, Grid, useMediaQuery} from "@mui/material";
+import { Theme } from '@mui/material/styles';
+import AccountBalanceCardComponent from "../components/Dashboard/AccountBalanceCardComponent";
+import ExpensesbyCategoryComponent from "../components/Dashboard/ExpensesbyCategoryComponent";
+import NewAccountComponent from "../components/Accounts/NewAccountComponent";
+import AccountsList from "../components/Dashboard/AccountsList";
+import AddExpense from "../components/Dashboard/AddTransaction";
+import Amount from "../components/Dashboard/Amouth";
+import {listDocs} from "@junobuild/core-peer";
 import LoginComponentJuno from "../components/LoginComponentJuno";
-import { AuthContext } from "../contexts/AuthContext";
+import {AuthContext} from "../contexts/AuthContext";
+//import usePullToRefresh from '../../hooks/usePullToRefresh';
+interface AccountData {
+    accountName: string;
+    financialInstitution: string;
+    currentBalance: number;
+    currency: string;
+    id: string;
+}
 const Home: NextPage = () => {
+    //usePullToRefresh();
     const { user, loading } = useContext(AuthContext);
-
     if (loading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -16,43 +30,98 @@ const Home: NextPage = () => {
             </Box>
         );
     }
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    const [open, setOpen] = useState(false);
+    const [accounts, setAccounts] = useState<AccountData[]>([]);
+    /*    const handleOpen = () => {
+        setOpen(true);
+    };*/
+    const handleClose = () => {
+        setOpen(false);
+    };
+    const totalCurrentBalance = accounts.reduce((sum, account) => sum + account.currentBalance, 0);
+    const formattedTotalBalance = totalCurrentBalance.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'IDR', // Change to the actual currency code if necessary
+    });
+
+
+    useEffect(() => {
+        fetchAccounts()
+            .then(() => {
+                // Handle success if needed
+            })
+            .catch(error => {
+                console.error('Error fetching accounts:', error);
+            });
+    }, []);
+    /*    const handleEdit = (accountId: string) => {
+            // Implement your edit logic here
+            console.log('Editing account with ID:', accountId);
+        };*/
+    const fetchAccounts = async () => {
+        try {
+            const accountsData = await listDocs({
+                collection: "Accounts"
+            });
+
+            if (accountsData && accountsData.items) {
+                const fetchedAccounts = accountsData.items.map(doc => {
+                    const data = doc.data as AccountData;
+                    return {
+                        accountName: data.accountName,
+                        financialInstitution: data.financialInstitution,
+                        currentBalance: data.currentBalance,
+                        currency: data.currency,
+                        id: doc.key
+                    };
+                });
+                setAccounts(fetchedAccounts);
+                console.log(accountsData);
+            } else {
+                console.error("Accounts data is undefined or items are missing");
+                alert('Failed to fetch accounts. Please try again.');
+            }
+        } catch (error) {
+            console.error("Error fetching accounts:", error);
+            alert('Failed to fetch accounts. Please try again.');
+        }
+    };
+
 
     return (
-        <>
-            <Head>
-                <title>Bridge 23 - Home</title>
-                <meta name="description" content="Welcome to Bridge 23" />
-            </Head>
-            <Container style={{ padding: '24px', marginBottom: '82px' }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Box display="flex" flexDirection="column" alignItems="center">
-                            <Image src="/icon-512x512.png" alt="Bridge 23 Logo" width={40} height={40} />
-                            <Typography variant="h4" sx={{ mt: 1 }}>
-                                Bridge 23
-                            </Typography>
-                            {/* Conditional rendering based on the user's authentication status */}
-                            {!user && (
-                                <Box mt={2}>
-                                    <LoginComponentJuno />
-                                </Box>
-                            )}
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-                                {/* Juno Badge */}
-                                <div>
-                                    <Image src="/logo-icp.png" alt="ICP Logo" width={263.625} height={16.125}/>
-                                </div>
+        <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px',}}>
+            {!user && (
+                    <LoginComponentJuno />
+            )}
+            <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
 
-                                {/* ICP Logo */}
-                                <div>
-                                    <Image src="/badge-juno.svg" alt="Juno Badge" width={152} height={32.66}/>
-                                </div>
-                            </div>
-                        </Box>
-                    </Grid>
+                <Grid item xs={12} md={4}>
+                    <AccountBalanceCardComponent currentBalance={formattedTotalBalance} />
                 </Grid>
-            </Container>
-        </>
+
+                <Grid xs={12} md={4}>
+                    <Amount />
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <ExpensesbyCategoryComponent />
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <NewAccountComponent />
+                </Grid>
+
+                <Grid item xs={12} md={isMobile ? 4 : 8}>
+                    <AccountsList accounts={accounts} />
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                    <AddExpense open={open} onClose={handleClose}/>
+                </Grid>
+
+            </Grid>
+        </Container>
     );
 };
 export default Home;

@@ -47,7 +47,7 @@ function MobileNavbar() {
         <AppBar position="fixed" color="primary" sx={{ top: 'auto', down: 'auto', bottom: 0, display: { xs: 'block', sm: 'none'} }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '40px', paddingLeft: '30px', paddingRight: '30px' }}>
                 {user && (
-                <Link href={`/dashboard`}>
+                <Link href={`/`}>
                     <IconButton color="inherit" aria-label="open drawer">
                         <HomeIcon fontSize="large"/>
                     </IconButton>

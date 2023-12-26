@@ -122,7 +122,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({}) => {
                         listId: newItem.listId,
                         checked: false,
                         listName: selectedListName,
-                        owner: { userId: user.key }
+                        owner: { userId: user.key}
                     }
                 }
             });
