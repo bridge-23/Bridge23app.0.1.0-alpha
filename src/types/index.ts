@@ -1,4 +1,4 @@
-//../types/index.ts
+//..src/types/index.ts
 import {SVGProps} from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
@@ -21,4 +21,23 @@ export interface AccountInfo {
     accountType: string;
     created: string; // If you're storing the date as an ISO string
     // Add any other fields that you might have
+}
+export interface Item {
+    id: string;
+    itemName: string;
+    itemLink: string;
+    description: string;
+    price: string;
+    currency: string;
+    listId: string;
+    listName: string;
+    checked?: boolean;
+    index: number;
+}
+export interface MagicList {
+    id: string;
+    name: string;
+    owner: {
+        userId: string;
+    };
 }

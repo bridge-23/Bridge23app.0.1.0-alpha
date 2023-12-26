@@ -2,11 +2,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-    Container, Typography, Grid, useMediaQuery,
-    AccordionDetails, AccordionSummary, Accordion, ToggleButtonGroup, ToggleButton,Box,Divider,
-    IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Snackbar
-} from "@mui/material";
+import {Container, Typography, Grid, useMediaQuery, AccordionDetails, AccordionSummary, Accordion, ToggleButtonGroup, ToggleButton,Box,Divider, IconButton, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button, Snackbar} from "@mui/material";
 import {Theme} from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import CheckroomIcon from '@mui/icons-material/Checkroom';
@@ -18,7 +14,6 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-//import MoreVertIcon from "@mui/icons-material/MoreVert";
 interface EditDialogProps {
     label: string;
     content: string;
@@ -84,7 +79,6 @@ export default function Transactions () {
                 const transformedReceipts = receiptsData.items.map(doc => {
                     const data = doc.data as any; // Assuming data structure is unknown
                     console.log("Raw data for receipt:", data);
-                    // Check if the expected fields are directly accessible or nested
                     const supplier = data.supplierName?.value || data.supplier || 'Unknown Supplier';
                     const address = data.supplierAddress?.value || data.address || 'Address Unknown';
                     const amount = data.totalAmount?.value || data.amount || 0;
@@ -92,7 +86,6 @@ export default function Transactions () {
                     const time = data.time?.value || data.time || 'Unknown Time';
                     const subcategory = data.subcategory?.value || data.subcategory || 'Unknown Subcategory';
                     const currency = data.locale?.currency?.value || data.locale?.currency || 'Unknown Currency';
-                    // Assuming items are always an array
                     const items = data.lineItems || data.items || [];
                     const formattedItems = items.map((item: any) => ({
                         description: item.description || 'Unknown Description',
@@ -189,7 +182,6 @@ export default function Transactions () {
     const deleteReceipt = async (receiptId: string) => {
         // Retrieve the most recent document
         const currentDoc = await getDoc({ collection: "Receipts", key: receiptId });
-
         // Check if currentDoc exists
         if (!currentDoc) {
             console.error("Error retrieving the current document.");

@@ -51,7 +51,7 @@ const ICPSignInButton = () => {
                 maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000)
             });
             console.log("Sign-in successful!");
-            await router.push('/magiclist');
+            await router.push('/magiclists');
         } catch (error) {
             console.error("Sign-in failed:", error);
         } finally {

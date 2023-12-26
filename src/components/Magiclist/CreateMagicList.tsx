@@ -1,14 +1,13 @@
 //../src/components/Magiclist/CreateMagicList.tsx
 import React, {useState, FC, useContext} from 'react';
-import {Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Card, Typography, CardActionArea} from '@mui/material';
+import {Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import {AuthContext} from "../../contexts/AuthContext";
 interface CreateMagicListProps {
-    onListCreated: () => void; // Assuming onListCreated does not take any arguments and does not return anything
+    onListCreated: () => void; // Ensure this matches usage
 }
-
 const CreateMagicList: FC<CreateMagicListProps> = ({ onListCreated }) => {
     const [listName, setListName] = useState('');
     const { user } = useContext(AuthContext);
@@ -17,7 +16,6 @@ const CreateMagicList: FC<CreateMagicListProps> = ({ onListCreated }) => {
     const handleClickOpen = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
@@ -56,26 +54,17 @@ const CreateMagicList: FC<CreateMagicListProps> = ({ onListCreated }) => {
     };
 
     return (
-        <>
-            <Card
+        <Box>
+            <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
                 onClick={handleClickOpen}
-                sx={{
-                    perspective: "1000px",
-                    width: { xs: '100%', sm: '150px' },
-                    height: '110px',
-                    cursor: "pointer",
-                    borderRadius: "24px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxShadow: 3,
-                }}
             >
-                <IconButton color="primary" aria-label="add" onClick={(e) => e.stopPropagation()}>
-                    <AddIcon fontSize="large"/>
-                </IconButton>
-                <Typography variant="h5">Create List</Typography>
-            </Card>
+                Create Magic List
+            </Button>
+
+            {/* The rest of your code remains unchanged */}
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Create Magic List</DialogTitle>
                 <DialogContent>
@@ -91,15 +80,11 @@ const CreateMagicList: FC<CreateMagicListProps> = ({ onListCreated }) => {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={createNewMagicList} color="primary">
-                        Create
-                    </Button>
+                    <Button onClick={handleClose} color="primary">Cancel</Button>
+                    <Button onClick={createNewMagicList} color="primary">Create</Button>
                 </DialogActions>
             </Dialog>
-        </>
+        </Box>
     );
 };
 export default CreateMagicList;
