@@ -1,6 +1,6 @@
 //..src/page/magiclists/index.tsx
 import React, {useContext, useState, useEffect} from 'react';
-import { Typography, Box, Container, useMediaQuery, Divider} from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Container, useMediaQuery,} from '@mui/material';
 import { AuthContext } from "../../contexts/AuthContext";
 import { listDocs } from "@junobuild/core-peer";
 import {Theme} from "@mui/material/styles";
@@ -65,37 +65,32 @@ const MagicLists: React.FC = () => {
             padding: isMobile ? 'initial' : '24px',
             marginLeft: isMobile ? '0' : '50px'
         }}>
-            <Box
+            <AppBar
+                position={isMobile ? 'fixed' : 'fixed'}
+                color="default"
                 sx={{
-                    position: { xs: 'fixed', sm: 'static' }, // 'fixed' in mobile, 'static' in desktop
-                    top: { xs: 0, sm: 'initial' },
-                    left: { xs: 0, sm: 'initial' },
-                    right: { xs: 0, sm: 'initial' },
-                    width: { xs: '100%', sm: 'fit-content' }, // Full width in mobile, fit content in desktop
-                    maxWidth: 'auto',
-                    margin: 'auto',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '10px',
-                    zIndex: { xs: 1100, sm: 1 }, // High zIndex only in mobile view
-                    borderBottom: { xs: '1px solid rgba(0, 0, 0, 0.12)', sm: 'none' }, // Border in mobile view
                     backgroundColor: 'white',
+                    width: '100%',
+                    left: 0,
+                    boxShadow: isMobile ? 1 : 1,
+                    ...(isMobile ? {} : { maxWidth: 600, mx: 'auto' }) // Centering in desktop
                 }}
             >
-                <Typography
-                    variant="h5"
-                    gutterBottom
-                    sx={{
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        color: 'primary.main'
-                    }}
-                >
-                    Magic Lists
-                </Typography>
-            </Box>
-            <Divider />
+                <Toolbar>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            flexGrow: 1,
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            color: 'primary.main'
+                        }}
+                    >
+                        Magic Lists
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+
             <Box
                 display="flex"
                 justifyContent="space-between"
