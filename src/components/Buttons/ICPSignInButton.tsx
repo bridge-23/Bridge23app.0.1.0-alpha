@@ -4,7 +4,6 @@ import { Button, ToggleButton, ToggleButtonGroup, Grid, Box } from '@mui/materia
 import { signIn, InternetIdentityProvider, NFIDProvider, signOut, authSubscribe } from '@junobuild/core-peer';
 import { useLoading } from '../../contexts/LoadingContext';
 import { useRouter } from 'next/router';
-
 //TODO: make post to juno to user collection
 type ProviderType = 'internetIdentity' | 'nftId';
 const ICPSignInButton = () => {
@@ -39,7 +38,6 @@ const ICPSignInButton = () => {
     const handleSignIn = async () => {
         try {
             setLoading(true);
-            //const SEVEN_DAYS_IN_NANOSECONDS = BigInt(7 * 24 * 60 * 60) * BigInt(1000000000);
             const provider = providerType === 'internetIdentity'
                 ? new InternetIdentityProvider({ domain: "internetcomputer.org" })
                 : new NFIDProvider({

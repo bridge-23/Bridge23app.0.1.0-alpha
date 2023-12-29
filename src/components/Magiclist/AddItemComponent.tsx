@@ -9,9 +9,10 @@ import {Item} from "../../types";
 import {MagicList} from "../../types";
 interface AddItemComponentProps {
     onAddItem: (newItem: Item) => void;
+    selectedListId?: string; // Optional selected list ID
 }
 //TODO: Display currecncy from library currency
-const AddItemComponent: React.FC<AddItemComponentProps> = ({}) => {
+const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selectedListId }) => {
     const { user } = useContext(AuthContext);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -25,7 +26,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({}) => {
         description: '',
         price: '',
         currency: '',
-        listId: '',
+        listId: selectedListId || '', // Use selectedListId as initial value
     });
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setNewItem({

@@ -9,6 +9,8 @@ import {MagicList} from "../../types";
 import MagicItem from './MagicItemComponent';
 import AddItemComponent from "./AddItemComponent";
 import EditItemComponent from "./EditItemComponent";
+import LoadingComponent from "../shared/LoadingComponent";
+
 const MagicListComponent: React.FC = () => {
     const { user } = useContext(AuthContext);
     const [expanded, setExpanded] = useState<string | false>(false);
@@ -18,17 +20,14 @@ const MagicListComponent: React.FC = () => {
     const [magicLists, setMagicLists] = useState<MagicList[]>([]);
     const [backdropOpen, setBackdropOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-    const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [editingItem, setEditingItem] = useState<Item | null>(null);
+
     const handleEditOpen = (item: Item) => {
         setEditingItem(item);
     };
     const handleEditClose = () => {
         setEditingItem(null);
-    };
-    const handleAddItem = (newItem: Item) => {
-        setNotes(prevNotes => [...prevNotes, { ...newItem, id: nanoid() }]);
     };
 
     useEffect(() => {
@@ -92,12 +91,78 @@ const MagicListComponent: React.FC = () => {
         const sortedFetchedNotes = fetchedNotes.sort((a, b) => Number(a.checked) - Number(b.checked));
         setNotes(sortedFetchedNotes);
     };
+    const handleAddItem = (newItem: Item) => {
+        setNotes(prevNotes => [...prevNotes, newItem]);
+    };
+/*    const handleAddItem = async () => {
+        if (!newItem.itemName.trim()) {
+            setSnackbarMessage('Please enter an item name.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+            return;
+        }
+        if (!user) {
+            alert('You must be logged in to add an item.');
+            return;
+        }
+        if (newItem.itemLink && !isValidUrl(newItem.itemLink)) {
+            alert('Please enter a valid URL for the item link.');
+            return;
+        }
+        if (!isValidPrice(newItem.price)) {
+            alert('Please enter a valid price. Price should be a positive number.');
+            return;
+        }
+        const selectedListName = magicLists.find(list => list.id === newItem.listId)?.name || '';
+        const noteId = nanoid();
+        setBackdropOpen(true);
+        try {
+            const itemToAdd = {
+                ...newItem,
+                listId: newItem.listId,
+                checked: false,
+                listName: selectedListName,
+                owner: { userId: user.key},
+                id: noteId // Include the generated ID
+            };
+
+            await setDoc({
+                collection: "MagicListItems",
+                doc: {
+                    key: noteId,
+                    data: itemToAdd
+                }
+            });
+
+            // Call onAddItem to update the list in the parent component
+            onAddItem(itemToAdd);
+            setSnackbarMessage('Item added successfully');
+            setSnackbarSeverity('success');
+            setSnackbarOpen(true);
+            setNewItem({
+                itemName: '',
+                itemLink: '',
+                description: '',
+                price: '',
+                currency: '',
+                listId: '',
+            });
+            await fetchShoppingList();
+        } catch (error) {
+            console.error("Error adding note:", error);
+            setSnackbarMessage('Failed to add note. Please try again.');
+            setSnackbarSeverity('error');
+            setSnackbarOpen(true);
+        } finally {
+            setBackdropOpen(false);
+            setAddDialogOpen(false);
+        }
+    };*/
     const handleCheckboxChange = async (index: number) => {
         setBackdropOpen(true);
         const updatedNotes = [...notes];
         updatedNotes[index].checked = !updatedNotes[index].checked;
-        const currentDoc = await getDoc({ collection: "ShoppingList", key: updatedNotes[index].id });
-
+        const currentDoc = await getDoc({ collection: "MagicListItems", key: updatedNotes[index].id });
         if (!currentDoc) {
             console.error("Error retrieving the current document.");
             alert('Failed to retrieve the current document. Please try again.');
@@ -133,6 +198,10 @@ const MagicListComponent: React.FC = () => {
             if (updatedNotes[index].checked) {
                 await addNote(index);
             }
+            await fetchShoppingList();
+            // Apply filter to show only checked items
+            const filteredNotes = updatedNotes.filter(note => note.checked);
+            setNotes(filteredNotes);
         } catch (error) {
             console.error("Error updating note:", error);
             alert('Failed to update note. Please try again.');
@@ -175,6 +244,8 @@ const MagicListComponent: React.FC = () => {
                 setSnackbarMessage('Note added successfully');
                 setSnackbarOpen(true);
                 // Reset current note input field if you have one
+                await fetchShoppingList();
+                await fetchMagicLists();
             } catch (error) {
                 console.error("Error adding note:", error);
                 alert('Failed to add note. Please try again.');
@@ -189,7 +260,7 @@ const MagicListComponent: React.FC = () => {
             const docKey = updatedItem.id; // Ensure this value is defined
             console.log("Doc key for getDoc:", docKey); // Debugging log
 
-            const currentDoc = await getDoc({ collection: "ShoppingList", key: updatedItem.id });
+            const currentDoc = await getDoc({ collection: "MagicListItems", key: updatedItem.id });
             if (!currentDoc) {
                 console.error("No item selected for editing.");
                 setSnackbarMessage('No item selected for editing.');
@@ -201,7 +272,6 @@ const MagicListComponent: React.FC = () => {
                 alert('You must be logged in to add a note.');
                 return;
             }
-
             await setDoc({
                 collection: "MagicListItems",
                 doc: {
@@ -222,7 +292,6 @@ const MagicListComponent: React.FC = () => {
             handleEditClose(); // Ensure handleEditClose is defined and accessible
         }
     };
-
     const handleDelete = async (index: number) => {
         setBackdropOpen(true);
         const itemId = notes[index].id;
@@ -230,14 +299,14 @@ const MagicListComponent: React.FC = () => {
         console.log("Current notes:", notes);
 
         try {
-            const currentDoc = await getDoc({ collection: "ShoppingList", key: itemId });
+            const currentDoc = await getDoc({ collection: "MagicListItems", key: itemId });
             if (!currentDoc) {
                 console.error(`Document with ID ${itemId} not found.`);
                 // Show an error message to the user
                 return;
             }
             await deleteDoc({
-                collection: "ShoppingList",
+                collection: "MagicListItems",
                 doc: {
                     key: itemId,
                     updated_at: currentDoc.updated_at,
@@ -272,7 +341,8 @@ const MagicListComponent: React.FC = () => {
                     }}
                     >
                         <Typography variant="h6">{list.name}</Typography>
-                        <AddItemComponent onAddItem={handleAddItem} />
+                        <AddItemComponent onAddItem={handleAddItem} selectedListId={list.id} />
+
                     </Box>
                     {notes
                         .filter((note) => note.listName === list.name) // Filtering notes by listName
@@ -289,6 +359,9 @@ const MagicListComponent: React.FC = () => {
                     }
                 </li>
             ))}
+            {backdropOpen && (
+                <LoadingComponent /> // Show loading component when backdrop is open
+            )}
             {editingItem && (
                 <EditItemComponent
                     isOpen={!!editingItem}

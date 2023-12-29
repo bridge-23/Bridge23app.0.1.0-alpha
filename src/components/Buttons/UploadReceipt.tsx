@@ -48,7 +48,6 @@ const FileUploadAndRecognize = () => {
     const [ocrResult, setOcrResult] = useState<IOcrResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const selectedFile = event.target.files[0];
@@ -82,7 +81,6 @@ const FileUploadAndRecognize = () => {
         try {
             const docKey = nanoid();
             console.log("Formatted Data for Juno:", JSON.stringify(formattedData, null, 2)); // Detailed log
-
             await setDoc({
                 collection: "Receipts",
                 doc: {
@@ -91,7 +89,6 @@ const FileUploadAndRecognize = () => {
                     description: "Optional description about the receipt"
                 },
             });
-
             console.log("Data posted to Juno Datastore successfully");
         } catch (error) {
             console.error("Error posting data to Juno Datastore:", error);
@@ -107,7 +104,6 @@ const FileUploadAndRecognize = () => {
                     collection: "receipts",
                 });
                 console.log("File uploaded successfully:", uploadResult);
-
                 const response = await fetch('/api/parseDocument', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

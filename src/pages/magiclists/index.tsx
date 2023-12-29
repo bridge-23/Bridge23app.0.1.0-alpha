@@ -48,7 +48,11 @@ const MagicLists: React.FC = () => {
     };
 
     return (
-        <Container sx={{marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px'}}>
+        <Container sx={{
+            marginBottom: isMobile ? '118px' : '62px',
+            padding: isMobile ? 'initial' : '24px',
+            marginLeft:isMobile ? '0' : '50px'
+        }}>
             <Box sx={{borderRadius: '24px', maxWidth: 'fit-content', margin: 'auto'}}>
                 <Typography
                     variant="h5"
