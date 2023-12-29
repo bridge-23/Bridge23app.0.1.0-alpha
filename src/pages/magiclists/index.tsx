@@ -74,8 +74,8 @@ const MagicLists: React.FC = () => {
                     width: '100%', // Ensure full width
                     maxWidth: 'auto',
                     margin: 'auto',
-                    backgroundColor: isScrolled ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.9)',
                     display: 'flex',
+                    backgroundColor: 'white',
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '10px',

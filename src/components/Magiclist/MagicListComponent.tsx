@@ -13,10 +13,10 @@ import LoadingComponent from "../shared/LoadingComponent";
 
 const MagicListComponent: React.FC = () => {
     const { user } = useContext(AuthContext);
-    const [expanded, setExpanded] = useState<string | false>(false);
+    //const [expanded, setExpanded] = useState<string | false>(false);
     const [notes, setNotes] = useState<Item[]>([]);
     const [currentNote, setCurrentNote] = useState<string>('');
-    const [currentEditItem, setcurrentEditItem] = useState<Item | null>(null);
+    //const [currentEditItem, setcurrentEditItem] = useState<Item | null>(null);
     const [magicLists, setMagicLists] = useState<MagicList[]>([]);
     const [backdropOpen, setBackdropOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -34,7 +34,7 @@ const MagicListComponent: React.FC = () => {
         (async () => {
             try {
                 await fetchShoppingList();
-                fetchMagicLists();
+                await fetchMagicLists();
             } catch (error) {
                 console.error("Failed to fetch shopping list:", error);
             }
