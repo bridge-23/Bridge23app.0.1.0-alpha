@@ -67,20 +67,20 @@ const MagicLists: React.FC = () => {
         }}>
             <Box
                 sx={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    width: '100%', // Ensure full width
+                    position: { xs: 'fixed', sm: 'static' }, // 'fixed' in mobile, 'static' in desktop
+                    top: { xs: 0, sm: 'initial' },
+                    left: { xs: 0, sm: 'initial' },
+                    right: { xs: 0, sm: 'initial' },
+                    width: { xs: '100%', sm: 'fit-content' }, // Full width in mobile, fit content in desktop
                     maxWidth: 'auto',
                     margin: 'auto',
                     display: 'flex',
-                    backgroundColor: 'white',
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '10px',
-                    zIndex: 1100,// Ensure it's above other elements
-                    borderBottom: '1px solid rgba(0, 0, 0, 0.12)'
+                    zIndex: { xs: 1100, sm: 1 }, // High zIndex only in mobile view
+                    borderBottom: { xs: '1px solid rgba(0, 0, 0, 0.12)', sm: 'none' }, // Border in mobile view
+                    backgroundColor: 'white',
                 }}
             >
                 <Typography
@@ -88,6 +88,7 @@ const MagicLists: React.FC = () => {
                     gutterBottom
                     sx={{
                         fontWeight: 'bold',
+                        textAlign: 'center',
                         color: 'primary.main'
                     }}
                 >
