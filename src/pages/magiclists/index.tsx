@@ -72,6 +72,7 @@ const MagicLists: React.FC = () => {
                     backgroundColor: 'white',
                     width: '100%',
                     left: 0,
+                    paddingTop: 'env(safe-area-inset-top)',
                     boxShadow: isMobile ? 1 : 1,
                     ...(isMobile ? {} : { maxWidth: 600, mx: 'auto' }) // Centering in desktop
                 }}
