@@ -17,8 +17,8 @@ export const LoadingProvider: React.FC<{ children: ReactNode }> = ({ children })
 
     return (
         <LoadingContext.Provider value={{ setLoading }}>
-            {children}
             {isLoading && <LoadingComponent />} {/* Your full-page loading component */}
+            {children}
         </LoadingContext.Provider>
     );
 };

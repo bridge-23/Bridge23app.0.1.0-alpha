@@ -9,15 +9,16 @@
 // For further details, see the LICENSE file or contact info@bridge23.app.
 
 import { AppProps } from 'next/app';
-import '../lib/Juno/initJuno';
-import '../styles/globals.css'
-import React, { useEffect } from 'react';
-import Navbar from "../components/Navigation/Navbar";
+import React, {useEffect } from 'react';
 import { ColorModeProvider } from '../contexts/ColorModeContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { initJuno } from "@junobuild/core-peer";
 import {useRouter} from "next/router";
 import { LoadingProvider } from '../contexts/LoadingContext';
+import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue} from 'recoil';
+import Navbar from "../components/Navigation/Navbar";
+import '../lib/Juno/initJuno';
+import '../styles/globals.css'
 function MyApp({ Component, pageProps }: AppProps) {
     const router = useRouter();
 
@@ -39,6 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }, [router]);
 
     return (
+        <RecoilRoot>
         <LoadingProvider>
             <AuthProvider>
                 <ColorModeProvider>
@@ -47,6 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 </ColorModeProvider>
             </AuthProvider>
         </LoadingProvider>
+        </RecoilRoot>
     );
 }
 export default MyApp;

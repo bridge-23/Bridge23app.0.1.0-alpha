@@ -1,39 +1,36 @@
 //..src/components/MagicList/MagicListComponent.tsx
 import React, {useContext, useEffect, useState} from 'react';
 import {List, Typography, Box, Snackbar, Divider} from '@mui/material';
-import { AuthContext } from "../../contexts/AuthContext";
 import {setDoc, listDocs, getDoc, deleteDoc} from "@junobuild/core-peer";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useRecoilState } from 'recoil';
 import { nanoid } from "nanoid";
-import {Item} from "../../types";
-import {MagicList} from "../../types";
-import MagicItem from './MagicItemComponent';
 import AddItemComponent from "./AddItemComponent";
 import EditItemComponent from "./EditItemComponent";
-import LoadingComponent from "../shared/LoadingComponent";
-
+import MagicItem from './MagicItemComponent';
+import {MagicList} from "../../types";
+import {MagicListItem} from "../../types";
+import { magicListsState, magicListItemState } from '../../state/atoms';
+import { useLoading } from '../../contexts/LoadingContext';
 const MagicListComponent: React.FC = () => {
     const { user } = useContext(AuthContext);
-    //const [expanded, setExpanded] = useState<string | false>(false);
-    const [notes, setNotes] = useState<Item[]>([]);
-    const [currentNote, setCurrentNote] = useState<string>('');
-    //const [currentEditItem, setcurrentEditItem] = useState<Item | null>(null);
-    const [magicLists, setMagicLists] = useState<MagicList[]>([]);
-    const [backdropOpen, setBackdropOpen] = useState(false);
+    const { setLoading } = useLoading();
+    const [currentItem, setCurrentItem] = useState<string>('');
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
-    const [editingItem, setEditingItem] = useState<Item | null>(null);
-
-    const handleEditOpen = (item: Item) => {
+    const [editingItem, setEditingItem] = useState<MagicListItem | null>(null);
+    const [magicLists, setMagicLists] = useState<MagicList[]>([]);
+    const [items, setItems] = useRecoilState(magicListItemState);
+    const handleEditOpen = (item: MagicListItem) => {
         setEditingItem(item);
     };
     const handleEditClose = () => {
         setEditingItem(null);
     };
-
     useEffect(() => {
         (async () => {
             try {
-                await fetchShoppingList();
+                await fetchMagicListItems();
                 await fetchMagicLists();
             } catch (error) {
                 console.error("Failed to fetch shopping list:", error);
@@ -64,16 +61,16 @@ const MagicListComponent: React.FC = () => {
             console.error("Error fetching magic lists:", error);
         }
     };
-    const fetchShoppingList = async () => {
-        let fetchedNotes: Item[] = []; // Use Item[] as the type
+    const fetchMagicListItems = async () => {
+        let fetchedItems: MagicListItem[] = []; // Use Item[] as the type
         try {
             const shoppingListData = await listDocs({
                 collection: "MagicListItems"
             });
 
             if (shoppingListData && shoppingListData.items) {
-                fetchedNotes = shoppingListData.items.map(doc => {
-                    const data = doc.data as Item; // Ensure data matches the Item type
+                fetchedItems = shoppingListData.items.map(doc => {
+                    const data = doc.data as MagicListItem; // Ensure data matches the Item type
                     return {
                         ...data, // Spread all properties from the data
                         id: doc.key,
@@ -88,81 +85,26 @@ const MagicListComponent: React.FC = () => {
             console.error("Error fetching shopping list:", error);
             alert('Failed to fetch shopping list. Please try again.');
         }
-        const sortedFetchedNotes = fetchedNotes.sort((a, b) => Number(a.checked) - Number(b.checked));
-        setNotes(sortedFetchedNotes);
+        const sortedFetchedItems = fetchedItems.sort((a, b) => {
+            const aChecked = a.checked || false;
+            const bChecked = b.checked || false;
+            return Number(aChecked) - Number(bChecked);
+        });
+        setItems(sortedFetchedItems);
     };
-    const handleAddItem = (newItem: Item) => {
-        setNotes(prevNotes => [...prevNotes, newItem]);
-    };
-/*    const handleAddItem = async () => {
-        if (!newItem.itemName.trim()) {
-            setSnackbarMessage('Please enter an item name.');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
-            return;
-        }
-        if (!user) {
-            alert('You must be logged in to add an item.');
-            return;
-        }
-        if (newItem.itemLink && !isValidUrl(newItem.itemLink)) {
-            alert('Please enter a valid URL for the item link.');
-            return;
-        }
-        if (!isValidPrice(newItem.price)) {
-            alert('Please enter a valid price. Price should be a positive number.');
-            return;
-        }
-        const selectedListName = magicLists.find(list => list.id === newItem.listId)?.name || '';
-        const noteId = nanoid();
-        setBackdropOpen(true);
-        try {
-            const itemToAdd = {
-                ...newItem,
-                listId: newItem.listId,
-                checked: false,
-                listName: selectedListName,
-                owner: { userId: user.key},
-                id: noteId // Include the generated ID
-            };
-
-            await setDoc({
-                collection: "MagicListItems",
-                doc: {
-                    key: noteId,
-                    data: itemToAdd
-                }
-            });
-
-            // Call onAddItem to update the list in the parent component
-            onAddItem(itemToAdd);
-            setSnackbarMessage('Item added successfully');
-            setSnackbarSeverity('success');
-            setSnackbarOpen(true);
-            setNewItem({
-                itemName: '',
-                itemLink: '',
-                description: '',
-                price: '',
-                currency: '',
-                listId: '',
-            });
-            await fetchShoppingList();
-        } catch (error) {
-            console.error("Error adding note:", error);
-            setSnackbarMessage('Failed to add note. Please try again.');
-            setSnackbarSeverity('error');
-            setSnackbarOpen(true);
-        } finally {
-            setBackdropOpen(false);
-            setAddDialogOpen(false);
-        }
-    };*/
     const handleCheckboxChange = async (index: number) => {
-        setBackdropOpen(true);
-        const updatedNotes = [...notes];
-        updatedNotes[index].checked = !updatedNotes[index].checked;
-        const currentDoc = await getDoc({ collection: "MagicListItems", key: updatedNotes[index].id });
+
+        setLoading(true);
+
+        const updatedItems = items.map((item, idx) => {
+            if (idx === index) {
+                // Toggle the 'checked' property of the specific item
+                return { ...item, checked: !item.checked };
+            }
+            return item;
+        });
+
+        const currentDoc = await getDoc({ collection: "MagicListItems", key: updatedItems[index].id || ''});
         if (!currentDoc) {
             console.error("Error retrieving the current document.");
             alert('Failed to retrieve the current document. Please try again.');
@@ -176,56 +118,62 @@ const MagicListComponent: React.FC = () => {
             await setDoc({
                 collection: "MagicListItems",
                 doc: {
-                    key: updatedNotes[index].id,
+                    key: updatedItems[index].id || '',
                     updated_at: currentDoc.updated_at,
                     data: {
-                        price:updatedNotes[index].price,
-                        currency:updatedNotes[index].currency,
-                        itemName:updatedNotes[index].itemName,
-                        itemLink:updatedNotes[index].itemLink,
-                        description:updatedNotes[index].description,
-                        listId:updatedNotes[index].listId,
-                        checked: updatedNotes[index].checked,
-                        listName:updatedNotes[index].listName,
+                        price:updatedItems[index].price,
+                        currency:updatedItems[index].currency,
+                        itemName:updatedItems[index].itemName,
+                        itemLink:updatedItems[index].itemLink,
+                        description:updatedItems[index].description,
+                        listId:updatedItems[index].listId,
+                        checked: updatedItems[index].checked,
+                        listName:updatedItems[index].listName,
                         owner: {
                             userId: user.key,
                         },
                     }
                 }
             });
-            setNotes(updatedNotes);
+            setItems(updatedItems);
             // If the checkbox is checked, add a new note
-            if (updatedNotes[index].checked) {
+            if (updatedItems[index].checked) {
                 await addNote(index);
             }
-            await fetchShoppingList();
+            await fetchMagicListItems();
             // Apply filter to show only checked items
-            const filteredNotes = updatedNotes.filter(note => note.checked);
-            setNotes(filteredNotes);
+            const filteredItems = updatedItems.filter(item => item.checked);
+            setItems(filteredItems);
         } catch (error) {
             console.error("Error updating note:", error);
             alert('Failed to update note. Please try again.');
         } finally {
-            setBackdropOpen(false); // Close the backdrop
+            setLoading(false);
         }
-        const sortedUpdatedNotes = updatedNotes.sort((a: { checked?: boolean; id: string }, b: { checked?: boolean; id: string }) => Number(a.checked) - Number(b.checked));
-        setNotes(sortedUpdatedNotes);
+        const sortedUpdatedItems = [...updatedItems].sort((a, b) => {
+            const aChecked = a.checked ?? false;
+            const bChecked = b.checked ?? false;
+            return Number(aChecked) - Number(bChecked);
+        });
+        setItems(sortedUpdatedItems);
+        // Closing the backdrop and other cleanup
+        setLoading(false);
     };
     const addNote = async (index: number) => {  // Assuming noteText is the text of the new note
-        if (currentNote.trim()) {
+        if (currentItem.trim()) {
             if (!user) {
                 alert('You must be logged in to add a note.');
                 return;
             }
             const noteId = `${nanoid()}`;
-            setBackdropOpen(true);
+            setLoading(true);
             try {
                 await setDoc({
                     collection: "MagicListItems",
                     doc: {
                         key: noteId,
                         data: {
-                            itemName: currentNote,
+                            itemName: currentItem,
                             itemLink:'',
                             description:'',
                             price:'',
@@ -239,39 +187,50 @@ const MagicListComponent: React.FC = () => {
                         }
                     }
                 });
-                setNotes(prevNotes => prevNotes.filter((_, i) => i !== index));
-                setCurrentNote('');
+                setItems(prevItems => prevItems.filter((_, i) => i !== index));
+                setCurrentItem('');
                 setSnackbarMessage('Note added successfully');
                 setSnackbarOpen(true);
                 // Reset current note input field if you have one
-                await fetchShoppingList();
+                await fetchMagicListItems();
                 await fetchMagicLists();
             } catch (error) {
                 console.error("Error adding note:", error);
                 alert('Failed to add note. Please try again.');
             } finally {
-                setBackdropOpen(false);
+                setLoading(false);
             }
         }
     };
-    const handleEditSave = async (updatedItem: Item) => {
-        setBackdropOpen(true);
+    const handleEditSave = async (updatedItem: Partial<MagicListItem>) => {
+        console.log("handleEditSave received:", updatedItem);
+
+        setLoading(true);
         try {
-            const docKey = updatedItem.id; // Ensure this value is defined
-            console.log("Doc key for getDoc:", docKey); // Debugging log
+            // Ensure the id of the updated item is defined
+            if (!updatedItem.id) {
+                console.error("No item id provided for editing.");
+                setSnackbarMessage('No item id provided for editing.');
+                setSnackbarOpen(true);
+                setLoading(false);
+                return;
+            }
 
             const currentDoc = await getDoc({ collection: "MagicListItems", key: updatedItem.id });
             if (!currentDoc) {
                 console.error("No item selected for editing.");
                 setSnackbarMessage('No item selected for editing.');
                 setSnackbarOpen(true);
+                setLoading(false);
                 return;
             }
 
             if (!user) {
-                alert('You must be logged in to add a note.');
+                alert('You must be logged in to edit an item.');
+                setLoading(false);
                 return;
             }
+
             await setDoc({
                 collection: "MagicListItems",
                 doc: {
@@ -280,26 +239,37 @@ const MagicListComponent: React.FC = () => {
                     data: updatedItem
                 }
             });
+
             setSnackbarMessage("Item updated successfully.");
             setSnackbarOpen(true);
+            setCurrentItem('');
+            // Update the items state here if necessary
+
+            // Update the local state with the edited item
+            setItems(prevItems => {
+                const updatedItems = prevItems.map(item =>
+                    item.id === updatedItem.id ? updatedItem : item
+                );
+                return updatedItems;
+            });
         } catch (error) {
             console.error("Error updating item:", error);
-            console.error("Error in handleEditSave:", error);
             setSnackbarMessage("Failed to update item. Please try again.");
             setSnackbarOpen(true);
         } finally {
-            setBackdropOpen(false);
-            handleEditClose(); // Ensure handleEditClose is defined and accessible
+            setLoading(false);
+            handleEditClose();
         }
     };
-    const handleDelete = async (index: number) => {
-        setBackdropOpen(true);
-        const itemId = notes[index].id;
-        console.log(`Attempting to delete item at index: ${index}`);
-        console.log("Current notes:", notes);
 
+    const handleDelete = async (index: number) => {
+        setLoading(true);
+
+        const itemId = items[index].id;
+
+        if (!itemId) { return }
         try {
-            const currentDoc = await getDoc({ collection: "MagicListItems", key: itemId });
+            const currentDoc = await getDoc({ collection: "MagicListItems", key: itemId || '' });
             if (!currentDoc) {
                 console.error(`Document with ID ${itemId} not found.`);
                 // Show an error message to the user
@@ -308,13 +278,13 @@ const MagicListComponent: React.FC = () => {
             await deleteDoc({
                 collection: "MagicListItems",
                 doc: {
-                    key: itemId,
+                    key: itemId || '',
                     updated_at: currentDoc.updated_at,
                     data: {}
                 }
             });
             // Update local state after successful deletion in the backend
-            setNotes(prevNotes => prevNotes.filter((_, i) => i !== index));
+            setItems((oldItems) => oldItems.filter(item => item.id !== itemId));
             setSnackbarMessage("Note deleted successfully.");
             setSnackbarOpen(true);
         } catch (error) {
@@ -322,7 +292,7 @@ const MagicListComponent: React.FC = () => {
             setSnackbarMessage("Failed to delete note.");
             setSnackbarOpen(true);
         } finally {
-            setBackdropOpen(false);
+            setLoading(false);
         }
     };
 
@@ -341,27 +311,25 @@ const MagicListComponent: React.FC = () => {
                     }}
                     >
                         <Typography variant="h6">{list.name}</Typography>
-                        <AddItemComponent onAddItem={handleAddItem} selectedListId={list.id} />
+                        <AddItemComponent selectedListId={list.id} />
 
                     </Box>
-                    {notes
-                        .filter((note) => note.listName === list.name) // Filtering notes by listName
-                        .map((filteredNote, index) => (
+                    {items
+                        .filter(item => item.listId === list.id) // Use list.id for filtering
+                        .map((filteredItem, index) => (
                             <MagicItem
-                                key={filteredNote.id}
-                                item={filteredNote}
-                                onDelete={() => handleDelete(notes.findIndex(n => n.id === filteredNote.id))}
-                                onCheck={() => handleCheckboxChange(notes.findIndex(n => n.id === filteredNote.id))}
-                                onEdit={() => handleEditOpen(filteredNote)}
-                                index={notes.findIndex(n => n.id === filteredNote.id)}
+                                key={filteredItem.id}
+                                item={filteredItem}
+                                onDelete={() => handleDelete(items.findIndex(n => n.id === filteredItem.id))}
+                                onCheck={() => handleCheckboxChange(items.findIndex(n => n.id === filteredItem.id))}
+                                onEdit={() => handleEditOpen(filteredItem as MagicListItem)}
+                                index={items.findIndex(n => n.id === filteredItem.id)}
                             />
                         ))
                     }
                 </li>
             ))}
-            {backdropOpen && (
-                <LoadingComponent /> // Show loading component when backdrop is open
-            )}
+
             {editingItem && (
                 <EditItemComponent
                     isOpen={!!editingItem}

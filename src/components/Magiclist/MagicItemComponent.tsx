@@ -1,17 +1,17 @@
 //..src/components/Magiclist/MagicItemComponent.tsx
+import Link from "next/link";
 import React, {useState} from "react";
 import { Accordion, AccordionSummary, AccordionDetails, Chip, Checkbox, IconButton, ListItemText } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Link from "next/link";
-import {Item} from "../../types";
+import {MagicListItem} from "../../types";
 //TODO: check all by key:...[index].id
 interface MagicItemProps {
-    item: Item; // Ensure this matches usage
+    item: Partial<MagicListItem>; // Accept Partial<Item> type to allow for optional properties
     onDelete: () => void;
     onCheck: () => void;
-    onEdit: (item: Item) => void;
+    onEdit: (item: Partial<MagicListItem>) => void;
     index: number;
 }
 const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck, onEdit }) => {
@@ -36,7 +36,7 @@ const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck,
             maximumFractionDigits: 2,
         }).format(amount);
     }
-    const formattedPrice = formatCurrency(item.price, item.currency);
+    const formattedPrice = formatCurrency(item.price ?? 0, item.currency ?? 'USD');
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };

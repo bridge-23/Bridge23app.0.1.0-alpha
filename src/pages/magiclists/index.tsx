@@ -4,11 +4,10 @@ import { AppBar, Toolbar, Typography, Box, Container, useMediaQuery,} from '@mui
 import { AuthContext } from "../../contexts/AuthContext";
 import { listDocs } from "@junobuild/core-peer";
 import {Theme} from "@mui/material/styles";
+import {MagicList} from "../../types";
 import MagicListComponent from "../../components/Magiclist/MagicListComponent";
 import CreateMagicList from "../../components/Magiclist/CreateMagicList";
-import {MagicList} from "../../types";
 import theme from "../../utils/theme";
-
 //TODO: make shopping panel for create shopping list
 //TODO: add edit button for shopping list
 //TODO: add delete button for shopping list
@@ -63,7 +62,8 @@ const MagicLists: React.FC = () => {
         <Container sx={{
             marginBottom: isMobile ? '118px' : '62px',
             padding: isMobile ? 'initial' : '24px',
-            marginLeft: isMobile ? '0' : '50px'
+            marginLeft: isMobile ? '0' : '50px',
+            backgroundColor: 'white'
         }}>
             <AppBar
                 position={isMobile ? 'fixed' : 'fixed'}

@@ -22,7 +22,8 @@ export interface AccountInfo {
     created: string; // If you're storing the date as an ISO string
     // Add any other fields that you might have
 }
-export interface Item {
+
+export interface MagicListItem {
     id: string;
     itemName: string;
     itemLink: string;

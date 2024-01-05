@@ -5,28 +5,33 @@ import AddIcon from '@mui/icons-material/Add';
 import { AuthContext } from "../../contexts/AuthContext";
 import {listDocs, setDoc} from "@junobuild/core-peer";
 import {nanoid} from "nanoid";
-import {Item} from "../../types";
 import {MagicList} from "../../types";
-interface AddItemComponentProps {
-    onAddItem: (newItem: Item) => void;
-    selectedListId?: string; // Optional selected list ID
-}
+import { useRecoilState } from 'recoil';
+import { magicListsState, magicListItemState } from '../../state/atoms';
+
+interface AddItemComponentProps {selectedListId?: string;}
+
 //TODO: Display currecncy from library currency
-const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selectedListId }) => {
+const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) => {
     const { user } = useContext(AuthContext);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [backdropOpen, setBackdropOpen] = useState(false);
+    const backdropStyle = {
+        zIndex: 1300, // Ensure this is higher than the dialog's z-index
+        color: '#fff',
+    };
     const [magicLists, setMagicLists] = useState<MagicList[]>([]);
+    const [items, setItems] = useRecoilState(magicListItemState);
     const [newItem, setNewItem] = useState({
         itemName: '',
         itemLink: '',
         description: '',
-        price: '',
+        price: 0,
         currency: '',
-        listId: selectedListId || '', // Use selectedListId as initial value
+        listId: selectedListId || '', // Use the selected list ID if provided
     });
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         setNewItem({
@@ -48,9 +53,9 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selected
         const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
         return urlRegex.test(url);
     };
-    const isValidPrice = (price: string): boolean => {
-        const parsedPrice = parseFloat(price);
-        return !isNaN(parsedPrice) && isFinite(parsedPrice) && parsedPrice > 0;
+    const isValidPrice = (price: number): boolean => {
+        // Since price is already a number, we just need to check if it's positive
+        return !isNaN(price) && isFinite(price) && price > 0;
     };
 
     useEffect(() => {
@@ -91,7 +96,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selected
 
         setMagicLists(fetchedLists);
     };
-    const handleAddNote = async () => {
+    const handleAddItem = async () => {
         if (!newItem.itemName.trim()) {
             setSnackbarMessage('Please enter an item name.');
             setSnackbarSeverity('error');
@@ -134,10 +139,17 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selected
                 itemName: '',
                 itemLink: '',
                 description: '',
-                price: '',
+                price: 0,
                 currency: '',
                 listId: '',
             });
+            setItems(prevItems => [...prevItems, {
+                ...newItem,
+                id: noteId, // Assuming the ID is generated and returned by your backend
+                listName: selectedListName,
+                checked: false,
+                // Include any other necessary properties
+            }]);
         } catch (error) {
             console.error("Error adding note:", error);
             setSnackbarMessage('Failed to add note. Please try again.');
@@ -226,13 +238,16 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selected
                             <MenuItem value="UZS">UZS</MenuItem>
                             <MenuItem value="USD">USD</MenuItem>
                             <MenuItem value="EUR">EUR</MenuItem>
+                            <MenuItem value="BTC">BTC</MenuItem>
+                            <MenuItem value="ETH">ETH</MenuItem>
+                            <MenuItem value="ICP">ICP</MenuItem>
                             {/* Add other currencies as needed */}
                         </Select>
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setAddDialogOpen(false)} color="primary">Cancel</Button>
-                    <Button onClick={handleAddNote} color="primary">Add</Button>
+                    <Button onClick={handleAddItem} color="primary">Add</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar
@@ -245,7 +260,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ onAddItem, selected
                 </Alert>
             </Snackbar>
 
-            <Backdrop open={backdropOpen}>
+            <Backdrop open={backdropOpen} style={backdropStyle}>
                 <CircularProgress color="inherit" />
             </Backdrop>
         </Box>

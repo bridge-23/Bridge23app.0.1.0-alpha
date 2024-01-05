@@ -2,40 +2,49 @@
 import React, {useEffect, useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Snackbar} from "@mui/material";
 import {getDoc, listDocs, setDoc} from "@junobuild/core-peer";
-import {MagicList} from "../../types";
-import {Item} from "../../types";
+import {MagicListItem, MagicList} from "../../types";
+import { useRecoilState } from 'recoil';
+
 interface EditItemProps {
     isOpen: boolean;
-    item: Item;
-    setItem: React.Dispatch<React.SetStateAction<Item | null>>;
+    item: Partial<MagicListItem>;
+    setItem: React.Dispatch<React.SetStateAction<MagicListItem | null>>;
     onClose: () => void;
-    onSave: (updatedItem: Item) => void; // Using Item directly if it matches the structure
+    onSave: (updatedItem: Partial<MagicListItem>) => void;
 }
 const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onSave }) => {
     const [magicLists, setMagicLists] = useState<MagicList[]>([]);
-    const [currentEditItem, setcurrentEditItem] = useState<Item | null>(null);
+    const [currentEditItem, setCurrentEditItem] = useState<Partial<MagicListItem> | null>(null);
     const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const handleCurrencyChange = (event: SelectChangeEvent) => {
         const newCurrency = event.target.value as string;
 
-        setcurrentEditItem(prevItem => {
+        setCurrentEditItem(prevItem => {
             return prevItem ? { ...prevItem, currency: newCurrency } : null; // Fallback to null if prevItem is null
         });
     };
     const handleSelectChange = (event: SelectChangeEvent) => {
-        // Find the selected list by its ID
-        const selectedList = magicLists.find(list => list.id === event.target.value);
-        // Update the state with the new list's ID and name
-        setItem({
-            ...item,
-            listName: event.target.value,
+        const selectedListId = event.target.value;
+        const selectedList = magicLists.find(list => list.id === selectedListId);
+
+        setCurrentEditItem(prevItem => {
+            if (!prevItem) return null;
+            return {
+                ...prevItem,
+                listId: selectedListId,
+                listName: selectedList ? selectedList.name : '', // Update both ID and Name
+            };
         });
     };
+
     useEffect(() => {
+
         fetchMagicLists().then(r => console.log("Magic lists fetched:", r));
-        setcurrentEditItem(item);
-        }, [item]);
+
+        setCurrentEditItem(item as MagicListItem);
+    }, [item]);
+
     const fetchMagicLists = async () => {
         let fetchedLists: MagicList[] = [];
         try {
@@ -67,23 +76,10 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
     };
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        // Define a default item with all properties
-        const defaultItem: Item = {
-            id: '', // default value
-            itemName: '', // default value
-            itemLink: '', // default value
-            description: '', // default value
-            price: 0, // default value
-            currency: '',
-            listId: '', // default value
-            listName: '', // default value
-            checked: false, // default value
-            index: 0, // default value or appropriate value for index
-        };
-
-        setcurrentEditItem(prevItem => {
-            // If prevItem is null, return a new Item with default values, else update the existing item
-            return prevItem ? { ...prevItem, [name]: value } : { ...defaultItem, [name]: value };
+        setCurrentEditItem((prevItem) => {
+            const updatedItem = { ...prevItem, [name]: value };
+            console.log("Updated item in handleInputChange:", updatedItem);
+            return updatedItem;
         });
     };
 
@@ -104,12 +100,15 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
                         <MenuItem value="UZS">UZS</MenuItem>
                         <MenuItem value="USD">USD</MenuItem>
                         <MenuItem value="EUR">EUR</MenuItem>
+                        <MenuItem value="BTC">BTC</MenuItem>
+                        <MenuItem value="ETH">ETH</MenuItem>
+                        <MenuItem value="ICP">ICP</MenuItem>
                         {/* Add other currencies as needed */}
                     </Select>
                 </FormControl>
                 <TextField
                     margin="dense"
-                    name="price" // Corresponds to the price property
+                    name="price"
                     label="Item Price"
                     type="number"
                     fullWidth
@@ -139,7 +138,7 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
                 <TextField
                     autoFocus
                     margin="dense"
-                    name="itemDescription"
+                    name="description"
                     label="Item Description"
                     type="text"
                     fullWidth
@@ -151,16 +150,15 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
                     <Select
                         labelId="list-select-label"
                         id="list-select"
-                        name="list"
-                        value={
-                            magicLists.find(list => list.name === item.listName)?.id || ''
-                        }
+                        name="listId" // Change to listId
+                        value={currentEditItem ? currentEditItem.listId : ''}
                         onChange={handleSelectChange}
                     >
                         {magicLists.map((list) => (
                             <MenuItem key={list.id} value={list.id}>{list.name}</MenuItem>
                         ))}
                     </Select>
+
                 </FormControl>
                 {/* Add more TextFields for itemLink, description, price, etc. */}
             </DialogContent>
@@ -170,9 +168,9 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
                 </Button>
                 <Button onClick={() => {
                     if (currentEditItem) {
+                        console.log("Saving item:", currentEditItem);
                         onSave(currentEditItem);
                     } else {
-                        // Handle the case where currentEditItem is null, if necessary
                         console.error("No item to save");
                     }
                 }} color="primary">
