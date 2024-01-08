@@ -37,12 +37,26 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
             };
         });
     };
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setCurrentEditItem((prevItem) => {
+            const updatedItem = { ...prevItem, [name]: value };
+            console.log("Updated item in handleInputChange:", updatedItem);
+            return updatedItem;
+        });
+    };
 
     useEffect(() => {
-
         fetchMagicLists().then(r => console.log("Magic lists fetched:", r));
-
         setCurrentEditItem(item as MagicListItem);
+    }, [item]);
+
+    useEffect(() => {
+        console.log("Current edit item state:", currentEditItem);
+    }, [currentEditItem]);
+
+    useEffect(() => {
+        console.log("Received editing item:", item);
     }, [item]);
 
     const fetchMagicLists = async () => {
@@ -74,14 +88,7 @@ const EditItem: React.FC<EditItemProps> = ({ isOpen, item, setItem, onClose, onS
         }
         setMagicLists(fetchedLists);
     };
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setCurrentEditItem((prevItem) => {
-            const updatedItem = { ...prevItem, [name]: value };
-            console.log("Updated item in handleInputChange:", updatedItem);
-            return updatedItem;
-        });
-    };
+
 
     return (
         <Dialog open={isOpen} onClose={onClose}>

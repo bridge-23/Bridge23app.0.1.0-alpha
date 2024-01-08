@@ -15,7 +15,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { initJuno } from "@junobuild/core-peer";
 import {useRouter} from "next/router";
 import { LoadingProvider } from '../contexts/LoadingContext';
-import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue} from 'recoil';
+import { RecoilRoot } from 'recoil';
 import Navbar from "../components/Navigation/Navbar";
 import '../lib/Juno/initJuno';
 import '../styles/globals.css'

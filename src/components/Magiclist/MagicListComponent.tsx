@@ -12,6 +12,7 @@ import {MagicList} from "../../types";
 import {MagicListItem} from "../../types";
 import { magicListsState, magicListItemState } from '../../state/atoms';
 import { useLoading } from '../../contexts/LoadingContext';
+
 const MagicListComponent: React.FC = () => {
     const { user } = useContext(AuthContext);
     const { setLoading } = useLoading();
@@ -23,6 +24,7 @@ const MagicListComponent: React.FC = () => {
     const [items, setItems] = useRecoilState(magicListItemState);
     const handleEditOpen = (item: MagicListItem) => {
         setEditingItem(item);
+        console.log("22Editing item set:", item);
     };
     const handleEditClose = () => {
         setEditingItem(null);
@@ -33,7 +35,7 @@ const MagicListComponent: React.FC = () => {
                 await fetchMagicListItems();
                 await fetchMagicLists();
             } catch (error) {
-                console.error("Failed to fetch shopping list:", error);
+                console.error("Failed to fetch MagicListItem:", error);
             }
         })();
     }, []);
@@ -329,7 +331,6 @@ const MagicListComponent: React.FC = () => {
                     }
                 </li>
             ))}
-
             {editingItem && (
                 <EditItemComponent
                     isOpen={!!editingItem}

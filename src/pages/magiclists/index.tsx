@@ -59,12 +59,18 @@ const MagicLists: React.FC = () => {
     }, []);
 
     return (
-        <Container sx={{
-            marginBottom: isMobile ? '118px' : '62px',
-            padding: isMobile ? 'initial' : '24px',
-            marginLeft: isMobile ? '0' : '50px',
-            backgroundColor: 'white'
-        }}>
+        <Container
+            sx={{
+                marginBottom: isMobile ? '118px' : '62px',
+                padding: isMobile ? 'initial' : '24px',
+                marginLeft: isMobile ? '0' : '50px',
+                backgroundColor: 'white',
+                // Other sx properties
+            }}
+            style={{
+                paddingTop: isMobile ? 'env(safe-area-inset-top)' : '0px',
+            }}
+        >
             <AppBar
                 position={isMobile ? 'fixed' : 'fixed'}
                 color="default"
@@ -72,8 +78,10 @@ const MagicLists: React.FC = () => {
                     backgroundColor: 'white',
                     width: '100%',
                     left: 0,
-                    paddingTop: 'env(safe-area-inset-top)',
-                    boxShadow: 1,
+                    paddingTop: 'env(safe-area-inset-top)', // Ensures top padding includes safe area
+                    zIndex: 500, // Sets z-index
+                    boxShadow: 1, // Adds shadow
+                    top: isMobile ? 0 : 'env(safe-area-inset-top)', // Ensures AppBar is at the top, including safe area
                 }}
             >
                 <Toolbar>
