@@ -2,7 +2,10 @@
 import Image from 'next/image';
 import React from "react";
 import { CircularProgress } from '@mui/material';
+import useSafeAreaInsets from '../../hooks/useSafeAreaInsets';
 function LoadingComponent() {
+    const { top } = useSafeAreaInsets();
+
     return (
         <div style={{
             position: 'fixed',  // Changed to fixed
@@ -15,8 +18,8 @@ function LoadingComponent() {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#2d62eb',
-            paddingTop: 'env(safe-area-inset-top)',
-            zIndex: 1000,       // High z-index to ensure it's on top
+            paddingTop: `${top}px`, // Ensures top padding includes safe area
+            zIndex: 1000,       // Sets z-index to be above the AppBar
         }}>
             <Image src="/iconWhiteNew.png" alt="BridgeLogo" width={280} height={180}/>
             <CircularProgress/>
