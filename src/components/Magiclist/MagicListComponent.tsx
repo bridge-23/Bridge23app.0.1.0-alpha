@@ -20,7 +20,7 @@ const MagicListComponent: React.FC = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [editingItem, setEditingItem] = useState<MagicListItem | null>(null);
-    const [magicLists, setMagicLists] = useState<MagicList[]>([]);
+    const [magicLists, setMagicLists] = useRecoilState(magicListsState);
     const [items, setItems] = useRecoilState(magicListItemState);
     const handleEditOpen = (item: MagicListItem) => {
         setEditingItem(item);

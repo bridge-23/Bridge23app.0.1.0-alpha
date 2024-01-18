@@ -8,8 +8,6 @@ import LoginComponentJuno from "../components/LoginComponentJuno";
 import {AuthContext} from "../contexts/AuthContext";
 import MobileDashboardComponent from "../components/Dashboard/MobileDashboardComponent";
 import DesktopDashboardComponent from "../components/Dashboard/DesktopDashboardComponent";
-
-//import usePullToRefresh from '../../hooks/usePullToRefresh';
 interface AccountData {
     accountName: string;
     financialInstitution: string;

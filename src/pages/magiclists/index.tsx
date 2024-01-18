@@ -8,7 +8,9 @@ import {MagicList} from "../../types";
 import MagicListComponent from "../../components/Magiclist/MagicListComponent";
 import CreateMagicList from "../../components/Magiclist/CreateMagicList";
 import theme from "../../utils/theme";
-//TODO: make shopping panel for create shopping list
+import {magicListItemState, magicListsState} from '../../state/atoms';
+import {useRecoilState} from "recoil";
+
 //TODO: add edit button for shopping list
 //TODO: add delete button for shopping list
 const MagicLists: React.FC = () => {
@@ -20,7 +22,9 @@ const MagicLists: React.FC = () => {
     const { user } = useContext(AuthContext);
     const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    const [magicLists, setMagicLists] = useState<MagicList[]>([]);
+    //const [magicLists, setMagicLists] = useState<MagicList[]>([]);
+    const [magicLists, setMagicLists] = useRecoilState(magicListsState);
+
     const fetchMagicList = async () => {
         let fetchedLists: MagicList[] = [];
         try {
