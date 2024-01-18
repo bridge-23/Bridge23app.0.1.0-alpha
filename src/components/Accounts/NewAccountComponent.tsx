@@ -5,6 +5,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
+import { useCurrency } from "../ExchangeRates/CurrencyComponent";
 
 const NewAccountComponent: React.FC = () => {
   const { user } = useContext(AuthContext);
@@ -17,6 +18,24 @@ const NewAccountComponent: React.FC = () => {
   const [financialInstitution, setFinancialInstitution] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [backdropOpen, setBackdropOpen] = useState(false);
+
+  const { convertCurrency, isLoading } = useCurrency();
+  const [baseCurrency, setBaseCurrency] = useState<string>("USD");
+
+  const handleCurrencyChange = (newCurrency: string) => {
+    if(!isLoading && initialBalance && baseCurrency && newCurrency) {
+      try {
+        const convertedBalance = convertCurrency(parseFloat(initialBalance.toString()), baseCurrency, newCurrency);
+        setInitialBalance(convertedBalance.toFixed(2));
+        setBaseCurrency(newCurrency);
+      }
+      catch (error) {
+        console.error("Error Converting Currency", error);
+      }
+    }
+    setCurrency(newCurrency);
+  }
+
   const handleCreateAccount = async () => {
     const parsedInitialBalance = parseFloat(initialBalance.toString());
     setErrorMessage("");
@@ -129,7 +148,7 @@ const NewAccountComponent: React.FC = () => {
             <InputLabel>Currency</InputLabel>
             <Select
               value={currency}
-              onChange={(e) => setCurrency(e.target.value as string)}
+              onChange={(e) => handleCurrencyChange(e.target.value as string)}
               label="Currency"
             >
               <MenuItem value="USD">USD</MenuItem>
