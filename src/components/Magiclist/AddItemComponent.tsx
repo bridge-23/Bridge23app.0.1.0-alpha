@@ -8,16 +8,23 @@ import {nanoid} from "nanoid";
 import {MagicList} from "../../types";
 import { useRecoilState } from 'recoil';
 import { magicListsState, magicListItemState } from '../../state/atoms';
+import { useLoading } from '../../contexts/LoadingContext';
 
 interface AddItemComponentProps {selectedListId?: string;}
 
 //TODO: Display currecncy from library currency
 const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) => {
     const { user } = useContext(AuthContext);
+    const { setLoading } = useLoading();
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
     const [addDialogOpen, setAddDialogOpen] = useState(false);
+    const handleCloseDialog = () => {
+        setAddDialogOpen(false);
+        setShowMoreFields(false); // Reset showMoreFields when dialog is closed
+    };
+    const [showMoreFields, setShowMoreFields] = useState(false);
     const [backdropOpen, setBackdropOpen] = useState(false);
     const backdropStyle = {
         zIndex: 1300, // Ensure this is higher than the dialog's z-index
@@ -111,13 +118,13 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
             alert('Please enter a valid URL for the item link.');
             return;
         }
-        if (!isValidPrice(newItem.price)) {
+        if (newItem.price && !isValidPrice(newItem.price)) {
             alert('Please enter a valid price. Price should be a positive number.');
             return;
         }
         const selectedListName = magicLists.find(list => list.id === newItem.listId)?.name || '';
         const noteId = nanoid();
-        setBackdropOpen(true);
+        setLoading(true);
         try {
             await setDoc({
                 collection: "MagicListItems",
@@ -156,7 +163,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         } finally {
-            setBackdropOpen(false);
+            setLoading(false);
             setAddDialogOpen(false);
         }
     };
@@ -164,8 +171,8 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
     return (
         <Box>
             <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => setAddDialogOpen(true)}>Add New Item</Button>
-            <Dialog open={addDialogOpen} onClose={() => setAddDialogOpen(false)}>
-                <DialogTitle>Add New Item</DialogTitle>
+            <Dialog open={addDialogOpen} onClose={handleCloseDialog}>
+                <DialogTitle>Add Item</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
@@ -178,6 +185,24 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
                         value={newItem.itemName}
                         onChange={handleInputChange}
                     />
+
+                    <FormControl fullWidth margin="dense">
+                        <InputLabel id="list-select-label">List</InputLabel>
+                        <Select
+                            labelId="list-select-label"
+                            id="list-select"
+                            name="list"
+                            value={newItem.listId} // Use listId here
+                            onChange={handleSelectChange}
+                        >
+                            {magicLists.map((list) => (
+                                <MenuItem key={list.id} value={list.id}>{list.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    {showMoreFields && (
+                        <>
                     <TextField
                         margin="dense"
                         id="itemLink"
@@ -210,20 +235,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
                         value={newItem.price}
                         onChange={handleInputChange}
                     />
-                    <FormControl fullWidth margin="dense">
-                        <InputLabel id="list-select-label">List</InputLabel>
-                        <Select
-                            labelId="list-select-label"
-                            id="list-select"
-                            name="list"
-                            value={newItem.listId} // Use listId here
-                            onChange={handleSelectChange}
-                        >
-                            {magicLists.map((list) => (
-                                <MenuItem key={list.id} value={list.id}>{list.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+
 
                     <FormControl fullWidth margin="dense">
                         <InputLabel id="currency-select-label">Currency</InputLabel>
@@ -244,8 +256,15 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
                             {/* Add other currencies as needed */}
                         </Select>
                     </FormControl>
+                        </>
+                    )}
                 </DialogContent>
                 <DialogActions>
+                    {!showMoreFields && (
+                        <Button onClick={() => setShowMoreFields(true)} color="primary">
+                            More
+                        </Button>
+                    )}
                     <Button onClick={() => setAddDialogOpen(false)} color="primary">Cancel</Button>
                     <Button onClick={handleAddItem} color="primary">Add</Button>
                 </DialogActions>

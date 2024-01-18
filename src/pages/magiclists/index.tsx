@@ -72,7 +72,7 @@ const MagicLists: React.FC = () => {
             }}
         >
             <AppBar
-                position={isMobile ? 'fixed' : 'fixed'}
+                position="static"
                 color="default"
                 sx={{
                     backgroundColor: 'white',
@@ -104,8 +104,7 @@ const MagicLists: React.FC = () => {
                 justifyContent="space-between"
                 alignItems="center"
                 sx={{
-                    paddingTop: '40px', // Adjust this based on the height of your fixed header
-                    margin: '40px 0',
+                    margin: '20px 0',
                     paddingX: '10px'
                 }}
             >

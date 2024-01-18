@@ -16,9 +16,16 @@ interface MagicItemProps {
 }
 const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck, onEdit }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
-    const formatCurrency = (amount: number, currency: string): string => {
-        // Define the locale based on the currency or user preference
-        let locale =  'en-US'; // Default locale
+    const formatCurrency = (amount: number | null | undefined, currency: string | null | undefined): string => {
+        if (amount === null || amount === undefined || isNaN(amount)) {
+            return ''; // or 'N/A' or any other placeholder
+        }
+
+        if (!currency) {
+            return ''; // or 'N/A' or any other placeholder
+        }
+
+        let locale = 'en-US'; // Default locale
 
         switch (currency) {
             case 'EUR':
@@ -35,7 +42,8 @@ const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck,
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         }).format(amount);
-    }
+    };
+
     const formattedPrice = formatCurrency(item.price ?? 0, item.currency ?? 'USD');
     const handleExpandClick = () => {
         setExpanded(!expanded);

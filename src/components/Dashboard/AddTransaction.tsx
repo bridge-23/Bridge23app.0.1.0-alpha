@@ -34,8 +34,27 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     const [accounts, setAccounts] = useState<AccountData[]>([]);
     const [selectedAccount, setSelectedAccount] = useState('');
     const [selectedAccountKey, setSelectedAccountKey] = useState('');
-
+    const incomeCategories = ['Salary', 'Pension', 'Interest Yield', 'Gig', 'Bonus', 'Present', 'Other', 'Add category'];
+    const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category' ];
     //const [selectedAccountId, setSelectedAccountId] = useState('');
+    const renderCategoryOptions = (): JSX.Element[] => {
+        let categories: string[] = []; // Explicitly type as string[]
+        switch (transactionType) {
+            case 'Income':
+                categories = incomeCategories;
+                break;
+            case 'Expense':
+                categories = expenseCategories;
+                break;
+            // Add more cases for other transaction types if needed
+            default:
+                categories = [];
+        }
+
+        return categories.map((category) => (
+            <MenuItem key={category} value={category}>{category}</MenuItem>
+        ));
+    };
 
     useEffect(() => {
         if (initialTransactionType !== undefined) {
@@ -292,21 +311,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                             label="Category"
                             onChange={(e) => setTransactionCategory(e.target.value)}
                         >
-                            <MenuItem value="Clothing">Clothing</MenuItem>
-                            <MenuItem value="Education">Education</MenuItem>
-                            <MenuItem value="Electronics">Electronics</MenuItem>
-                            <MenuItem value="Health">Health</MenuItem>
-                            <MenuItem value="Home">Home</MenuItem>
-                            <MenuItem value="Recreation">Recreation</MenuItem>
-                            <MenuItem value="Restaurant">Restaurant</MenuItem>
-                            <MenuItem value="Services">Services</MenuItem>
-                            <MenuItem value="Transport">Transport</MenuItem>
-                            <MenuItem value="Travel">Travel</MenuItem>
-                            <MenuItem value="Supermarket">Supermarket</MenuItem>
-                            <MenuItem value="Other">Other</MenuItem>
-                            <MenuItem value="Gift">Gift</MenuItem>
-                            <MenuItem value="Internet Retail">Internet Retail</MenuItem>
-                            <MenuItem value="Pets">Pets</MenuItem>
+                            {renderCategoryOptions()}
                         </Select>
                     </FormControl>
 
