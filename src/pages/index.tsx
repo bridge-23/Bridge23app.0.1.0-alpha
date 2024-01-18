@@ -3,15 +3,12 @@ import React, {useState, useEffect, useContext} from 'react';
 import { NextPage } from "next";
 import {Box, CircularProgress, Container, Grid, useMediaQuery} from "@mui/material";
 import { Theme } from '@mui/material/styles';
-import AccountBalanceCardComponent from "../components/Dashboard/AccountBalanceCardComponent";
-import ExpensesbyCategoryComponent from "../components/Dashboard/ExpensesbyCategoryComponent";
-import NewAccountComponent from "../components/Accounts/NewAccountComponent";
-import AccountsList from "../components/Dashboard/AccountsList";
-import AddExpense from "../components/Dashboard/AddTransaction";
-import Amount from "../components/Dashboard/Amouth";
 import {listDocs} from "@junobuild/core-peer";
 import LoginComponentJuno from "../components/LoginComponentJuno";
 import {AuthContext} from "../contexts/AuthContext";
+import MobileDashboardComponent from "../components/Dashboard/MobileDashboardComponent";
+import DesktopDashboardComponent from "../components/Dashboard/DesktopDashboardComponent";
+
 //import usePullToRefresh from '../../hooks/usePullToRefresh';
 interface AccountData {
     accountName: string;
@@ -88,28 +85,8 @@ const Home: NextPage = () => {
             )}
             <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
 
-                <Grid item xs={12} md={4}>
-                    <AccountBalanceCardComponent currentBalance={formattedTotalBalance} />
-                </Grid>
-
-                <Grid xs={12} md={4}>
-                    <Amount />
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                    <ExpensesbyCategoryComponent />
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                    <NewAccountComponent />
-                </Grid>
-
-                <Grid item xs={12} md={isMobile ? 4 : 8}>
-                    <AccountsList accounts={accounts} />
-                </Grid>
-
-                <Grid item xs={12} md={4}>
-                    <AddExpense open={open} onClose={handleClose}/>
+                <Grid item xs={12}>
+                    {isMobile ? <MobileDashboardComponent /> : <DesktopDashboardComponent />}
                 </Grid>
 
             </Grid>

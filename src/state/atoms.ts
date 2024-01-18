@@ -11,3 +11,4 @@ export const magicListsState = atom<Partial<MagicList>[]>({
     default: [],
 });
 
+

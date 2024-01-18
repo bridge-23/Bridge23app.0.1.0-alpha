@@ -1,10 +1,11 @@
 //..src/components/Accounts/AccountList.tsx
 import React from "react";
-import {Grid, Card, CardContent, Typography, useMediaQuery} from "@mui/material";
+import {Grid, Card, CardContent, Typography, useMediaQuery, MobileStepper, Button} from "@mui/material";
 import AccountCard from "../Accounts/AccountCardComponent";
 import {useTheme} from "@mui/material/styles";
-import { SxProps, Theme } from "@mui/material/styles";
-//import { setDoc } from "@junobuild/core-peer";
+import SwipeableViews from 'react-swipeable-views';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 
 interface AccountData {
   accountName: string;
@@ -19,64 +20,72 @@ interface AccountsListProps {
 const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const [activeStep, setActiveStep] = React.useState(0);
+    const maxSteps = accounts.length;
 
-    const scrollContainerStyle = {
-        display: 'flex',
-        overflowX: 'auto',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-        // Adjust padding and margin as needed
-        padding: theme.spacing(1),
-        '& > *': {
-            flex: 'none', // Prevents cards from stretching
-            width: '100%', // Set card width
-            maxWidth: '300px', // Adjust maximum width as needed
-            marginRight: theme.spacing(1)
-        }
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
-  // Accept props here
-  const handleEdit = (accountId: string) => {
-    // Logic to handle edit operation
-    console.log(`Edit account with ID: ${accountId}`);
-  };
 
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleStepChange = (step: number) => {
+        setActiveStep(step);
+    };
 
     return (
-        <Card sx={{ mx: "auto", my: 2, p: 0, borderRadius: 0, boxShadow: 'none' }}>
+        <Card
+            sx={{
+                mx: "auto",
+                my: 2,
+                p: 0,
+                borderRadius: 0,
+                boxShadow: 'none',
+                maxWidth: {
+                    xs: '400px', // Maximum width on extra-small screens (mobile)
+                    md: '700px'  // Maximum width on medium screens (desktop) and above
+                }
+            }}
+        >
             <CardContent>
-                <Typography variant="h5" gutterBottom>
-                    Accounts
-                </Typography>
-                {isMobile ? (
-                    <div style={scrollContainerStyle}>
-                        {accounts.map(account => (
+             {/*  <Typography variant="h5" gutterBottom>Accounts</Typography>*/}
+                <SwipeableViews
+                    axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
+                    index={activeStep}
+                    onChangeIndex={handleStepChange}
+                    enableMouseEvents
+                >
+                    {accounts.map((account, index) => (
+                        <div key={account.id} style={{ padding: 22, width: '100%'}}>
                             <AccountCard
-                                key={account.id}
                                 accountName={account.accountName}
                                 financialInstitution={account.financialInstitution}
                                 currentBalance={account.currentBalance}
                                 accountCurrency={account.currency}
                                 onEdit={() => console.log(`Edit account with ID: ${account.id}`)}
-                                //sx={{ minWidth: 300, marginRight: theme.spacing(2) }}
                             />
-                        ))}
-                    </div>
-                ) : (
-                    <Grid container spacing={3}>
-                        {accounts.map(account => (
-                            <Grid item xs={12} sm={6} md={4} key={account.id}>
-                                <AccountCard
-                                    accountName={account.accountName}
-                                    financialInstitution={account.financialInstitution}
-                                    currentBalance={account.currentBalance}
-                                    accountCurrency={account.currency}
-                                    onEdit={() => console.log(`Edit account with ID: ${account.id}`)}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                )}
+                        </div>
+                    ))}
+                </SwipeableViews>
+                <MobileStepper
+                    steps={maxSteps}
+                    position="static"
+                    activeStep={activeStep}
+                    nextButton={
+                        <Button size="small" onClick={handleNext} disabled={activeStep === maxSteps - 1}>
+                            Next
+                            {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+                        </Button>
+                    }
+                    backButton={
+                        <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+                            {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+                            Back
+                        </Button>
+                    }
+                />
             </CardContent>
         </Card>
     );

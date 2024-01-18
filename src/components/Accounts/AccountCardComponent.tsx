@@ -30,18 +30,26 @@ const AccountCard: React.FC<AccountCardProps> = ({
         <Card
             sx={{
                 perspective: '1000px',
-                width: { xs: '100%', sm: '100%' },
-                height: { xs: '100%', sm: '100%' },
+                width: {
+                    xs: '300px', // Width on extra-small screens (mobile)
+                    sm: '100%',  // Width on small screens (tablet)
+                    md: '600px'  // Width on medium screens (desktop) and above
+                },
+                height: {
+                    xs: '150px',
+                    sm: '200px',
+                    md: '200px'
+                },
                 margin: 0,
                 p: 0,
                 borderRadius: '24px',
-                boxShadow: 3,
+                //boxShadow: 3,
                 display: 'flex',
                 flexDirection: 'column',
             }}
         >
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 300, height: 60 }} aria-label="simple table" stickyHeader>
+                <Table sx={{ minWidth: 200, height: 100 }} aria-label="simple table" stickyHeader>
                     <TableHead>
                         <TableRow>
                             {isMobile ? (
