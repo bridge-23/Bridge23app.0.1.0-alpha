@@ -17,7 +17,6 @@ import {useRouter} from "next/router";
 import { LoadingProvider } from '../contexts/LoadingContext';
 import { RecoilRoot } from 'recoil';
 import Navbar from "../components/Navigation/Navbar";
-import { CurrencyProvider } from '../components/ExchangeRates/CurrencyComponent';
 import '../lib/Juno/initJuno';
 import '../styles/globals.css'
 function MyApp({ Component, pageProps }: AppProps) {
@@ -42,16 +41,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     return (
         <RecoilRoot>
-            <LoadingProvider>
-                <AuthProvider>
-                    <ColorModeProvider>
-                        <CurrencyProvider>
-                            <Navbar />
-                            <Component {...pageProps} />
-                        </CurrencyProvider>
-                    </ColorModeProvider>
-                </AuthProvider>
-            </LoadingProvider>
+        <LoadingProvider>
+            <AuthProvider>
+                <ColorModeProvider>
+                    <Navbar />
+                    <Component {...pageProps} />
+                </ColorModeProvider>
+            </AuthProvider>
+        </LoadingProvider>
         </RecoilRoot>
     );
 }
