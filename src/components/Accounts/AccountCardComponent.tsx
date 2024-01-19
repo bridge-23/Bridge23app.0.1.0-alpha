@@ -3,8 +3,6 @@ import React from 'react';
 import {useMediaQuery, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Paper } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {Theme} from "@mui/material/styles";
-import {AccountCardState} from '../../state/atoms';
-import {useRecoilState, useRecoilValue} from "recoil";
 interface AccountCardProps {
     accountName: string;
     financialInstitution: string;
@@ -14,7 +12,6 @@ interface AccountCardProps {
 }
 const AccountCard: React.FC<AccountCardProps> = ({accountName, financialInstitution, currentBalance, accountCurrency, onEdit }) => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    // A helper function to format the balance text
     const formattedBalance = currentBalance !== undefined ? `${accountCurrency} ${currentBalance.toLocaleString()}`:`${accountCurrency} `;
 
     return (
@@ -86,12 +83,10 @@ const AccountCard: React.FC<AccountCardProps> = ({accountName, financialInstitut
                                 </>
                             )}
                         </TableRow>
-                        {/* Add additional rows for the table body if needed */}
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Card>
-);
+        </Card>);
 };
 export default AccountCard;
 

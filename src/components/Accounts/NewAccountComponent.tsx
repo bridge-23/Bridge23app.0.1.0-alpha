@@ -5,7 +5,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
-
+import { accountDataState } from '../../state/atoms';
+import { useSetRecoilState } from 'recoil';
 const NewAccountComponent: React.FC = () => {
   const { user } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -17,18 +18,18 @@ const NewAccountComponent: React.FC = () => {
   const [financialInstitution, setFinancialInstitution] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [backdropOpen, setBackdropOpen] = useState(false);
+  const setAccounts = useSetRecoilState(accountDataState);
   const handleCreateAccount = async () => {
     const parsedInitialBalance = parseFloat(initialBalance.toString());
     setErrorMessage("");
-
     if (
-      !accountName ||
-      isNaN(parsedInitialBalance) ||
-      parsedInitialBalance < 0
+        !accountName ||
+        isNaN(parsedInitialBalance) ||
+        parsedInitialBalance < 0
     ) {
       console.error("Please provide a valid account name and initial balance.");
       setErrorMessage(
-        "Please provide a valid account name and initial balance."
+          "Please provide a valid account name and initial balance."
       );
       return;
     }
@@ -63,11 +64,17 @@ const NewAccountComponent: React.FC = () => {
         setOpen(false);
         setSuccessMessage("");
       }, 1500);
+      setAccounts(prevAccounts => [...prevAccounts, {
+        accountName,
+        financialInstitution,
+        currentBalance: parsedInitialBalance,
+        currency,
+        id: accountRef,
+      }]);
     } catch (error) {
-      console.error("Error creating account:", error);
       setErrorMessage("Error creating account. Please try again.");
     } finally {
-      setBackdropOpen(false); // Ensure the backdrop is closed whether the operation is successful or not
+      setBackdropOpen(false);
     }
   };
 
@@ -83,13 +90,16 @@ const NewAccountComponent: React.FC = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          boxShadow: 3,
+          boxShadow: 0,
+          border: 'none', // Removes any border
+          elevation: 0, // Removes shadow
         }}
+        onClick={() => setOpen(true)}
       >
-        <IconButton onClick={() => setOpen(true)}>
+        <IconButton>
           <AddCircleIcon fontSize="large" />
         </IconButton>
-        <Typography variant="h6">New Account</Typography>
+        <Typography variant="h6">Create Account</Typography>
       </Card>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <Box sx={{ p: 2 }}>
@@ -179,5 +189,4 @@ const NewAccountComponent: React.FC = () => {
     </>
   );
 };
-
 export default NewAccountComponent;

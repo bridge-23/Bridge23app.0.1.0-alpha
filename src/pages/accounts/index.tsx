@@ -37,7 +37,7 @@ const Accounts: React.FC = () => {
                     <NewAccountComponent />
                 </Grid>
                 <Grid item xs={12} md={6} lg={8}>
-                    <AccountsList accounts={accounts} />
+                    <AccountsList />
                 </Grid>
             </Grid>
         </Container>

@@ -11,17 +11,6 @@ export interface AccountData {
     currency: string;
     id: string;
 }
-export interface AccountInfo {
-    userId: string; // or number, depending on the type of your user key
-    accountName: string;
-    financialInstitution: string;
-    initialBalance: number;
-    currentBalance: number;
-    currency: string;
-    accountType: string;
-    created: string; // If you're storing the date as an ISO string
-    // Add any other fields that you might have
-}
 
 export interface AccountCardType  {
     accountName: string;
@@ -30,7 +19,6 @@ export interface AccountCardType  {
     accountCurrency: string;
     onEdit: () => void;
 };
-
 
 export interface MagicListItem {
     id: string;
@@ -50,4 +38,10 @@ export interface MagicList {
     owner: {
         userId: string;
     };
+}
+export interface totalIncomeItem {
+    amount: number;
+}
+export interface totalExpenseItem {
+    amount: number;
 }

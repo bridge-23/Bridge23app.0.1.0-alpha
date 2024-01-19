@@ -1,42 +1,33 @@
 //..src/components/Accounts/AccountList.tsx
 import React from "react";
 import {Grid, Card, CardContent, Typography, useMediaQuery, MobileStepper, Button} from "@mui/material";
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import AccountCard from "../Accounts/AccountCardComponent";
 import {useTheme} from "@mui/material/styles";
 import SwipeableViews from 'react-swipeable-views';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import NewAccountComponent from "../Accounts/NewAccountComponent";
 import {accountDataState} from '../../state/atoms';
-import {useRecoilState} from "recoil";
-interface AccountData {
-  accountName: string;
-  financialInstitution: string;
-  currentBalance: number;
-  currency: string;
-  id: string;
-}
-interface AccountsListProps { accounts: AccountData[];}
-const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
+import {useRecoilState, useRecoilValue } from "recoil";
+const AccountsList: React.FC = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = accounts ? accounts.length : 0;
-
+    const accounts = useRecoilValue(accountDataState);
+    const maxSteps = accounts.length;
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
-
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
-
     const handleStepChange = (step: number) => {
         setActiveStep(step);
     };
-
     return (
         <Card
             sx={{
+                width: '100%',
                 mx: "auto",
                 my: 2,
                 p: 0,
@@ -68,6 +59,7 @@ const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
                         </div>
                     ))}
                 </SwipeableViews>
+                <NewAccountComponent />
                 <MobileStepper
                     steps={maxSteps}
                     position="static"
@@ -89,5 +81,4 @@ const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
         </Card>
     );
 };
-
-export default AccountList;
+export default AccountsList;
