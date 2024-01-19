@@ -4,11 +4,11 @@ import {SVGProps} from "react";
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
     size?: number;
 };
-export interface Account {
+export interface AccountData {
     accountName: string;
+    financialInstitution: string;
     currentBalance: number;
     currency: string;
-    type: string; // Corresponds to accountType
     id: string;
 }
 export interface AccountInfo {
@@ -22,6 +22,15 @@ export interface AccountInfo {
     created: string; // If you're storing the date as an ISO string
     // Add any other fields that you might have
 }
+
+export interface AccountCardType  {
+    accountName: string;
+    financialInstitution: string;
+    currentBalance: number;
+    accountCurrency: string;
+    onEdit: () => void;
+};
+
 
 export interface MagicListItem {
     id: string;

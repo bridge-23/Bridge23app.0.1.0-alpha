@@ -1,6 +1,5 @@
 //..src/components/Dashboard/DesktopDashboardComponent.tsx
 import React, {useState, useEffect, useContext} from 'react';
-
 import {Box, CircularProgress, Container, Grid, useMediaQuery} from "@mui/material";
 import { Theme } from '@mui/material/styles';
 import AccountBalanceCardComponent from "../Dashboard/AccountBalanceCardComponent";
@@ -10,26 +9,23 @@ import AccountsList from "../Dashboard/AccountsList";
 import AddExpense from "../Dashboard/AddTransaction";
 import Amount from "../Dashboard/Amouth";
 import {listDocs} from "@junobuild/core-peer";
-import LoginComponentJuno from "../LoginComponentJuno";
 import {AuthContext} from "../../contexts/AuthContext";
+import {accountDataState} from '../../state/atoms';
+import {useRecoilState} from "recoil";
+import {AccountData} from "../../types";
 
-//import usePullToRefresh from '../../hooks/usePullToRefresh';
-interface AccountData {
-    accountName: string;
-    financialInstitution: string;
-    currentBalance: number;
-    currency: string;
-    id: string;
-}
 const DesktopDashboardComponent = () => {
     const { user, loading } = useContext(AuthContext);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [open, setOpen] = useState(false);
-    const [accounts, setAccounts] = useState<AccountData[]>([]);
+    const [accounts, setAccounts] = useRecoilState(accountDataState);
     const handleClose = () => {
         setOpen(false);
     };
-    const totalCurrentBalance = accounts.reduce((sum, account) => sum + account.currentBalance, 0);
+    const totalCurrentBalance = accounts.reduce((sum, account) => {
+        // Check if currentBalance is undefined before adding to sum
+        return sum + (account.currentBalance ?? 0);
+    }, 0);
     const formattedTotalBalance = totalCurrentBalance.toLocaleString('en-US', {
         style: 'currency',
         currency: 'IDR', // Change to the actual currency code if necessary

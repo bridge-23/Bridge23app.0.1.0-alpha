@@ -8,6 +8,9 @@ import LoginComponentJuno from "../components/LoginComponentJuno";
 import {AuthContext} from "../contexts/AuthContext";
 import MobileDashboardComponent from "../components/Dashboard/MobileDashboardComponent";
 import DesktopDashboardComponent from "../components/Dashboard/DesktopDashboardComponent";
+import {AccountCardState, accountDataState} from '../state/atoms';
+import {useRecoilState} from "recoil";
+import { useFetchAccounts } from '../lib/Juno/fetchAccounts';
 interface AccountData {
     accountName: string;
     financialInstitution: string;
@@ -19,7 +22,7 @@ const Home: NextPage = () => {
     const { user, loading } = useContext(AuthContext);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [open, setOpen] = useState(false);
-    const [accounts, setAccounts] = useState<AccountData[]>([]);
+    const [accounts, setAccounts] = useRecoilState(accountDataState);
     const handleClose = () => {
         setOpen(false);
     };

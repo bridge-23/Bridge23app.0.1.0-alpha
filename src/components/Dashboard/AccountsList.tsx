@@ -6,7 +6,8 @@ import {useTheme} from "@mui/material/styles";
 import SwipeableViews from 'react-swipeable-views';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-
+import {accountDataState} from '../../state/atoms';
+import {useRecoilState} from "recoil";
 interface AccountData {
   accountName: string;
   financialInstitution: string;
@@ -14,14 +15,12 @@ interface AccountData {
   currency: string;
   id: string;
 }
-interface AccountsListProps {
-  accounts: AccountData[]; // Use the AccountData interface
-}
+interface AccountsListProps { accounts: AccountData[];}
 const AccountList: React.FC<AccountsListProps> = ({ accounts }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const [activeStep, setActiveStep] = React.useState(0);
-    const maxSteps = accounts.length;
+    const maxSteps = accounts ? accounts.length : 0;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
