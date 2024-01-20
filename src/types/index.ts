@@ -39,9 +39,13 @@ export interface MagicList {
         userId: string;
     };
 }
-export interface totalIncomeItem {
+export interface IncomeItem {
     amount: number;
+    id: string;
+    name: string;
 }
-export interface totalExpenseItem {
+export interface ExpenseItem {
     amount: number;
+    id: string;
+    name: string;
 }
