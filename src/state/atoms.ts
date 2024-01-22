@@ -17,11 +17,11 @@ export const AccountCardState = atom<Partial<AccountCardType>[]>({
     key: 'accountInfoState',
     default: [],
 });
-export const IncomeState = atom<IncomeItem[]>({
-    key: 'IncomeState',
+export const incomeState = atom<IncomeItem[]>({
+    key: 'incomeState',
     default: [],
 });
-export const ExpenseState = atom<ExpenseItem[]>({
-    key: 'ExpenseState',
+export const expenseState = atom<ExpenseItem[]>({
+    key: 'expenseState',
     default: [],
 });

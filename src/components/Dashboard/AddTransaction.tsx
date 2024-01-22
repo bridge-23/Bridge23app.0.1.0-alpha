@@ -9,9 +9,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
-import { useRecoilState } from 'recoil';
-import { IncomeState } from '../../state/atoms';
-import { IncomeItem } from '../../types';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { incomeState, expenseState } from '../../state/atoms';
+import { IncomeItem, ExpenseItem } from '../../types';
 
 interface AddTransactionProps {
     open: boolean;
@@ -41,6 +41,8 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     const incomeCategories = ['Salary', 'Pension', 'Interest Yield', 'Gig', 'Bonus', 'Present', 'Other', 'Add category'];
     const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category' ];
     //const [selectedAccountId, setSelectedAccountId] = useState('');
+    const setIncomes = useSetRecoilState(incomeState);
+    const setExpenses = useSetRecoilState(expenseState);
     const renderCategoryOptions = (): JSX.Element[] => {
         let categories: string[] = []; // Explicitly type as string[]
         switch (transactionType) {
@@ -153,27 +155,33 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             }
 
             await updateAccountBalance(selectedAccountKey, parseFloat(transactionAmount), transactionType);
+            
+            const newTransaction = {
+                id: transactionId, // Используйте id вместо transactionId
+                userId: user.key,
+                accountId: selectedAccountKey,
+                accountName: selectedAccount,
+                name: transactionName,
+                transactionType: transactionType,
+                amount: parseFloat(transactionAmount),
+                category: transactionCategory,
+                //from,
+                //to,
+            };
 
             await setDoc({
                 collection: collectionName,
                 doc: {
                     key: transactionId,
-                    //description:,
-                    //updated_at
-                    data: {
-                        transactionId:transactionId,
-                        userId: user.key,
-                        accountId: selectedAccountKey,
-                        accountName:selectedAccount,
-                        name: transactionName,
-                        transactionType: transactionType,
-                        amount: parseFloat(transactionAmount),
-                        category: transactionCategory
-                        //from
-                        //to
-                    }
-                }
+                    data: newTransaction,
+                },
             });
+
+            if (transactionType === 'Income') {
+                setIncomes(oldIncomes => [...oldIncomes, newTransaction]);
+            } else if (transactionType === 'Expense') {
+                setExpenses(oldExpenses => [...oldExpenses, newTransaction]);
+            }
 
             alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition

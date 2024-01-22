@@ -40,12 +40,27 @@ export interface MagicList {
     };
 }
 export interface IncomeItem {
-    amount: number;
     id: string;
+    userId: string;
+    accountId: string;
+    accountName: string;
     name: string;
+    transactionType: string;
+    amount: number;
+    category: string;
+    created_at: bigint | undefined;
+    updated_at: bigint | undefined;
 }
+
 export interface ExpenseItem {
-    amount: number;
     id: string;
+    userId: string;
+    accountId: string;
+    accountName: string;
     name: string;
+    transactionType: string;
+    amount: number;
+    category: string;
+    created_at: bigint | undefined;
+    updated_at: bigint | undefined;
 }
