@@ -21,7 +21,7 @@ export const IncomeState = atom<IncomeItem[]>({
     key: 'IncomeState',
     default: [],
 });
-export const totalExpenseState = atom<ExpenseItem[]>({
-    key: 'totalExpenseState',
+export const ExpenseState = atom<ExpenseItem[]>({
+    key: 'ExpenseState',
     default: [],
 });

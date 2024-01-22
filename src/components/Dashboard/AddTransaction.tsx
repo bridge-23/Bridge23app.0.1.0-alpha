@@ -9,6 +9,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
+import { useRecoilState } from 'recoil';
+import { IncomeState } from '../../state/atoms';
+import { IncomeItem } from '../../types';
+
 interface AddTransactionProps {
     open: boolean;
     onClose: () => void;

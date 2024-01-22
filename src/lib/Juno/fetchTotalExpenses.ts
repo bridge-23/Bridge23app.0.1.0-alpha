@@ -1,8 +1,10 @@
 //..src/lib/Juno/fetchTotalIncomes.ts
 import {listDocs} from "@junobuild/core-peer";
+
 interface ExpenseItem {
     amount: number;
 }
+
 export const fetchTotalExpenses = async () => {
     try {
         const expensesData = await listDocs({ collection: "Expenses" });

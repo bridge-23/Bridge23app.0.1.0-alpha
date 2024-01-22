@@ -3,6 +3,9 @@ import React from 'react';
 import { Box, Typography, Container } from '@mui/material';
 import { useFetchIncomes } from '../../components/Transactions/useFetchIncomes';
 import { useFetchExpenses } from '../../components/Transactions/useFetchExpenses';
+// import { useRecoilState } from 'recoil';
+// import { IncomeState } from '../../state/atoms';
+// import { IncomeItem } from '../../types';
 
 const IncomesExpensesComponent: React.FC = () => {
     const incomes = useFetchIncomes();

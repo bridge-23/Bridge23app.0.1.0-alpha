@@ -1,16 +1,18 @@
 // Файл: useFetchIncomes.ts
 import { useState, useEffect } from 'react';
 import { listDocs } from "@junobuild/core-peer";
+import {IncomeItem} from "../../types";
 
-type Income = {
-    id: string;
-    name: string;
-    amount: number;
-    // Другие поля...
-};
+
+// type Income = {
+//     id: string;
+//     name: string;
+//     amount: number;
+//     // Другие поля...
+// };
 
 export const useFetchIncomes = () => {
-    const [incomes, setIncomes] = useState<Income[]>([]);
+    const [incomes, setIncomes] = useState<IncomeItem[]>([]);
 
     useEffect(() => {
         const fetchIncomes = async () => {
@@ -21,7 +23,7 @@ export const useFetchIncomes = () => {
 
                 if (incomesData && incomesData.items) {
                     const fetchedIncomes = incomesData.items.map(doc => {
-                        const data = doc.data as Income;
+                        const data = doc.data as IncomeItem;
                         return {
                             id: doc.key,
                             name: data.name,
