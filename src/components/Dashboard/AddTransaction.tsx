@@ -13,6 +13,7 @@ import { nanoid } from "nanoid";
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
 import { IncomeItem, ExpenseItem } from '../../types';
+import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../../components/Transactions/fetchTransactionData';
 
 interface AddTransactionProps {
     open: boolean;
@@ -135,6 +136,18 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
         }
     };
 
+    async function reloadTransactions() {
+        try {
+            const updatedIncomes = await fetchIncomesFromAPI();
+            setIncomes(updatedIncomes);
+    
+            const updatedExpenses = await fetchExpensesFromAPI();
+            setExpenses(updatedExpenses);
+        } catch (error) {
+            console.error("Error reloading transactions:", error);
+        }
+    }
+
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
             alert('Please provide valid expense details.');
@@ -142,9 +155,9 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
         }
         try {
             if (!user) {
-            console.error('Please sign in to create an account.');
-            return;
-        }
+                console.error('Please sign in to create an account.');
+                return;
+            }
             const transactionId = nanoid();
             const collectionName = getCollectionName();
             const selectedAccountDoc = accounts.find(account => account.data.accountName === selectedAccount)?.key;
@@ -178,11 +191,16 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                 },
             });
 
-            if (transactionType === 'Income') {
-                setIncomes(oldIncomes => [...oldIncomes, newTransaction]);
-            } else if (transactionType === 'Expense') {
-                setExpenses(oldExpenses => [...oldExpenses, newTransaction]);
-            }
+            await reloadTransactions();
+
+            // if (transactionType === 'Income') {
+            //     setIncomes(oldIncomes => [...oldIncomes, newTransaction]);
+            // } else if (transactionType === 'Expense') {
+            //     setExpenses(oldExpenses => [...oldExpenses, newTransaction]);
+            // }
+            // if (success) { // Проверьте, что транзакция успешно добавлена
+            //     await reloadTransactions(); // Перезагрузите данные после добавления
+            // }
 
             alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition
