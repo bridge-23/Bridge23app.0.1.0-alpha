@@ -1,15 +1,6 @@
-// Файл: useFetchIncomes.ts
 import { useState, useEffect } from 'react';
 import { listDocs } from "@junobuild/core-peer";
-import {IncomeItem} from "../../types";
-
-
-// type Income = {
-//     id: string;
-//     name: string;
-//     amount: number;
-//     // Другие поля...
-// };
+import { IncomeItem } from "../../types";
 
 export const useFetchIncomes = () => {
     const [incomes, setIncomes] = useState<IncomeItem[]>([]);
@@ -25,9 +16,10 @@ export const useFetchIncomes = () => {
                     const fetchedIncomes = incomesData.items.map(doc => {
                         const data = doc.data as IncomeItem;
                         return {
+                            ...data,
                             id: doc.key,
-                            name: data.name,
-                            amount: data.amount,
+                            created_at: doc.created_at,
+                            updated_at: doc.updated_at
                         };
                     });
                     setIncomes(fetchedIncomes);

@@ -4,6 +4,8 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
 import { IncomeItem, ExpenseItem } from '../../types';
 import { listDocs } from "@junobuild/core-peer";
+import { useFetchExpenses } from '../../components/Transactions/useFetchExpenses';
+import { useFetchIncomes } from '../../components/Transactions/useFetchIncomes';
 
 function convertTimestamp(timestamp: bigint | undefined): string {
     if (timestamp === undefined) {
@@ -16,55 +18,6 @@ function convertTimestamp(timestamp: bigint | undefined): string {
     });
 }
 
-
-async function fetchIncomesFromAPI(): Promise<IncomeItem[]> {
-    try {
-        const incomesData = await listDocs({
-            collection: "Incomes"
-        });
-
-        if (incomesData && incomesData.items) {
-            return incomesData.items.map(doc => ({
-                ...(doc.data as IncomeItem),
-                id: doc.key,
-                created_at: doc.created_at,
-                updated_at: doc.updated_at
-            }));
-        } else {
-            console.error("No incomes found.");
-            return [];
-        }
-    } catch (error) {
-        console.error("Error fetching incomes:", error);
-        throw error;
-    }
-}
-
-
-async function fetchExpensesFromAPI() {
-    try {
-        const expensesData = await listDocs({
-            collection: "Expenses"
-        });
-
-        if (expensesData && expensesData.items) {
-            return expensesData.items.map(doc => ({
-                ...(doc.data as ExpenseItem),
-                id: doc.key,
-                created_at: doc.created_at,
-                updated_at: doc.updated_at
-            })) as ExpenseItem[];
-        } else {
-            console.error("No expenses found.");
-            return [];
-        }
-    } catch (error) {
-        console.error("Error fetching expenses:", error);
-        throw error;
-    }
-}
-
-
 const TransactionType = {
     All: "All",
     Incomes: "Incomes",
@@ -72,25 +25,17 @@ const TransactionType = {
 };
 
 const IncomesExpensesComponent: React.FC = () => {
-    const [selectedType, setSelectedType] = useState(TransactionType.All);
-    const incomes = useRecoilValue(incomeState);
-    const expenses = useRecoilValue(expenseState);
     const setIncomes = useSetRecoilState(incomeState);
     const setExpenses = useSetRecoilState(expenseState);
+    const [selectedType, setSelectedType] = useState<string>(TransactionType.All);
+
+    const incomes = useFetchIncomes();
+    const expenses = useFetchExpenses();
 
     useEffect(() => {
-        const loadInitialData = async () => {
-            try {
-                const fetchedIncomes = await fetchIncomesFromAPI();
-                const fetchedExpenses = await fetchExpensesFromAPI();
-                setIncomes(fetchedIncomes);
-                setExpenses(fetchedExpenses);
-            } catch (error) {
-                console.error("Error loading initial data:", error);
-            }
-        };
-        loadInitialData();
-    }, [setIncomes, setExpenses]);
+        setIncomes(incomes);
+        setExpenses(expenses);
+    }, [incomes, expenses, setIncomes, setExpenses]);
 
     const sortedTransactions = [...incomes, ...expenses].sort((a, b) => {
         // Обработка undefined значений
@@ -111,7 +56,7 @@ const IncomesExpensesComponent: React.FC = () => {
         return false;
     });
 
- return (
+    return (
         <Container>
             <Box sx={{ marginBottom: 2 }}>
                 <Select
@@ -131,8 +76,8 @@ const IncomesExpensesComponent: React.FC = () => {
                         <CardContent>
                             <List>
                                 {transactionList.map((transaction, index) => (
-                                    <ListItem key={index} sx={{ color: transaction.transactionType === "Income" ? "green" : "red" }}>
-                                        <ListItemText 
+                                    <ListItem key={transaction.id} sx={{ color: transaction.transactionType === "Income" ? "green" : "red" }}>
+                                    <ListItemText 
                                             primary={transaction.name}
                                             secondary={`Amount: ${transaction.amount} - Created: ${convertTimestamp(transaction.created_at)}`} 
                                         />

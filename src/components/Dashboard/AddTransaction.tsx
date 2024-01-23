@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
+
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
 import { IncomeItem, ExpenseItem } from '../../types';
@@ -197,6 +198,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
+
     async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
         try {
             // Fetch the current account document

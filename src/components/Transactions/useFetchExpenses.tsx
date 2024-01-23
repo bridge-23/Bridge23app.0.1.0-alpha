@@ -1,14 +1,6 @@
-// Файл: useFetchExpenses.ts
 import { useState, useEffect } from 'react';
 import { listDocs } from "@junobuild/core-peer";
-import {ExpenseItem} from "../../types";
-
-// type Expense = {
-//     id: string;
-//     name: string;
-//     amount: number;
-//     // Другие поля...
-// };
+import { ExpenseItem } from "../../types";
 
 export const useFetchExpenses = () => {
     const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
@@ -24,9 +16,10 @@ export const useFetchExpenses = () => {
                     const fetchedExpenses = expensesData.items.map(doc => {
                         const data = doc.data as ExpenseItem;
                         return {
+                            ...data,
                             id: doc.key,
-                            name: data.name,
-                            amount: data.amount,
+                            created_at: doc.created_at,
+                            updated_at: doc.updated_at
                         };
                     });
                     setExpenses(fetchedExpenses);
