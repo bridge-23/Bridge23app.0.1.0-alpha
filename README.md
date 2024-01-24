@@ -30,7 +30,7 @@ To get started with Bridge23, clone the repository and install dependencies:
 
 git clone [repository-url]
 cd bridge23
-## npm install
+## yarn install
 
 ## 🚀 Running the Application
 
