@@ -193,15 +193,6 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
 
             await reloadTransactions();
 
-            // if (transactionType === 'Income') {
-            //     setIncomes(oldIncomes => [...oldIncomes, newTransaction]);
-            // } else if (transactionType === 'Expense') {
-            //     setExpenses(oldExpenses => [...oldExpenses, newTransaction]);
-            // }
-            // if (success) { // Проверьте, что транзакция успешно добавлена
-            //     await reloadTransactions(); // Перезагрузите данные после добавления
-            // }
-
             alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition
             setTransactionName('');
