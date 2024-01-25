@@ -11,7 +11,7 @@ export async function fetchIncomesFromAPI(): Promise<IncomeItem[]> {
             ...(doc.data as IncomeItem),
             id: doc.key,
             created_at: doc.created_at,
-            updated_at: doc.updated_at
+            updated_at: doc.updated_at,
         }));
     } catch (error) {
         console.error("Error fetching incomes:", error);
