@@ -1,92 +1,112 @@
 // components/AIChat.tsx
-import React, { useState } from 'react';
-import { Box, TextField, Button, List, ListItem, ListItemText, Typography, Stack, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import Fab from '@mui/material/Fab';
+import React, { useState, useRef } from 'react';
+import { Box, TextField, Button, List, ListItem, ListItemText, IconButton, Fab, Dialog, Slide, Typography, Popover } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
+import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-
-const AIChatFab = ({ onClick }: { onClick: () => void }) => (
-    <Stack direction="row" spacing={2}>
-        <Fab color="primary" aria-label="chat" onClick={onClick} size="small">
-            <ChatIcon />
-        </Fab>
-        <Typography variant="subtitle1">Hi BridgeAI here, can I help you?</Typography>
-    </Stack>
-);
-
-const useAIChat = () => {
-    const [open, setOpen] = useState(false);
-    const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
-
-    const handleMessage = async (text: string) => {
-        // Send text to the API and get the response
-        const response = await fetch('/api/openai', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message: text }),
-        });
-        const data = await response.json();
-
-        // Add response to messages
-        setMessages([...messages, { text: data.message, isUser: false }]);
-    };
-
-    const handleToggleOpen = () => {
-        setOpen(!open);
-    };
-
-    return { open, messages, handleMessage, handleToggleOpen };
-};
 
 const AIChat = () => {
-    const { open, messages, handleMessage, handleToggleOpen } = useAIChat();
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
+  const [input, setInput] = useState('');
 
-    const [input, setInput] = useState('');
-    const [openDialog, setOpenDialog] = useState(false);
-    const [dialogMessage, setDialogMessage] = useState('');
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const fabRef = useRef<HTMLButtonElement>(null);
 
-    const handleSend = async () => {
-        await handleMessage(input);
-        setInput('');
-        setOpenDialog(true);
+  const handleToggleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(fabRef.current);
+    setOpen(!open);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setOpen(false);
+  };
+
+  const handleMessage = async (text: string) => {
+    // Add user message to messages
+    setMessages(prevMessages => [...prevMessages, { text, isUser: true }]);
+
+    // Send text to the API and get the response
+    const response = await fetch('/api/openai', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: text }),
+    });
+    const data = await response.json();
+
+    // Add AI response to messages
+    // Make sure to extract the text from the OpenAI response correctly
+    const aiText = data.data.choices[0].text.trim(); // Assuming the response structure is correct
+    setMessages(prevMessages => [...prevMessages, { text: aiText, isUser: false }]);
+  };
+
+  const handleSend = async () => {
+    if (input.trim()) {
+      await handleMessage(input);
+      setInput('');
     }
+  };
 
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-    }
-
-    return (
-        <Box>
-          <AIChatFab onClick={handleToggleOpen} />
-          {open && (
-            <Box>
-              <List>
-                {messages.map((message, index) => (
-                  <ListItem key={index}>
-                    <ListItemText primary={message.text} secondary={message.isUser ? 'You' : 'AI'} />
-                  </ListItem>
-                ))}
-              </List>
-              <TextField value={input} onChange={e => setInput(e.target.value)} />
-              <Button onClick={handleSend}>Send</Button>
-            </Box>
-          )}
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle>AI Response</DialogTitle>
-            <DialogContent>
-              <Typography>{dialogMessage}</Typography>
-            </DialogContent>
-            <DialogActions>
-              <IconButton edge="end" color="inherit" onClick={handleCloseDialog} aria-label="close">
-                <CloseIcon />
-              </IconButton>
-            </DialogActions>
-          </Dialog>
+  return (
+    <Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>
+      <Fab color="primary" aria-label="chat" onClick={handleToggleOpen} ref={fabRef}>
+        <ChatIcon />
+      </Fab>
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        PaperProps={{
+          style: {
+            width: '500px', // Set Popover
+            maxHeight: '800px', // set height Popover
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', padding: 2 }}>
+          <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close" sx={{ paddingRight: 2 }}>
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="body1">
+            Hai this is BridgeAI, you can ask anything here
+          </Typography>
         </Box>
-    );
+        <List>
+          {messages.map((message, index) => (
+            <ListItem key={index}>
+              <ListItemText
+                primary={message.text}
+                secondary={message.isUser ? 'You' : 'AI'}
+              />
+            </ListItem>
+          ))}
+        </List>
+        <Box sx={{ display: 'flex', padding: 2 }}>
+          <TextField
+            fullWidth
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyPress={e => e.key === 'Enter' && handleSend()}
+            placeholder="Type your message..."
+          />
+          <IconButton color="primary" onClick={handleSend}>
+            <SendIcon />
+          </IconButton>
+        </Box>
+      </Popover>
+    </Box>
+  );
 };
-    
-    export default AIChat;
+
+export default AIChat;

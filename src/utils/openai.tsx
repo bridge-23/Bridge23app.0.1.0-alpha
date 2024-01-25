@@ -1,8 +1,7 @@
-//src/utils/openai.tsx
 import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai-api";
 
-const openai = process.env.OPENAI_API_KEY ? new OpenAI(process.env.OPENAI_API_KEY) : null;
+const openai = new OpenAI('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');
 
 const openaiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!openai) {
@@ -10,10 +9,10 @@ const openaiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     
     if (req.method === "POST") {
-        const { prompt } = req.body;
+        const { message } = req.body;
         const gptResponse = await openai.complete({
             engine: "davinci",
-            prompt,
+            prompt: message,
             maxTokens: 150,
             temperature: 0.9,
             topP: 1,
