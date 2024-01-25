@@ -45,6 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <AuthProvider>
                 <ColorModeProvider>
                     <Navbar />
+                    
                     <Component {...pageProps} />
                 </ColorModeProvider>
             </AuthProvider>

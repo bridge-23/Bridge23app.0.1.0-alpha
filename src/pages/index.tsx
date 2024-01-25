@@ -8,6 +8,7 @@ import { Theme } from '@mui/material/styles';
 import LoginComponentJuno from "../components/LoginComponentJuno";
 import MobileDashboardComponent from "../components/Dashboard/MobileDashboardComponent";
 import DesktopDashboardComponent from "../components/Dashboard/DesktopDashboardComponent";
+import AIChat from '../components/OpenAIAssist/AiChat';
 const Home: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const { loading: accountsLoading, error: accountsError } = useFetchAccounts();
@@ -35,6 +36,7 @@ const Home: NextPage = () => {
             {!user && (
                     <LoginComponentJuno />
             )}
+            <AIChat />
             <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
 
                 <Grid item xs={12}>
