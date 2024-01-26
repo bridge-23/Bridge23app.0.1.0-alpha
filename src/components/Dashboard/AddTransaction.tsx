@@ -9,6 +9,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
+
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { incomeState, expenseState } from '../../state/atoms';
+import { IncomeItem, ExpenseItem } from '../../types';
+import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../../components/Transactions/fetchTransactionData';
+
 interface AddTransactionProps {
     open: boolean;
     onClose: () => void;
@@ -37,6 +43,8 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     const incomeCategories = ['Salary', 'Pension', 'Interest Yield', 'Gig', 'Bonus', 'Present', 'Other', 'Add category'];
     const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category' ];
     //const [selectedAccountId, setSelectedAccountId] = useState('');
+    const setIncomes = useSetRecoilState(incomeState);
+    const setExpenses = useSetRecoilState(expenseState);
     const renderCategoryOptions = (): JSX.Element[] => {
         let categories: string[] = []; // Explicitly type as string[]
         switch (transactionType) {
@@ -128,6 +136,18 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
         }
     };
 
+    async function reloadTransactions() {
+        try {
+            const updatedIncomes = await fetchIncomesFromAPI();
+            setIncomes(updatedIncomes);
+    
+            const updatedExpenses = await fetchExpensesFromAPI();
+            setExpenses(updatedExpenses);
+        } catch (error) {
+            console.error("Error reloading transactions:", error);
+        }
+    }
+
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
             alert('Please provide valid expense details.');
@@ -135,9 +155,9 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
         }
         try {
             if (!user) {
-            console.error('Please sign in to create an account.');
-            return;
-        }
+                console.error('Please sign in to create an account.');
+                return;
+            }
             const transactionId = nanoid();
             const collectionName = getCollectionName();
             const selectedAccountDoc = accounts.find(account => account.data.accountName === selectedAccount)?.key;
@@ -149,27 +169,29 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             }
 
             await updateAccountBalance(selectedAccountKey, parseFloat(transactionAmount), transactionType);
+            
+            const newTransaction = {
+                id: transactionId, // Используйте id вместо transactionId
+                userId: user.key,
+                accountId: selectedAccountKey,
+                accountName: selectedAccount,
+                name: transactionName,
+                transactionType: transactionType,
+                amount: parseFloat(transactionAmount),
+                category: transactionCategory,
+                //from,
+                //to,
+            };
 
             await setDoc({
                 collection: collectionName,
                 doc: {
                     key: transactionId,
-                    //description:,
-                    //updated_at
-                    data: {
-                        transactionId:transactionId,
-                        userId: user.key,
-                        accountId: selectedAccountKey,
-                        accountName:selectedAccount,
-                        name: transactionName,
-                        transactionType: transactionType,
-                        amount: parseFloat(transactionAmount),
-                        category: transactionCategory
-                        //from
-                        //to
-                    }
-                }
+                    data: newTransaction,
+                },
             });
+
+            await reloadTransactions();
 
             alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition
@@ -185,6 +207,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
+
     async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
         try {
             // Fetch the current account document
