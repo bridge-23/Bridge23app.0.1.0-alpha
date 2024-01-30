@@ -1,7 +1,6 @@
 //..src/components/Dashboard/AddExpense
 import React, {useState, useEffect, useContext} from 'react';
 import {Button, TextField, Dialog, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
-import { useFetchAccounts } from '../../lib/Juno/fetchAccounts';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -10,6 +9,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
+
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { incomeState, expenseState } from '../../state/atoms';
+import { IncomeItem, ExpenseItem } from '../../types';
+import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../../components/Transactions/fetchTransactionData';
 
 interface AddTransactionProps {
     open: boolean;
@@ -39,6 +43,8 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     const incomeCategories = ['Salary', 'Pension', 'Interest Yield', 'Gig', 'Bonus', 'Present', 'Other', 'Add category'];
     const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category' ];
     //const [selectedAccountId, setSelectedAccountId] = useState('');
+    const setIncomes = useSetRecoilState(incomeState);
+    const setExpenses = useSetRecoilState(expenseState);
     const renderCategoryOptions = (): JSX.Element[] => {
         let categories: string[] = []; // Explicitly type as string[]
         switch (transactionType) {
@@ -48,6 +54,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             case 'Expense':
                 categories = expenseCategories;
                 break;
+            // Add more cases for other transaction types if needed
             default:
                 categories = [];
         }
@@ -64,43 +71,49 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     }, [initialTransactionType]);
 
     useEffect(() => {
-    const fetchAccounts = async () => {
-        if (user) {
-            try {
-                const accountsData = await listDocs({
-                    collection: "Accounts",
-                    filter: {
-                        owner: user.key,
-                    },
-                });
-                if (accountsData && accountsData.items) {
-                    // Map the fetched data to the AccountData structure
-                    const fetchedAccounts = accountsData.items.map(doc => {
-                        const data = doc.data as AccountData['data'];
-                        return {
-                            key: doc.key,
-                            data: {
-                                accountName: data.accountName,
-                                financialInstitution: data.financialInstitution,
-                                currentBalance: data.currentBalance,
-                                currency: data.currency,
-                                owner: data.owner,
-                                userId: user.key,
-                            },
-                        };
-
+        const fetchAccounts = async () => {
+            if (user) {
+                try {
+                    const accountsData = await listDocs({
+                        collection: "Accounts",
+                        filter: {
+                            owner: user.key,
+                        },
                     });
-                    setAccounts(fetchedAccounts); // Update state with the fetched accounts
-                } else {
-                    console.error("No accounts found for the current user.");
-                    alert('No accounts found. Please try again.');
+
+                    if (accountsData && accountsData.items) {
+                        // Map the fetched data to the AccountData structure
+                        const fetchedAccounts = accountsData.items.map(doc => {
+
+                            const data = doc.data as AccountData['data'];
+
+                            console.log("Account Name:", data.accountName, "| Current Balance:", data.currentBalance);
+
+                            return {
+                                key: doc.key,
+                                data: {
+                                    accountName: data.accountName,
+                                    financialInstitution: data.financialInstitution,
+                                    currentBalance: data.currentBalance,
+                                    currency: data.currency,
+                                    owner: data.owner,
+                                    userId: user.key,
+                                },
+                            };
+
+                        });
+
+                        setAccounts(fetchedAccounts); // Update state with the fetched accounts
+                    } else {
+                        console.error("No accounts found for the current user.");
+                        alert('No accounts found. Please try again.');
+                    }
+                } catch (error) {
+                    console.error("Error fetching accounts:", error);
+                    alert('Failed to fetch accounts. Please try again.');
                 }
-            } catch (error) {
-                console.error("Error fetching accounts:", error);
-                alert('Failed to fetch accounts. Please try again.');
             }
-        }
-    };
+        };
         fetchAccounts()
             .then(() => {
                 // Handle success if needed
@@ -122,6 +135,19 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                 throw new Error(`Invalid transaction type: ${transactionType}`);
         }
     };
+
+    async function reloadTransactions() {
+        try {
+            const updatedIncomes = await fetchIncomesFromAPI();
+            setIncomes(updatedIncomes);
+
+            const updatedExpenses = await fetchExpensesFromAPI();
+            setExpenses(updatedExpenses);
+        } catch (error) {
+            console.error("Error reloading transactions:", error);
+        }
+    }
+
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
             alert('Please provide valid expense details.');
@@ -129,40 +155,44 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
         }
         try {
             if (!user) {
-            console.error('Please sign in to create an account.');
-            return;
-        }
+                console.error('Please sign in to create an account.');
+                return;
+            }
             const transactionId = nanoid();
             const collectionName = getCollectionName();
             const selectedAccountDoc = accounts.find(account => account.data.accountName === selectedAccount)?.key;
 
             if (!selectedAccountDoc) {
+                console.error('Selected account not found.');
                 alert('Failed to find the selected account. Please try again.');
                 return;
             }
 
             await updateAccountBalance(selectedAccountKey, parseFloat(transactionAmount), transactionType);
 
+            const newTransaction = {
+                id: transactionId, // Используйте id вместо transactionId
+                userId: user.key,
+                accountId: selectedAccountKey,
+                accountName: selectedAccount,
+                name: transactionName,
+                transactionType: transactionType,
+                amount: parseFloat(transactionAmount),
+                category: transactionCategory,
+                //from,
+                //to,
+            };
+
             await setDoc({
                 collection: collectionName,
                 doc: {
                     key: transactionId,
-                    //description:,
-                    //updated_at
-                    data: {
-                        transactionId:transactionId,
-                        userId: user.key,
-                        accountId: selectedAccountKey,
-                        accountName:selectedAccount,
-                        name: transactionName,
-                        transactionType: transactionType,
-                        amount: parseFloat(transactionAmount),
-                        category: transactionCategory
-                        //from
-                        //to
-                    }
-                }
+                    data: newTransaction,
+                },
             });
+
+            await reloadTransactions();
+
             alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition
             setTransactionName('');
@@ -177,6 +207,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
+
     async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
         try {
             // Fetch the current account document
@@ -193,7 +224,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             const currentBalance = accountData.currentBalance;
             let updatedBalance;
 
-
+            // Calculate the updated balance
             switch (transactionType) {
                 case 'Income':
                     updatedBalance = currentBalance + transactionAmount;
@@ -207,6 +238,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                 default:
                     throw new Error(`Unsupported transaction type: ${transactionType}`);
             }
+
             // Update the account with the new balance
             await setDoc({
                 collection: 'Accounts',
@@ -224,6 +256,8 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             throw error;
         }
     }
+
+
     const handleChange = (event: SelectChangeEvent) => {
         const accountName = event.target.value;
         const account = accounts.find(acc => acc.data.accountName === accountName);
@@ -240,6 +274,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             setSelectedAccountKey('');
         }
     };
+
 
     return (
         <>
@@ -304,26 +339,26 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                     </FormControl>
 
                     <FormControl fullWidth>
-                    <InputLabel id="account-select-label">Account</InputLabel>
-                    <Select
-                        labelId="account-select-label"
-                        id="account-select"
-                        value={selectedAccount}
-                        label="Account"
-                        onChange={handleChange}
-                    >
-                        {
-                            accounts.map((account) => (
-                                <MenuItem key={account.key} value={account.data.accountName}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                        <span>{account.data.accountName}</span>
-                                        <span>{`${account.data.currentBalance.toFixed(2)} ${account.data.currency}`}</span>
-                                    </div>
-                                </MenuItem>
-                            ))
-                        }
-                    </Select>
-                </FormControl>
+                        <InputLabel id="account-select-label">Account</InputLabel>
+                        <Select
+                            labelId="account-select-label"
+                            id="account-select"
+                            value={selectedAccount}
+                            label="Account"
+                            onChange={handleChange}
+                        >
+                            {
+                                accounts.map((account) => (
+                                    <MenuItem key={account.key} value={account.data.accountName}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                            <span>{account.data.accountName}</span>
+                                            <span>{`${account.data.currentBalance.toFixed(2)} ${account.data.currency}`}</span>
+                                        </div>
+                                    </MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
                 </DialogContent>
 
                 <DialogActions>
@@ -343,4 +378,5 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     );
 }
 export default AddTransaction;
+
 

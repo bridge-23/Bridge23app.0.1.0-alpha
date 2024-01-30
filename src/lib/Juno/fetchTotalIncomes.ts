@@ -1,7 +1,7 @@
 //..src/lib/Juno/fetchTotalIncomes.ts
 import {listDocs} from "@junobuild/core-peer";
 
-interface totalIncomes {
+interface IncomeItem {
     amount: number;
 }
 export const fetchTotalIncomes = async () => {
@@ -10,7 +10,7 @@ export const fetchTotalIncomes = async () => {
         if (incomesData && incomesData.items) {
             // Directly return the total
             return incomesData.items.reduce((acc, item) => {
-                const income = item.data as totalIncomes;
+                const income = item.data as IncomeItem;
                 return acc + income.amount;
             }, 0);
         } else {

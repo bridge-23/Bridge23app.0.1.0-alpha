@@ -1,16 +1,29 @@
 //..src/components/Dashboard/AccountBalanceCardComponent.tsx
 import React from 'react';
-import {Box, Card, CardContent, Typography, Avatar, IconButton, useMediaQuery} from "@mui/material";
+import { Box, Card, CardContent, Typography, Avatar, IconButton, useMediaQuery } from "@mui/material";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Amount from "../Dashboard/Amouth";
-import {useTheme} from "@mui/material/styles";
+import { AvatarContext } from '../ProfilePage/AvatarContext';
+import { useTheme } from "@mui/material/styles";
+import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
+import { avatarUrlState } from '../../state/atoms';
 interface AccountBalanceCardProps {
     currentBalance: string; // Prop for the current balance
 }
 const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ currentBalance }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const avatarUrl = useRecoilValue(avatarUrlState);
+    const router = useRouter();
+
+    const handleAvatarClick = () => {
+        router.push('/profile');
+    }
+
+    const avatar: File | null = null;
 
     return (
         <Card
@@ -25,21 +38,22 @@ const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ curren
             <CardContent>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     {isMobile &&
-                    <Avatar aria-label="profile" style={{ backgroundColor: '#1976d2' }}>
-                        I
-                    </Avatar>
+                        <Avatar
+                            src={avatarUrl} // Fix the 'avatar' usage
+                            onClick={handleAvatarClick}
+                        />
                     }
                     {isMobile &&
                         <Box display="flex" alignItems="center" >
-                        <Typography variant="subtitle1" color="textSecondary" >November</Typography>
-                        <IconButton>
-                            <KeyboardArrowDownIcon />
-                        </IconButton>
-                    </Box>
+                            <Typography variant="subtitle1" color="textSecondary" >November</Typography>
+                            <IconButton>
+                                <KeyboardArrowDownIcon />
+                            </IconButton>
+                        </Box>
                     }
                     {isMobile &&
                         <Avatar aria-label="profile" style={{ backgroundColor: '#1976d2' }}>
-                        <SettingsIcon />
+                            <SettingsIcon />
                         </Avatar>
                     }
                 </Box>
