@@ -1,52 +1,68 @@
-// components/AIChat.tsx
+// ..src/components/AIChat.tsx
 import React, { useState, useRef } from 'react';
-import { Box, TextField, Button, List, ListItem, ListItemText, IconButton, Fab, Dialog, Slide, Typography, Popover } from '@mui/material';
+import { Box, TextField, List, ListItem, ListItemText, IconButton, Fab, Typography, Popover } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
-
 const AIChat = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>([]);
   const [input, setInput] = useState('');
-
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const fabRef = useRef<HTMLButtonElement>(null);
-
-  const handleToggleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleToggleOpen = () => {
     setAnchorEl(fabRef.current);
     setOpen(!open);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
     setOpen(false);
   };
-
   const handleMessage = async (text: string) => {
     // Add user message to messages
     setMessages(prevMessages => [...prevMessages, { text, isUser: true }]);
 
-    // Send text to the API and get the response
-    const response = await fetch('/api/openai', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ message: text }),
-    });
-    const data = await response.json();
+    try {
+      // Send text to the API and get the response
+      const response = await fetch('/api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: text }),
+      });
 
-    // Add AI response to messages
-    // Make sure to extract the text from the OpenAI response correctly
-    const aiText = data.data.choices[0].text.trim(); // Assuming the response structure is correct
-    setMessages(prevMessages => [...prevMessages, { text: aiText, isUser: false }]);
+      // Check if the response is ok (status in the range 200-299)
+      if (!response.ok) {
+        console.error(`API call failed with status: ${response.status}`);
+        // Optionally, handle the error in the UI or perform other actions
+      } else {
+        const data = await response.json();
+        // process data
+      }
+      const data = await response.json();
+
+      // Check if the data has the expected structure
+      if (data && data.data && data.data.choices && data.data.choices.length > 0) {
+        const aiText = data.data.choices[0].text.trim();
+        setMessages(prevMessages => [...prevMessages, { text: aiText, isUser: false }]);
+      } else {
+        // Handle unexpected structure
+        console.error('Unexpected response structure:', data);
+      }
+    } catch (error) {
+      console.error('Error handling message:', error);
+      // Optionally, handle the error in the UI as well
+    }
   };
-
   const handleSend = async () => {
     if (input.trim()) {
-      await handleMessage(input);
-      setInput('');
+      try {
+        await handleMessage(input);
+        setInput('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   };
 
@@ -56,23 +72,23 @@ const AIChat = () => {
         <ChatIcon />
       </Fab>
       <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        PaperProps={{
-          style: {
-            width: '500px', // Set Popover
-            maxHeight: '800px', // set height Popover
-          },
-        }}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          PaperProps={{
+            style: {
+              width: '500px',
+              maxHeight: '800px',
+            },
+          }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', padding: 2 }}>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close" sx={{ paddingRight: 2 }}>
@@ -92,13 +108,14 @@ const AIChat = () => {
             </ListItem>
           ))}
         </List>
+        // Example structure, update attributes as per latest Material-UI documentation
         <Box sx={{ display: 'flex', padding: 2 }}>
           <TextField
-            fullWidth
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyPress={e => e.key === 'Enter' && handleSend()}
-            placeholder="Type your message..."
+              fullWidth
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && handleSend()}
+              placeholder="Type your message..."
           />
           <IconButton color="primary" onClick={handleSend}>
             <SendIcon />

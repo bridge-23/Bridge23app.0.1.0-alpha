@@ -1,33 +1,26 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import OpenAI from "openai-api";
+import { NextApiRequest } from "next";
+import OpenAI from 'openai-api';
 
-const openai = new OpenAI('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');
+// @ts-ignore
+const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
-const openaiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-    if (!openai) {
-        return res.status(500).json({ message: "OpenAI client not initialized" });
+const openaiHandler = async (req: NextApiRequest) => {
+    if (req.method !== "POST") {
+        throw new Error(`Method ${req.method} not allowed`);
     }
-    
-    if (req.method === "POST") {
-        const { message } = req.body;
-        const gptResponse = await openai.complete({
-            engine: "davinci",
-            prompt: message,
-            maxTokens: 150,
-            temperature: 0.9,
-            topP: 1,
-            presencePenalty: 0,
-            frequencyPenalty: 0,
-            bestOf: 1,
-            n: 1,
-            stream: false,
-            stop: ["\n"]
-        });
-        res.status(200).json({ data: gptResponse.data });
-    } else {
-        res.setHeader("Allow", ["POST"]);
-        res.status(405).json({ message: `Method ${req.method} not allowed` });
+
+    const { message } = req.body;
+
+    if (!message) {
+        throw new Error("Message is required");
     }
+
+    const gptResponse = await openai.complete({
+        engine: "davinci",
+        prompt: message,
+        // ... other parameters
+    });
+    return gptResponse.data;
 };
 
 export default openaiHandler;
