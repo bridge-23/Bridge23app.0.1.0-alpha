@@ -1,6 +1,6 @@
 //..src/components/Magiclist/AddItemComponent.tsx
 import React, {ChangeEvent, useState, useContext, useEffect} from 'react';
-import { Box, Button, TextField, Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Snackbar, Alert, AlertColor } from '@mui/material';
+import { Box, Button, TextField, Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Snackbar, Alert, AlertColor, Skeleton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { AuthContext } from "../../contexts/AuthContext";
 import {listDocs, setDoc} from "@junobuild/core-peer";

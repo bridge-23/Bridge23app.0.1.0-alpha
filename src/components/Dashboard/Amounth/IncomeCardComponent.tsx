@@ -3,7 +3,6 @@ import React from 'react';
 import {Box, Card, CardContent, Typography, Avatar, useMediaQuery} from "@mui/material";
 import ArrowUpwardSharpIcon from '@mui/icons-material/ArrowUpwardSharp';
 import {useTheme} from "@mui/material/styles";
-
 interface IncomeCardComponentProps {
     totalIncomes: number;
 }

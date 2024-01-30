@@ -3,10 +3,10 @@ import React from "react";
 import {Grid, Card, CardContent, Typography, useMediaQuery, MobileStepper, Button} from "@mui/material";
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import AccountCard from "../Accounts/AccountCardComponent";
+import AccountCard from "./AccountCardComponent";
 import {useTheme} from "@mui/material/styles";
 import SwipeableViews from 'react-swipeable-views';
-import NewAccountComponent from "../Accounts/NewAccountComponent";
+import NewAccountComponent from "./NewAccountComponent";
 import {accountDataState} from '../../state/atoms';
 import {useRecoilState, useRecoilValue } from "recoil";
 const AccountsList: React.FC = () => {

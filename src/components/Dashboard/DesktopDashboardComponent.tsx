@@ -4,7 +4,7 @@ import {Box, CircularProgress, Container, Grid, useMediaQuery} from "@mui/materi
 import AccountBalanceCardComponent from "../Dashboard/AccountBalanceCardComponent";
 import ExpenseCategoryComponent from "./ExpenseCategoryComponent";
 import NewAccountComponent from "../Accounts/NewAccountComponent";
-import AccountsList from "../Dashboard/AccountsList";
+import AccountsList from "../Accounts/AccountsList";
 import AddExpense from "../Dashboard/AddTransaction";
 import Amount from "../Dashboard/Amouth";
 import { AuthContext } from "../../contexts/AuthContext";

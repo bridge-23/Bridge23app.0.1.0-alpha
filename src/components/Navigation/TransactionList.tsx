@@ -1,6 +1,6 @@
 //..src/components/TransactionList.tsx
 import React, { useState } from 'react';
-import { List, ListItem, ListItemText, ListItemIcon, Dialog, DialogContent, DialogTitle } from '@mui/material';
+import {List, ListItem, ListItemText, ListItemIcon, Dialog, DialogContent, DialogTitle, Box} from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
@@ -28,10 +28,7 @@ export default function TransactionList() {
             <List
                 sx={{
                     width: '280px',
-                    backgroundColor: 'background.paper',
-                    borderRadius: '10px',
-                    boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px',
-                    padding: '16px'
+                    //padding: '16px'
                 }}
             >
                 <ListItem button onClick={() => handleListItemClick('Expense')}>
@@ -60,10 +57,18 @@ export default function TransactionList() {
                 </ListItem>
             </List>
             <AddTransaction open={isDialogOpen} onClose={() => setDialogOpen(false)} initialTransactionType={initialTransactionType} />
-
             {/* Dialog for File Upload and Recognize */}
-            <Dialog open={isUploadDialogOpen} onClose={() => setUploadDialogOpen(false)}>
-                <DialogTitle>Upload and Recognize Receipt</DialogTitle>
+            <Dialog open={isUploadDialogOpen} onClose={() => setUploadDialogOpen(false)}
+                    sx={{
+                        '& .MuiPaper-rounded': { // Targeting the inner Paper component of the Dialog
+                            borderRadius: '24px', // Setting the border radius
+                            boxShadow: 'none'
+                        }
+                    }}>
+                <DialogTitle sx={{ textAlign: 'center' }}>
+                    Upload Receipt
+                </DialogTitle>
+
                 <DialogContent>
                     <FileUploadAndRecognize />
                 </DialogContent>

@@ -1,6 +1,6 @@
 //../src/state/atoms.ts
 import {atom} from "recoil";
-import {AccountData, MagicListItem, MagicList, AccountCardType, totalExpenseItem, totalIncomeItem} from "../types";
+import {AccountData, MagicListItem, MagicList, AccountCardType, totalExpenses, totalIncomes, TransactionData} from "../types";
 export const magicListItemState = atom<Partial<MagicListItem>[]>({
     key: 'itemState',
     default: [],
@@ -17,11 +17,15 @@ export const AccountCardState = atom<Partial<AccountCardType>[]>({
     key: 'accountInfoState',
     default: [],
 });
-export const totalIncomeState = atom<totalIncomeItem[]>({
+export const totalIncomesState = atom<Partial<totalIncomes[]>>({
     key: 'totalIncomeState',
     default: [],
 });
-export const totalExpenseState = atom<totalExpenseItem[]>({
+export const totalExpenseState = atom<Partial<totalExpenses[]>>({
     key: 'totalExpenseState',
+    default: [],
+});
+export const TransactionDataState = atom<TransactionData[]>({
+    key: 'TransactionDataState',
     default: [],
 });

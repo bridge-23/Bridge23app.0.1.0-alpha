@@ -4,10 +4,8 @@ import { Box, CircularProgress, Container, Grid, useMediaQuery } from "@mui/mate
 import { Theme } from '@mui/material/styles';
 import AccountBalanceCardComponent from "../Dashboard/AccountBalanceCardComponent";
 import ExpenseCategoryComponent from "./ExpenseCategoryComponent";
-import NewAccountComponent from "../Accounts/NewAccountComponent";
-import AccountsList from "../Dashboard/AccountsList";
+import AccountsList from "../Accounts/AccountsList";
 import AddExpense from "../Dashboard/AddTransaction";
-import Amount from "../Dashboard/Amouth";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useFetchAccounts } from '../../lib/Juno/fetchAccounts';
 import {useRecoilValue} from "recoil";

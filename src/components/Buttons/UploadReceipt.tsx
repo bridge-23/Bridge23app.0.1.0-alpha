@@ -172,16 +172,19 @@ const FileUploadAndRecognize = () => {
     return (
         <Box>
             {filePreviewUrl && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, padding: 2 }}>
-                    <img src={filePreviewUrl} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, padding: 2, boxShadow: 'none', border: 'none' }}>
+                    <img src={filePreviewUrl} alt="Preview" style={{ maxWidth: '70%', maxHeight: '50%' }} />
                 </Box>
             )}
             {!ocrResult && (
-                <Paper elevation={3} sx={{  marginBottom: 2 }}>
-                    <Typography variant="h5" gutterBottom sx={{ textAlign: 'center' }}>
-                        Upload Receipt
-                    </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, padding: 2 }}>
+                <Paper elevation={3} sx={{
+                    boxShadow: 'none',
+                    border: 'none',
+                    outline: 'none'
+                }}
+                >
+                    <Box
+                        sx={{display: 'flex', justifyContent: 'center', borderRadius: '24px', alignItems: 'center', gap: 2, boxShadow: 'none', border: 'none' }}>
                         {!file && (
                             <>
                                 <input
@@ -193,7 +196,15 @@ const FileUploadAndRecognize = () => {
                                     onChange={handleFileChange}
                                 />
                                 <label htmlFor="raised-button-file">
-                                    <Button variant="contained" component="span">
+                                    <Button
+                                        variant="contained"
+                                        component="span"
+                                        sx={{
+                                            '&:focusVisible': {
+                                                outline: 'none'
+                                            }
+                                        }}
+                                    >
                                         Choose File
                                     </Button>
                                 </label>
@@ -212,23 +223,22 @@ const FileUploadAndRecognize = () => {
                     </Box>
                 </Paper>
             )}
-
             {error && (
                 <Typography color="error">{error}</Typography>
             )}
 
             {ocrResult && (
-                <Paper elevation={3} sx={{ padding: 2, width: '100%' }}>
+                <Paper sx={{ padding: 1, width: '100%', boxShadow: 'none', border: 'none', justifyContent: 'center', alignItems: 'center'}}>
                     <Typography variant="h6" textAlign="center">Purchase Data:</Typography>
-                    <Typography variant="h6">Summary:</Typography>
-                    <Typography>Supplier: {ocrResult.supplierName || 'Unknown Supplier'}</Typography>
-                    <Typography>Supplier Address: {ocrResult.supplierAddress || 'Address Unknown'}</Typography>
-                    <Typography>Currency: {ocrResult.locale?.currency || ''}</Typography>
-                    <Typography>Total Amount: {ocrResult.totalAmount || '0.00'}</Typography>
-                    <Typography>Date: {ocrResult.purchaseDate || 'Date Unknown'}</Typography>
-                    <Typography>Time: {ocrResult.purchaseTime || 'Time Unknown'}</Typography>
+                    <Typography variant="h6" textAlign="center">Summary:</Typography>
+                    <Typography textAlign="center">Supplier: {ocrResult.supplierName || 'Unknown Supplier'}</Typography>
+                    <Typography textAlign="center">Supplier Address: {ocrResult.supplierAddress || 'Address Unknown'}</Typography>
+                    <Typography textAlign="center">Currency: {ocrResult.locale?.currency || ''}</Typography>
+                    <Typography textAlign="center">Total Amount: {ocrResult.totalAmount || '0.00'}</Typography>
+                    <Typography textAlign="center">Date: {ocrResult.purchaseDate || 'Date Unknown'}</Typography>
+                    <Typography textAlign="center">Time: {ocrResult.purchaseTime || 'Time Unknown'}</Typography>
                     <br/>
-                    <Typography paragraph>
+                    <Typography paragraph textAlign="center">
                         <strong>Locale:</strong>
                         <br/>
                         Language: {ocrResult.locale.language},
@@ -238,13 +248,13 @@ const FileUploadAndRecognize = () => {
                         Currency: {ocrResult.locale.currency}
                         <br/>
                     </Typography>
-                    <Typography paragraph>
+                    <Typography paragraph textAlign="center">
                         <strong>Subcategory:</strong>
                         <br/>
                         {ocrResult.subcategory}
                         <br/>
                     </Typography>
-                    <Typography paragraph>
+                    <Typography paragraph textAlign="center">
                         <strong>Items:</strong>
                         <br/>
                         {Array.isArray(ocrResult.lineItems) ? ocrResult.lineItems.map((item, index) => (
@@ -257,7 +267,7 @@ const FileUploadAndRecognize = () => {
                 </Paper>
             )}
             {file && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2, boxShadow: 'none', border: 'none' }}>
                     <Button variant="contained" color="secondary" onClick={handleClose}>
                         Done
                     </Button>

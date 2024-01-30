@@ -1,7 +1,7 @@
 //..src/pages/accounts/index.tsx
 import React, { useState, useEffect, useContext } from "react";
 import NewAccountComponent from "../../components/Accounts/NewAccountComponent";
-import AccountsList from "../../components/Dashboard/AccountsList";
+import AccountsList from "../../components/Accounts/AccountsList";
 import { Container, Grid, Typography } from "@mui/material";
 import { useFetchAccounts } from '../../lib/Juno/fetchAccounts';
 import { useRecoilValue } from 'recoil';
