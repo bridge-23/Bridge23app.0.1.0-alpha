@@ -1,41 +1,68 @@
-//..src/pages/profile/index.tsx
-import React from 'react';
-import { Typography, Container, Card, CardContent, Avatar, Button, Grid, Fab,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemIcon
-} from '@mui/material';
-import { setDoc, listDocs,deleteDoc,getDoc} from "@junobuild/core-peer";
-import { nanoid } from "nanoid";
-import AddIcon from '@mui/icons-material/Add';
+import React, { useState, useRef } from 'react';
+import FirstSetup from '../../components/ProfilePage/FirstSetup';
+import { AvatarContext } from '../../components/ProfilePage/AvatarContext';
+import { Container, Grid, useMediaQuery, Avatar, IconButton, Box, Typography, Button, Chip, Badge } from "@mui/material";
+import SettingsIcon from '@mui/icons-material/Settings';
+import { Theme } from '@mui/material/styles';
+import { useRouter } from 'next/router';
 
 const ProfilePage: React.FC = () => {
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+    const [nickname, setNickname] = useState("");
+    const [avatar, setAvatar] = useState<File | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isFirstSetupOpen, setIsFirstSetupOpen] = useState(false);
+    const { avatarUrl } = React.useContext(AvatarContext);
+
+    const router = useRouter();
+
+    const handleSettingsClick = () => {
+        setIsFirstSetupOpen(!isFirstSetupOpen);
+    }
+
+    const handleCancelClick = () => {
+        router.push('/');
+    }
+
     return (
-        <>
-            <Container maxWidth="sm" style={{ marginTop: '20px' }}>
-                <Card>
-                    <CardContent>
-                        <Avatar />
-                        <Typography variant="h5">Nickname</Typography>
-                        <Typography variant="subtitle1">Curent balance</Typography>
-                        <Typography variant="subtitle1">johndoe@example.com</Typography>
-                        <Typography variant="subtitle1">Primary currency</Typography>
-                        <Button variant="contained" color="primary" style={{ marginTop: '10px' }}>
-                            Edit Profile
-                        </Button>
-                    </CardContent>
-                </Card>
-
-                <Grid container spacing={2} style={{ marginTop: '20px' }}>
-                    {/* Add your summary cards here */}
+        <Container sx={{ marginBottom: isMobile ? '118px' : '62px', padding: isMobile ? 'initial' : '24px', height: '100vh', width: '100vw' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: isMobile ? 'space-between' : 'space-around', padding: '8px 16px', backgroundColor: '', color: 'black' }}>
+                <Button color="inherit" onClick={handleCancelClick} sx={{ marginLeft: isMobile ? '0%' : '10%' }}>Cancel</Button>
+                <IconButton color="inherit" onClick={handleSettingsClick} sx={{ marginRight: isMobile ? '0%' : '15%' }}>
+                    <SettingsIcon />
+                </IconButton>
+            </Box>
+            {/* <Box sx={{ position: 'relative', width: 120, height: 120, borderRadius: '80%', overflow: 'hidden', margin: '50px auto' }}>
+                <Avatar src={avatarUrl} sx={{ width: 120, height: 120 }} />
+            </Box> */}
+            <Box
+                sx={{
+                    color: "#000",
+                    whiteSpace: "nowrap",
+                    fontFamily: "Inter, sans-serif",
+                }}
+            >
+            </Box>
+            <Grid container spacing={2} direction={isMobile ? 'column' : 'row'} alignItems="stretch">
+                <Grid item xs={12} md={4}>
+                    <FirstSetup
+                        nickname={nickname}
+                        setNickname={setNickname}
+                        avatar={avatar}
+                        setAvatar={setAvatar}
+                        open={isFirstSetupOpen}
+                        onClose={() => setIsFirstSetupOpen(false)}
+                        fileInputRef={fileInputRef} handleFileChange={function (event: React.ChangeEvent<HTMLInputElement>): void {
+                            throw new Error('Function not implemented.');
+                        }} />
                 </Grid>
-
-                <Fab color="primary" aria-label="add" style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-                    <AddIcon />
-                </Fab>
-            </Container>
-        </>
+            </Grid>
+            <input
+                ref={fileInputRef}
+                type="file"
+                hidden
+            />
+        </Container>
     );
 };
 

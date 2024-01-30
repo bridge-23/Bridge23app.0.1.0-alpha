@@ -25,3 +25,7 @@ export const expenseState = atom<ExpenseItem[]>({
     key: 'expenseState',
     default: [],
 });
+export const avatarUrlState = atom({
+    key: 'avatarUrlState',
+    default: '',
+})
