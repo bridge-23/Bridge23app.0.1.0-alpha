@@ -1,7 +1,6 @@
 //..src/contexts/AuthContext.tsx
 import React, { createContext, useEffect, useState } from "react";
 import { authSubscribe, User } from "@junobuild/core-peer";
-import ICPSignInButton from "../components/Buttons/ICPSignInButton";
 import LoginComponentJuno from "../components/LoginComponentJuno";
 import LoadingComponent from "../components/shared/LoadingComponent";
 // Define the context type

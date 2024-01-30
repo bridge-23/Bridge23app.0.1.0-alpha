@@ -29,7 +29,10 @@ function MobileNavbar() {
         popupState.close();
     };
     const popupState = usePopupState({ variant: 'popover', popupId: 'demo-popup-menu' });
-
+    const handleProfileClick = () => {
+        popupState.close(); // Close the popup, if necessary
+        router.push('/profile'); // Navigate to /profile
+    };
     const handleSignOut = async () => {
         try {
             await signOut(); // Your signOut logic
@@ -87,7 +90,7 @@ function MobileNavbar() {
                             <MoreVertIcon fontSize="large" />
                         </IconButton>
                         <Menu {...bindMenu(popupState)}>
-                            <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                            <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
                             <MenuItem onClick={popupState.close}>Support</MenuItem>
                             <MenuItem onClick={handleFeedbackClick}>FeedBack</MenuItem>
                             <MenuItem onClick={handleSignOut}>Logout</MenuItem>

@@ -13,7 +13,7 @@ import { nanoid } from "nanoid";
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
 import { IncomeItem, ExpenseItem } from '../../types';
-import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../../components/Transactions/fetchTransactionData';
+import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../Transactions/fetchTransactionData';
 
 interface AddTransactionProps {
     open: boolean;
