@@ -42,9 +42,10 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
     //set up recoil for avatar
     const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
     const { setLoading } = useLoading();
-    const [successMessage, setSuccessMessage] = useState<string>("");
-    const [backdropOpen, setBackdropOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string>("");
+    // const [successMessage, setSuccessMessage] = useState<string>("");
+    // const [backdropOpen, setBackdropOpen] = useState(false);
+    // const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -58,8 +59,7 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
             return;
         }
 
-        //show loading indicator
-        setLoading(true);
+        setIsLoading(true); // Set local isLoading to true
 
         try {
             const setupId = `${user.key}_${nanoid()}`;
@@ -89,13 +89,13 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
             });
 
             // Redirect to the main page
-            router.push('/');
+            router.push('/').then(() => setIsLoading(false)); //This is after navogation is complete
         } catch (error) {
             // Error handling
             console.error('Error posting data', error);
         } finally {
-            //hide loading indicator
-            setLoading(false);
+            setIsLoading(false); // Set local isLoading to false
+            setLoading(false); // Hide loading indicator (global loading indicator)
         }
     };
 
@@ -166,27 +166,11 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
                     variant="contained"
                     color="primary"
                     onClick={handleDoneClick}
-                    disabled={!currency}
+                    disabled={!currency || isLoading}
                     sx={{ mt: 2 }}
                 >
-                    Done
+                    {isLoading ? <CircularProgress size={24} />:'Done'}
                 </Button>
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={backdropOpen}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-                {successMessage && (
-                    <Alert severity="success" sx={{ mt: 2 }}>
-                        {successMessage}
-                    </Alert>
-                )}
-                {errorMessage && (
-                    <Alert severity="error" sx={{ mt: 2 }}>
-                        {errorMessage}
-                    </Alert>
-                )}
             </Box>
         </Box>
     );
