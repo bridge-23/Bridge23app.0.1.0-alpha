@@ -4,6 +4,9 @@ import { setDoc, uploadFile } from '@junobuild/core-peer';
 import { nanoid } from 'nanoid';
 import { AuthContext } from '../../contexts/AuthContext';
 import { AvatarContext } from './AvatarContext';
+import { useLoading } from '../../contexts/LoadingContext';
+import { CircularProgress, Backdrop, Alert } from '@mui/material';
+
 import {
     Box,
     Typography,
@@ -38,6 +41,11 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
     const router = useRouter();
     //set up recoil for avatar
     const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
+    const { setLoading } = useLoading();
+    // const [successMessage, setSuccessMessage] = useState<string>("");
+    // const [backdropOpen, setBackdropOpen] = useState(false);
+    // const [errorMessage, setErrorMessage] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -50,6 +58,8 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
             console.error('User key or avatar file is not available.');
             return;
         }
+
+        setIsLoading(true); // Set local isLoading to true
 
         try {
             const setupId = `${user.key}_${nanoid()}`;
@@ -79,10 +89,13 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
             });
 
             // Redirect to the main page
-            router.push('/');
+            router.push('/').then(() => setIsLoading(false)); //This is after navogation is complete
         } catch (error) {
             // Error handling
             console.error('Error posting data', error);
+        } finally {
+            setIsLoading(false); // Set local isLoading to false
+            setLoading(false); // Hide loading indicator (global loading indicator)
         }
     };
 
@@ -153,10 +166,10 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
                     variant="contained"
                     color="primary"
                     onClick={handleDoneClick}
-                    disabled={!currency}
+                    disabled={!currency || isLoading}
                     sx={{ mt: 2 }}
                 >
-                    Done
+                    {isLoading ? <CircularProgress size={24} />:'Done'}
                 </Button>
             </Box>
         </Box>
