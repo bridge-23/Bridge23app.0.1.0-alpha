@@ -21,6 +21,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
     "@google-cloud/vision": "^4.0.2",
+    "@junobuild/core": "^0.0.44",
     "@junobuild/core-peer": "^0.0.1",
     "@mui/icons-material": "^5.15.6",
     "@mui/lab": "^5.0.0-alpha.144",

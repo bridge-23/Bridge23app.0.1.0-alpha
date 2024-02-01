@@ -1,6 +1,6 @@
 
 import React, { useContext, useState, useRef } from 'react';
-import { setDoc, uploadFile } from '@junobuild/core-peer';
+import { setDoc, uploadFile, getDoc } from '@junobuild/core-peer';
 import { nanoid } from 'nanoid';
 import { AuthContext } from '../../contexts/AuthContext';
 import { AvatarContext } from './AvatarContext';
@@ -53,6 +53,8 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
         }
     };
 
+    
+
     const handleDoneClick = async () => {
         if (!user?.key || !avatar) {
             console.error('User key or avatar file is not available.');
@@ -83,6 +85,7 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
                         nickname,
                         dmail,
                         currency,
+                        avatarUrl,
                         created: new Date().toISOString(),
                     },
                 },

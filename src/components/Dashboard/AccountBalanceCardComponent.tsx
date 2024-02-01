@@ -20,7 +20,7 @@ const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ curren
     const router = useRouter();
 
     const handleAvatarClick = () => {
-        router.push('/profile');
+        router.push('/firstsetup');
     }
 
     const avatar: File | null = null;
