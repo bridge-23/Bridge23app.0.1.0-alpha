@@ -314,7 +314,6 @@ const MagicListComponent: React.FC = () => {
                     >
                         <Typography variant="h6">{list.name}</Typography>
                         <AddItemComponent selectedListId={list.id} />
-
                     </Box>
                     {items
                         .filter(item => item.listId === list.id) // Use list.id for filtering

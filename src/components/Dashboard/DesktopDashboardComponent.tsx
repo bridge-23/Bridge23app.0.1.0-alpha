@@ -3,7 +3,6 @@ import React, {useState, useContext} from 'react';
 import {Box, CircularProgress, Container, Grid, useMediaQuery} from "@mui/material";
 import AccountBalanceCardComponent from "../Dashboard/AccountBalanceCardComponent";
 import ExpenseCategoryComponent from "./ExpenseCategoryComponent";
-import NewAccountComponent from "../Accounts/NewAccountComponent";
 import AccountsList from "../Accounts/AccountsList";
 import AddExpense from "../Dashboard/AddTransaction";
 import Amount from "../Dashboard/Amouth";
@@ -48,10 +47,6 @@ const DesktopDashboardComponent = () => {
                 <Grid item xs={6} md={8}>
                     <AccountsList />
                 </Grid>
-
-                {/*<Grid item xs={12} md={4}>
-                    <NewAccountComponent />
-                </Grid>*/}
 
                 <Grid item xs={12} md={4}>
                     <AddExpense open={open} onClose={handleClose}/>

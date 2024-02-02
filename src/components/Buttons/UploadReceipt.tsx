@@ -170,7 +170,13 @@ const FileUploadAndRecognize = () => {
     };
 
     return (
-        <Box>
+        <Box
+            sx={{
+            '& .MuiDrawer-paper': {
+                borderTopLeftRadius: '24px',
+                borderTopRightRadius: '24px',
+            },
+        }}>
             {filePreviewUrl && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, padding: 2, boxShadow: 'none', border: 'none' }}>
                     <img src={filePreviewUrl} alt="Preview" style={{ maxWidth: '70%', maxHeight: '50%' }} />
@@ -184,7 +190,7 @@ const FileUploadAndRecognize = () => {
                 }}
                 >
                     <Box
-                        sx={{display: 'flex', justifyContent: 'center', borderRadius: '24px', alignItems: 'center', gap: 2, boxShadow: 'none', border: 'none' }}>
+                        sx={{display: 'flex', justifyContent: 'center', paddingTop:'24px',paddingBottom:'24px', borderRadius: '24px', alignItems: 'center', gap: 2, boxShadow: 'none', border: 'none' }}>
                         {!file && (
                             <>
                                 <input
@@ -267,7 +273,7 @@ const FileUploadAndRecognize = () => {
                 </Paper>
             )}
             {file && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2, boxShadow: 'none', border: 'none' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2, paddingBottom:'24px', boxShadow: 'none', border: 'none' }}>
                     <Button variant="contained" color="secondary" onClick={handleClose}>
                         Done
                     </Button>

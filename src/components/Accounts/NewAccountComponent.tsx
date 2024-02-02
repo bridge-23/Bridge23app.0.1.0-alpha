@@ -1,12 +1,29 @@
 //src/components/Accounts/NewAccountComponent.tsx
 import React, { useContext, useState } from "react";
-import { Card,IconButton, Typography, Dialog, TextField, Button, Box, Select, MenuItem, InputLabel, FormControl, Backdrop, CircularProgress, Alert } from "@mui/material";
+import {
+  Card,
+  IconButton,
+  Typography,
+  Dialog,
+  TextField,
+  Button,
+  Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Backdrop,
+  CircularProgress,
+  Alert,
+  useMediaQuery, Drawer
+} from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { setDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { AuthContext } from "../../contexts/AuthContext";
 import { accountDataState } from '../../state/atoms';
 import { useSetRecoilState } from 'recoil';
+import {useTheme} from "@mui/material/styles";
 const NewAccountComponent: React.FC = () => {
   const { user } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -19,6 +36,8 @@ const NewAccountComponent: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [backdropOpen, setBackdropOpen] = useState(false);
   const setAccounts = useSetRecoilState(accountDataState);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const handleCreateAccount = async () => {
     const parsedInitialBalance = parseFloat(initialBalance.toString());
     setErrorMessage("");
@@ -77,6 +96,79 @@ const NewAccountComponent: React.FC = () => {
       setBackdropOpen(false);
     }
   };
+  const renderFormContent = () => (
+      <Box sx={{ p: 2 }}>
+        <TextField
+            fullWidth
+            label="Account Name"
+            variant="outlined"
+            margin="normal"
+            value={accountName}
+            onChange={(e) => setAccountName(e.target.value)}
+        />
+
+        <FormControl fullWidth variant="outlined" margin="normal">
+          <InputLabel>Account Type</InputLabel>
+          <Select
+              value={accountType}
+              onChange={(e) => setAccountType(e.target.value as string)}
+              label="Account Type"
+          >
+            <MenuItem value="money">Money</MenuItem>
+            <MenuItem value="savings">Savings</MenuItem>
+            <MenuItem value="cards">Cards</MenuItem>
+            {/* Add more types if necessary */}
+          </Select>
+        </FormControl>
+
+        <TextField
+            fullWidth
+            label="Financial Institution"
+            variant="outlined"
+            margin="normal"
+            value={financialInstitution}
+            onChange={(e) => setFinancialInstitution(e.target.value)}
+        />
+
+        <FormControl fullWidth variant="outlined" margin="normal">
+          <InputLabel>Currency</InputLabel>
+          <Select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as string)}
+              label="Currency"
+          >
+            <MenuItem value="USD">USD</MenuItem>
+            <MenuItem value="EUR">EUR</MenuItem>
+            <MenuItem value="GBP">GBP</MenuItem>
+            <MenuItem value="IDR">IDR</MenuItem>
+            <MenuItem value="CAD">CAD</MenuItem>
+            {/* Add more currencies if necessary */}
+          </Select>
+        </FormControl>
+
+        <TextField
+            fullWidth
+            label="Initial Balance"
+            variant="outlined"
+            margin="normal"
+            value={initialBalance}
+            onChange={(e) => setInitialBalance(e.target.value)}
+        />
+          <Box display="flex" justifyContent="center">
+              <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                      mt: 2,
+                      borderRadius: "24px"
+                  }}
+                  onClick={handleCreateAccount}
+              >
+                  Create
+              </Button>
+          </Box>
+      </Box>
+  );
 
   return (
     <>
@@ -101,73 +193,36 @@ const NewAccountComponent: React.FC = () => {
         </IconButton>
         <Typography variant="h6">Create Account</Typography>
       </Card>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+
         <Box sx={{ p: 2 }}>
-          <TextField
-            fullWidth
-            label="Account Name"
-            variant="outlined"
-            margin="normal"
-            value={accountName}
-            onChange={(e) => setAccountName(e.target.value)}
-          />
+          {isMobile ? (
+              <Drawer
+                  anchor="bottom"
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  sx={{
+                    '& .MuiDrawer-paper': {
+                      borderTopLeftRadius: '24px',
+                      borderTopRightRadius: '24px',
+                    },
+                  }}
+              >
+                {renderFormContent()}
+              </Drawer>
+          ) : (
+              <Dialog
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  sx={{
+                      '& .MuiDialog-paper': {
+                          borderRadius: '24px'
+                      },
+                  }}
+              >
+                  {renderFormContent()}
+              </Dialog>
 
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Account Type</InputLabel>
-            <Select
-              value={accountType}
-              onChange={(e) => setAccountType(e.target.value as string)}
-              label="Account Type"
-            >
-              <MenuItem value="money">Money</MenuItem>
-              <MenuItem value="savings">Savings</MenuItem>
-              <MenuItem value="cards">Cards</MenuItem>
-              {/* Add more types if necessary */}
-            </Select>
-          </FormControl>
-
-          <TextField
-            fullWidth
-            label="Financial Institution"
-            variant="outlined"
-            margin="normal"
-            value={financialInstitution}
-            onChange={(e) => setFinancialInstitution(e.target.value)}
-          />
-
-          <FormControl fullWidth variant="outlined" margin="normal">
-            <InputLabel>Currency</InputLabel>
-            <Select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value as string)}
-              label="Currency"
-            >
-              <MenuItem value="USD">USD</MenuItem>
-              <MenuItem value="EUR">EUR</MenuItem>
-              <MenuItem value="GBP">GBP</MenuItem>
-              <MenuItem value="IDR">IDR</MenuItem>
-              <MenuItem value="CAD">CAD</MenuItem>
-              {/* Add more currencies if necessary */}
-            </Select>
-          </FormControl>
-
-          <TextField
-            fullWidth
-            label="Initial Balance"
-            variant="outlined"
-            margin="normal"
-            value={initialBalance}
-            onChange={(e) => setInitialBalance(e.target.value)}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            fullWidth
-            onClick={handleCreateAccount}
-          >
-            Create
-          </Button>
+          )}
           <Backdrop
               sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
               open={backdropOpen}
@@ -185,7 +240,7 @@ const NewAccountComponent: React.FC = () => {
             </Alert>
           )}
         </Box>
-      </Dialog>
+
     </>
   );
 };

@@ -1,7 +1,26 @@
 //..src/components/Magiclist/AddItemComponent.tsx
 import React, {ChangeEvent, useState, useContext, useEffect} from 'react';
-import { Box, Button, TextField, Backdrop, CircularProgress, Dialog, DialogContent, DialogTitle, DialogActions, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Snackbar, Alert, AlertColor, Skeleton } from '@mui/material';
+import {
+    Box,
+    Button,
+    TextField,
+    Backdrop,
+    CircularProgress,
+    Dialog,
+    Drawer,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    SelectChangeEvent,
+    Snackbar,
+    Alert,
+    AlertColor
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { AuthContext } from "../../contexts/AuthContext";
 import {listDocs, setDoc} from "@junobuild/core-peer";
 import {nanoid} from "nanoid";
@@ -9,21 +28,20 @@ import {MagicList} from "../../types";
 import { useRecoilState } from 'recoil';
 import { magicListsState, magicListItemState } from '../../state/atoms';
 import { useLoading } from '../../contexts/LoadingContext';
-
+import { styled, useTheme } from '@mui/material/styles';
 interface AddItemComponentProps {selectedListId?: string;}
 
 //TODO: Display currecncy from library currency
 const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) => {
+    const [open, setOpen] = useState(false);
+    const theme = useTheme();
     const { user } = useContext(AuthContext);
     const { setLoading } = useLoading();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
     const [addDialogOpen, setAddDialogOpen] = useState(false);
-    const handleCloseDialog = () => {
-        setAddDialogOpen(false);
-        setShowMoreFields(false); // Reset showMoreFields when dialog is closed
-    };
     const [showMoreFields, setShowMoreFields] = useState(false);
     const [backdropOpen, setBackdropOpen] = useState(false);
     const backdropStyle = {
@@ -167,42 +185,46 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
             setAddDialogOpen(false);
         }
     };
+    const toggleComponent = (newOpen: boolean) => () => {
+        setOpen(newOpen);
+        if (!newOpen) {
+            setShowMoreFields(false); // Reset showMoreFields when component is closed
+        }
+    };
+    const renderContent = () => (
+        <>
+            <TextField
+                autoFocus
+                margin="dense"
+                id="itemName"
+                name="itemName"
+                label="Item Name"
+                type="text"
+                fullWidth
+                value={newItem.itemName}
+                onChange={handleInputChange}
+            />
+            <FormControl fullWidth margin="dense">
+                {/*<InputLabel id="list-select-label">List</InputLabel>*/}
+                <InputLabel shrink htmlFor="select-multiple-native">
+                    Magic List
+                </InputLabel>
+                <Select
+                    labelId="list-select-label"
+                    id="list-select"
+                    name="list"
+                    value={newItem.listId} // Use listId here
+                    label="Magic List"
+                    onChange={handleSelectChange}
+                >
+                    {magicLists.map((list) => (
+                        <MenuItem key={list.id} value={list.id}>{list.name}</MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
 
-    return (
-        <Box>
-            <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => setAddDialogOpen(true)}>Add New Item</Button>
-            <Dialog open={addDialogOpen} onClose={handleCloseDialog}>
-                <DialogTitle>Add Item</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="itemName"
-                        name="itemName" // Changed from 'name' to 'itemName'
-                        label="Item Name"
-                        type="text"
-                        fullWidth
-                        value={newItem.itemName}
-                        onChange={handleInputChange}
-                    />
-
-                    <FormControl fullWidth margin="dense">
-                        <InputLabel id="list-select-label">List</InputLabel>
-                        <Select
-                            labelId="list-select-label"
-                            id="list-select"
-                            name="list"
-                            value={newItem.listId} // Use listId here
-                            onChange={handleSelectChange}
-                        >
-                            {magicLists.map((list) => (
-                                <MenuItem key={list.id} value={list.id}>{list.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    {showMoreFields && (
-                        <>
+            {showMoreFields && (
+                <>
                     <TextField
                         margin="dense"
                         id="itemLink"
@@ -236,7 +258,6 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
                         onChange={handleInputChange}
                     />
 
-
                     <FormControl fullWidth margin="dense">
                         <InputLabel id="currency-select-label">Currency</InputLabel>
                         <Select
@@ -256,34 +277,77 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
                             {/* Add other currencies as needed */}
                         </Select>
                     </FormControl>
-                        </>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    {!showMoreFields && (
-                        <Button onClick={() => setShowMoreFields(true)} color="primary">
-                            More
-                        </Button>
-                    )}
-                    <Button onClick={() => setAddDialogOpen(false)} color="primary">Cancel</Button>
-                    <Button onClick={handleAddItem} color="primary">Add</Button>
-                </DialogActions>
-            </Dialog>
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={() => setSnackbarOpen(false)}
+                </>
+            )}
+            {/* Include other inputs and form controls */}
+            <Box display="flex" justifyContent="center" alignItems="center" mt={2} gap={2}>
+                {!showMoreFields && (
+                    <Button variant="outlined" onClick={() => setShowMoreFields(true)} color="primary">More</Button>
+                )}
+                <Button variant="outlined" onClick={toggleComponent(false)} color="primary">Cancel</Button>
+                <Button variant="outlined" onClick={handleAddItem} color="primary">Add</Button>
+            </Box>
+        </>
+    );
+
+    return (
+        <Box>
+            <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={toggleComponent(true)}
+                sx={{ borderRadius: '24px' }}
             >
-                <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity as AlertColor} sx={{ width: '100%' }}>
+                Add New Item
+            </Button>
+
+            {isMobile ? (
+                // Mobile: Render as SwipeableDrawer or Drawer
+                <Drawer
+                    anchor="bottom"
+                    open={open}
+                    onClose={toggleComponent(false)}
+                    sx={{
+                        '& .MuiDrawer-paper': {
+                            borderTopLeftRadius: '24px',
+                            borderTopRightRadius: '24px',
+                        },
+                    }}
+                >
+                    <Box p={2} role="presentation">
+                        {renderContent()}
+                    </Box>
+                </Drawer>
+            ) : (
+                // Desktop: Render as Dialog
+                <Dialog
+                    open={open}
+                    onClose={toggleComponent(false)}
+                    sx={{
+                        '& .MuiDialog-paper': {
+                            borderRadius: '24px',
+                        },
+                    }}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Add Item</DialogTitle>
+                    <DialogContent>
+                        {renderContent()}
+                    </DialogContent>
+                </Dialog>
+
+            )}
+            {/* Snackbar and Backdrop */}
+            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={() => setSnackbarOpen(false)}>
+                <Alert onClose={() => setSnackbarOpen(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
                     {snackbarMessage}
                 </Alert>
             </Snackbar>
-
-            <Backdrop open={backdropOpen} style={backdropStyle}>
+            <Backdrop open={backdropOpen} style={{ zIndex: 1300, color: '#fff' }}>
                 <CircularProgress color="inherit" />
             </Backdrop>
         </Box>
     );
 };
-
 export default AddItemComponent;

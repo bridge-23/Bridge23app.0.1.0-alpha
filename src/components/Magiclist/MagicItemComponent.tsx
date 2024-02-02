@@ -45,7 +45,8 @@ const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck,
     };
 
     const formattedPrice = formatCurrency(item.price ?? 0, item.currency ?? 'USD');
-    const handleExpandClick = () => {
+    const handleExpandClick = (e: React.SyntheticEvent) => {
+        e.stopPropagation();
         setExpanded(!expanded);
     };
     const extractDomain = (url: string): string => {
@@ -62,9 +63,21 @@ const MagicItemComponent: React.FC<MagicItemProps> = ({ item, onDelete, onCheck,
     };
 
     return (
-        <Accordion expanded={expanded} onChange={handleExpandClick}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Checkbox edge="start" tabIndex={-1} disableRipple checked={item.checked} onChange={onCheck}/>
+        <Accordion expanded={expanded}>
+            <AccordionSummary
+                expandIcon={
+                    <IconButton onClick={handleExpandClick}>
+                        <ExpandMoreIcon />
+                    </IconButton>
+                }
+            >
+                <Checkbox
+                    edge="start"
+                    tabIndex={-1}
+                    disableRipple
+                    checked={item.checked}
+                    onChange={onCheck}
+                />
                 <ListItemText
                     primary={`${formattedPrice} ${item.itemName}`}
                     secondary={item.itemLink && (

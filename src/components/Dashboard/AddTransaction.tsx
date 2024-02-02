@@ -1,20 +1,24 @@
 //..src/components/Dashboard/AddExpense
 import React, {useState, useEffect, useContext} from 'react';
-import {Button, TextField, Dialog, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
-import DialogActions from '@mui/material/DialogActions';
+import {
+    Button,
+    TextField,
+    Dialog,
+    Select,
+    MenuItem,
+    InputLabel,
+    FormControl,
+    SelectChangeEvent,
+    useTheme,
+    useMediaQuery, Drawer, Box
+} from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
-
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
-import { IncomeItem, ExpenseItem } from '../../types';
 import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../Transactions/fetchTransactionData';
-
 interface AddTransactionProps {
     open: boolean;
     onClose: () => void;
@@ -42,9 +46,10 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     const [selectedAccountKey, setSelectedAccountKey] = useState('');
     const incomeCategories = ['Salary', 'Pension', 'Interest Yield', 'Gig', 'Bonus', 'Present', 'Other', 'Add category'];
     const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category' ];
-    //const [selectedAccountId, setSelectedAccountId] = useState('');
     const setIncomes = useSetRecoilState(incomeState);
     const setExpenses = useSetRecoilState(expenseState);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const renderCategoryOptions = (): JSX.Element[] => {
         let categories: string[] = []; // Explicitly type as string[]
         switch (transactionType) {
@@ -135,7 +140,6 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                 throw new Error(`Invalid transaction type: ${transactionType}`);
         }
     };
-
     async function reloadTransactions() {
         try {
             const updatedIncomes = await fetchIncomesFromAPI();
@@ -147,7 +151,6 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             console.error("Error reloading transactions:", error);
         }
     }
-
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
             alert('Please provide valid expense details.');
@@ -190,9 +193,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                     data: newTransaction,
                 },
             });
-
             await reloadTransactions();
-
             alert(`${transactionType} added successfully!`);
             // Clear the fields after successful addition
             setTransactionName('');
@@ -207,7 +208,6 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
-
     async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
         try {
             // Fetch the current account document
@@ -256,8 +256,6 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             throw error;
         }
     }
-
-
     const handleChange = (event: SelectChangeEvent) => {
         const accountName = event.target.value;
         const account = accounts.find(acc => acc.data.accountName === accountName);
@@ -274,108 +272,129 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
             setSelectedAccountKey('');
         }
     };
+    const renderForm = () => (
+        <Box
+            sx={{
+                p: 2, // Applies padding to all sides
+                paddingRight: '16px', // Specific padding to the right
+                paddingLeft: '16px', // Specific padding to the left
+                // Additional styling can be applied here
+                display: 'flex',
+                flexDirection: 'column', // Stacks the form fields vertically
+                gap: 2, // Creates space between child components
+                width: '100%', // Ensures the Box takes full width of its parent
+                maxWidth: '500px', // Limits the maximum width, centering the form on larger screens
+                margin: 'auto', // Centers the Box horizontally in the parent
+            }}
+        >
+            <TextField
+                label="Transaction Name"
+                variant="outlined"
+                value={transactionName}
+                onChange={(e) => setTransactionName(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Transaction Name"
+                variant="outlined"
+                value={transactionName}
+                onChange={(e) => setTransactionName(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
 
+            <FormControl fullWidth margin="normal">
+                <InputLabel id="transaction-type-label">Transaction Type</InputLabel>
+                <Select
+                    labelId="transaction-type-label"
+                    id="transaction-type-select"
+                    value={transactionType}
+                    label="Transaction Type"
+                    onChange={(e) => setTransactionType(e.target.value)}
+                >
+                    <MenuItem value="Income">Income</MenuItem>
+                    <MenuItem value="Expense">Expense</MenuItem>
+                    <MenuItem value="Transfer">Transfer</MenuItem>
+                </Select>
+            </FormControl>
+
+            <TextField
+                label="Amount"
+                variant="outlined"
+                value={transactionAmount}
+                onChange={(e) => setTransactionAmount(e.target.value)}
+                fullWidth
+                margin="normal"
+            />
+
+            <FormControl fullWidth margin="normal">
+                <InputLabel id="transaction-category-label">Category</InputLabel>
+                <Select
+                    labelId="transaction-category-label"
+                    id="transaction-category-select"
+                    value={transactionCategory}
+                    label="Category"
+                    onChange={(e) => setTransactionCategory(e.target.value)}
+                >
+                    {renderCategoryOptions()}
+                </Select>
+            </FormControl>
+
+            <FormControl fullWidth>
+                <InputLabel id="account-select-label">Account</InputLabel>
+                <Select
+                    labelId="account-select-label"
+                    id="account-select"
+                    value={selectedAccount}
+                    label="Account"
+                    onChange={handleChange}
+                >
+                    {
+                        accounts.map((account) => (
+                            <MenuItem key={account.key} value={account.data.accountName}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                    <span>{account.data.accountName}</span>
+                                    <span>{`${account.data.currentBalance.toFixed(2)} ${account.data.currency}`}</span>
+                                </div>
+                            </MenuItem>
+                        ))
+                    }
+                </Select>
+            </FormControl>
+
+            <Box display="flex" justifyContent="center" alignItems="center" mt={2} gap={2}>
+                <Button onClick={onClose} color="secondary">Cancel</Button>
+                <Button variant="contained" color="primary" onClick={handleAddTransaction}>Add Transaction</Button>
+            </Box>
+        </Box>
+    );
 
     return (
-        <>
-            <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-                <DialogTitle>
-                    Add Transaction
-                    <IconButton
-                        edge="end"
-                        color="inherit"
-                        onClick={onClose}
-                        aria-label="close"
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-
-                <DialogContent>
-                    <TextField
-                        label="Transaction Name"
-                        variant="outlined"
-                        value={transactionName}
-                        onChange={(e) => setTransactionName(e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="transaction-type-label">Transaction Type</InputLabel>
-                        <Select
-                            labelId="transaction-type-label"
-                            id="transaction-type-select"
-                            value={transactionType}
-                            label="Transaction Type"
-                            onChange={(e) => setTransactionType(e.target.value)}
-                        >
-                            <MenuItem value="Income">Income</MenuItem>
-                            <MenuItem value="Expense">Expense</MenuItem>
-                            <MenuItem value="Transfer">Transfer</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    <TextField
-                        label="Amount"
-                        variant="outlined"
-                        value={transactionAmount}
-                        onChange={(e) => setTransactionAmount(e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
-
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="transaction-category-label">Category</InputLabel>
-                        <Select
-                            labelId="transaction-category-label"
-                            id="transaction-category-select"
-                            value={transactionCategory}
-                            label="Category"
-                            onChange={(e) => setTransactionCategory(e.target.value)}
-                        >
-                            {renderCategoryOptions()}
-                        </Select>
-                    </FormControl>
-
-                    <FormControl fullWidth>
-                        <InputLabel id="account-select-label">Account</InputLabel>
-                        <Select
-                            labelId="account-select-label"
-                            id="account-select"
-                            value={selectedAccount}
-                            label="Account"
-                            onChange={handleChange}
-                        >
-                            {
-                                accounts.map((account) => (
-                                    <MenuItem key={account.key} value={account.data.accountName}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                            <span>{account.data.accountName}</span>
-                                            <span>{`${account.data.currentBalance.toFixed(2)} ${account.data.currency}`}</span>
-                                        </div>
-                                    </MenuItem>
-                                ))
-                            }
-                        </Select>
-                    </FormControl>
-                </DialogContent>
-
-                <DialogActions>
-                    <Button onClick={onClose} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleAddTransaction}
-                    >
-                        Add Transaction
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </>
+        <Box>
+            {isMobile ? (
+                <Drawer anchor="bottom" open={open} onClose={onClose}
+                        sx={{
+                            '& .MuiDrawer-paper': {
+                                borderTopLeftRadius: '24px',
+                                borderTopRightRadius: '24px',
+                                paddingBottom: '80px',
+                            },
+                        }}>
+                    <Box>
+                        {renderForm()}
+                    </Box>
+                </Drawer>
+            ) : (
+                <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+                    <DialogContent>
+                        {renderForm()}
+                    </DialogContent>
+                </Dialog>
+            )}
+        </Box>
     );
+
 }
 export default AddTransaction;
 

@@ -1,6 +1,6 @@
 //..src/components/Navigation/AppBarUser.tsx
 import React, {useContext} from 'react';
-import {AppBar, Toolbar, IconButton, Menu, MenuItem, Fab, Dialog} from '@mui/material';
+import {AppBar, Toolbar, IconButton, Menu, MenuItem, Fab, Dialog, useMediaQuery, Drawer} from '@mui/material';
 import Link from 'next/link';
 import HomeIcon from "@mui/icons-material/Home";
 import FormatListBulletedSharpIcon from "@mui/icons-material/FormatListBulletedSharp";
@@ -13,10 +13,13 @@ import { signOut } from '@junobuild/core-peer';
 import {AuthContext} from "../../contexts/AuthContext";
 import TransactionList from './TransactionList';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import {useTheme} from "@mui/material/styles";
 function MobileNavbar() {
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const router = useRouter();
     const { user } = useContext(AuthContext);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const handleModalOpen = () => {
         setDialogOpen(true);
     };
@@ -98,9 +101,23 @@ function MobileNavbar() {
                     </>
                 )}
             </Toolbar>
-            <Dialog open={dialogOpen} onClose={handleModalClose}>
-                <TransactionList/>
-            </Dialog>
+                <Drawer
+                    anchor="bottom"
+                    open={dialogOpen}
+                    onClose={handleModalClose}
+                    sx={{
+                        '& .MuiDrawer-paper': {
+                            borderTopLeftRadius: '24px',
+                            borderTopRightRadius: '24px',
+                            paddingBottom: '300px',
+                        },
+                    }}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                >
+                    <TransactionList/>
+                </Drawer>
         </AppBar>
     );
 }

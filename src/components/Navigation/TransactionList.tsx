@@ -1,28 +1,34 @@
 //..src/components/TransactionList.tsx
 import React, { useState } from 'react';
-import {List, ListItem, ListItemText, ListItemIcon, Dialog, DialogContent, DialogTitle, Box} from '@mui/material';
+import {List, ListItem, ListItemText, ListItemIcon, Dialog, DialogContent, DialogTitle, Box, useMediaQuery, Drawer} from '@mui/material';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import AddTransaction from "../Dashboard/AddTransaction";
 import FileUploadAndRecognize from '../Buttons/UploadReceipt';
-
+import {useTheme} from "@mui/material/styles";
 export default function TransactionList() {
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isUploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [initialTransactionType, setInitialTransactionType] = useState<string>(''); // Explicitly specify the type
-    // Inside your handleListItemClick function
-    // Inside your handleListItemClick function
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const handleListItemClick = (type: string) => {
-        if (type === 'UploadReceipt') {
-            setUploadDialogOpen(true); // Open the upload dialog
-        } else {
-            setInitialTransactionType(type);
-            setDialogOpen(true);
-        }
+        setInitialTransactionType(type);
+        type === 'UploadReceipt' ? setUploadDialogOpen(true) : setDialogOpen(true);
     };
-
+    const renderDialogContent = () => (
+        <>
+            {/* Your Dialog Content Here */}
+            {initialTransactionType !== 'UploadReceipt' && (
+                <AddTransaction open={isDialogOpen} onClose={() => setDialogOpen(false)} initialTransactionType={initialTransactionType} />
+            )}
+            {initialTransactionType === 'UploadReceipt' && (
+                <FileUploadAndRecognize />
+            )}
+        </>
+    );
     return (
         <>
             <List
@@ -56,23 +62,27 @@ export default function TransactionList() {
                     <ListItemText primary="Upload receipt" />
                 </ListItem>
             </List>
-            <AddTransaction open={isDialogOpen} onClose={() => setDialogOpen(false)} initialTransactionType={initialTransactionType} />
             {/* Dialog for File Upload and Recognize */}
-            <Dialog open={isUploadDialogOpen} onClose={() => setUploadDialogOpen(false)}
-                    sx={{
-                        '& .MuiPaper-rounded': { // Targeting the inner Paper component of the Dialog
-                            borderRadius: '24px', // Setting the border radius
-                            boxShadow: 'none'
-                        }
-                    }}>
-                <DialogTitle sx={{ textAlign: 'center' }}>
-                    Upload Receipt
-                </DialogTitle>
-
-                <DialogContent>
-                    <FileUploadAndRecognize />
-                </DialogContent>
-            </Dialog>
+            {isMobile ? (
+                <Drawer anchor="bottom"sx={{
+                    '& .MuiDrawer-paper': {
+                        borderTopLeftRadius: '24px',
+                        borderTopRightRadius: '24px',
+                        paddingBottom: '60px',
+                    },
+                }} open={isDialogOpen || isUploadDialogOpen} onClose={() => { setDialogOpen(false); setUploadDialogOpen(false); }}>
+                    {renderDialogContent()}
+                </Drawer>
+            ) : (
+                <Dialog open={isDialogOpen || isUploadDialogOpen} onClose={() => { setDialogOpen(false); setUploadDialogOpen(false); }} sx={{ '& .MuiPaper-rounded': { borderRadius: '24px', boxShadow: 'none' } }}>
+                    <DialogTitle sx={{ textAlign: 'center' }}>
+                        {initialTransactionType === 'UploadReceipt' ? 'Upload Receipt' : 'Add Transaction'}
+                    </DialogTitle>
+                    <DialogContent>
+                        {renderDialogContent()}
+                    </DialogContent>
+                </Dialog>
+            )}
         </>
     );
 }
