@@ -104,6 +104,7 @@ const CreateMagicList: FC<CreateMagicListProps> = ({ onListCreated }) => {
                         '& .MuiDrawer-paper': {
                             borderTopLeftRadius: '24px',
                             borderTopRightRadius: '24px',
+                            paddingBottom: '144px',
                         },
                     }}
                 >

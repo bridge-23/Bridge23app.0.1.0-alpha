@@ -312,6 +312,7 @@ const AddItemComponent: React.FC<AddItemComponentProps> = ({ selectedListId }) =
                         '& .MuiDrawer-paper': {
                             borderTopLeftRadius: '24px',
                             borderTopRightRadius: '24px',
+                            paddingBottom: '144px',
                         },
                     }}
                 >
