@@ -27,10 +27,10 @@ function MobileNavbar() {
         setDialogOpen(false);
     };
     const handleFeedbackClick = () => {
-        // For demonstration purposes. Replace with your desired logic.
-        alert("Thank you for your feedback!");
-        popupState.close();
+        popupState.close(); // Close the popup menu
+        window.open('https://cko8sv40a0v.typeform.com/to/HfkJUBdq', '_blank'); // Replace 'YOUR_FEEDBACK_FORM_URL' with your actual feedback form URL
     };
+
     const popupState = usePopupState({ variant: 'popover', popupId: 'demo-popup-menu' });
     const handleProfileClick = () => {
         popupState.close(); // Close the popup, if necessary
@@ -95,7 +95,12 @@ function MobileNavbar() {
                         <Menu {...bindMenu(popupState)}>
                             <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
                             <MenuItem onClick={popupState.close}>Support</MenuItem>
-                            <MenuItem onClick={handleFeedbackClick}>FeedBack</MenuItem>
+                            <MenuItem onClick={() => {
+                                popupState.close();
+                                window.open('https://cko8sv40a0v.typeform.com/to/HfkJUBdq', '_blank');
+                            }}>Feedback</MenuItem>
+
+
                             <MenuItem onClick={handleSignOut}>Logout</MenuItem>
                         </Menu>
                     </>
