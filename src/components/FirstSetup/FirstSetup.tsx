@@ -19,8 +19,6 @@ import {
     MenuItem,
 } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
-import { avatarUrlState } from '../../state/atoms';
 
 interface FirstSetupProps {
     nickname: string;
@@ -37,14 +35,9 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
     const { user } = useContext(AuthContext);
     const [dmail, setDmail] = useState('');
     const [currency, setCurrency] = useState('USD');
-    // const { setAvatarUrl } = useContext(AvatarContext);
+    const { setAvatarUrl } = useContext(AvatarContext);
     const router = useRouter();
-    //set up recoil for avatar
-    const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
     const { setLoading } = useLoading();
-    // const [successMessage, setSuccessMessage] = useState<string>("");
-    // const [backdropOpen, setBackdropOpen] = useState(false);
-    // const [errorMessage, setErrorMessage] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,8 +45,6 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
             setAvatar(event.target.files[0]);
         }
     };
-
-    
 
     const handleDoneClick = async () => {
         if (!user?.key || !avatar) {
@@ -91,8 +82,13 @@ const FirstSetup: React.FC<FirstSetupProps> = ({ nickname, setNickname, avatar, 
                 },
             });
 
+            // update the context with the new avatar URL
+            setAvatarUrl(avatarUrl);
+
             // Redirect to the main page
-            router.push('/').then(() => setIsLoading(false)); //This is after navogation is complete
+            router.push('/profile').then(() => setIsLoading(false)); //This is after navogation is complete
+            // after user completes the setup
+            localStorage.setItem('hasCompletedSetup', 'true')
         } catch (error) {
             // Error handling
             console.error('Error posting data', error);

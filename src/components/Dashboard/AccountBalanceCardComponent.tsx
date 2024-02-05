@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography, Avatar, IconButton, useMediaQuery }
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Amount from "../Dashboard/Amouth";
-import { AvatarContext } from '../ProfilePage/AvatarContext';
+import { AvatarContext } from '../FirstSetup/AvatarContext';
 import { useTheme } from "@mui/material/styles";
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';

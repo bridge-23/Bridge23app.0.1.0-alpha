@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import FirstSetup from '../../components/ProfilePage/FirstSetup';
-import { AvatarContext } from '../../components/ProfilePage/AvatarContext';
+import FirstSetup from '../../components/FirstSetup/FirstSetup';
+import { AvatarContext } from '../../components/FirstSetup/AvatarContext';
 import { Container, Grid, useMediaQuery, Avatar, IconButton, Box, Typography, Button, Chip, Badge } from "@mui/material";
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Theme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 
-const ProfilePage: React.FC = () => {
+const FirstSetupPage: React.FC = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const [nickname, setNickname] = useState("");
     const [avatar, setAvatar] = useState<File | null>(null);
@@ -66,4 +66,4 @@ const ProfilePage: React.FC = () => {
     );
 };
 
-export default ProfilePage;
+export default FirstSetupPage;
