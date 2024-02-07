@@ -1,18 +1,22 @@
 //..src/components/Accounts/AccountCardComponent.tsx
 import React from 'react';
-import {useMediaQuery, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Paper } from '@mui/material';
+import { useMediaQuery, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Paper } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import {Theme} from "@mui/material/styles";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Theme } from "@mui/material/styles";
+
 interface AccountCardProps {
     accountName: string;
     financialInstitution: string;
     currentBalance: number;
     accountCurrency: string;
     onEdit: () => void;
+    onDelete: () => void;
 }
-const AccountCard: React.FC<AccountCardProps> = ({accountName, financialInstitution, currentBalance, accountCurrency, onEdit }) => {
+
+const AccountCard: React.FC<AccountCardProps> = ({ accountName, financialInstitution, currentBalance, accountCurrency, onEdit, onDelete }) => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    const formattedBalance = currentBalance !== undefined ? `${accountCurrency} ${currentBalance.toLocaleString()}`:`${accountCurrency} `;
+    const formattedBalance = currentBalance !== undefined ? `${accountCurrency} ${currentBalance.toLocaleString()}` : `${accountCurrency} `;
 
     return (
         <Card
@@ -67,6 +71,9 @@ const AccountCard: React.FC<AccountCardProps> = ({accountName, financialInstitut
                                         <IconButton onClick={onEdit} size="small">
                                             <EditIcon />
                                         </IconButton>
+                                        <IconButton onClick={onDelete}>
+                                            <DeleteIcon />
+                                        </IconButton>
                                     </TableCell>
                                 </>
                             ) : (
@@ -76,10 +83,13 @@ const AccountCard: React.FC<AccountCardProps> = ({accountName, financialInstitut
                                     <TableCell align="right">{accountCurrency}</TableCell>
                                     <TableCell align="right">{formattedBalance}</TableCell>
                                     <TableCell align="right">
-                                    <IconButton onClick={onEdit} size="small">
-                                        <EditIcon />
-                                    </IconButton>
-                                </TableCell>
+                                        <IconButton onClick={onEdit} size="small">
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton onClick={onDelete}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </TableCell>
                                 </>
                             )}
                         </TableRow>

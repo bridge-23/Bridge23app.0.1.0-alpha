@@ -1,6 +1,7 @@
 //../src/state/atoms.ts
 import {atom} from "recoil";
 import {AccountData, MagicListItem, MagicList, AccountCardType, ExpenseItem, IncomeItem} from "../types";
+
 export const magicListItemState = atom<Partial<MagicListItem>[]>({
     key: 'itemState',
     default: [],
