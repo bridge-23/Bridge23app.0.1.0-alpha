@@ -224,7 +224,7 @@ const IncomesExpensesComponent: React.FC = () => {
                                             secondary={
                                                 <>
                                                     <Typography component="span" variant="body2" color="textSecondary" style={getListItemTextStyles(transaction.transactionType)}>
-                                                        Amount:  {transaction.amount}
+                                                        Amount:  {transaction.amount} {transaction.amount_currency}
                                                     </Typography>
                                                     <br />
                                                     <Typography component="span" variant="body2" color="textSecondary">

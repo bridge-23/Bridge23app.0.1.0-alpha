@@ -8,6 +8,7 @@ import { Theme } from '@mui/material/styles';
 import LoginComponentJuno from "../components/LoginComponentJuno";
 import MobileDashboardComponent from "../components/Dashboard/MobileDashboardComponent";
 import DesktopDashboardComponent from "../components/Dashboard/DesktopDashboardComponent";
+
 const Home: NextPage = () => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
     const { loading: accountsLoading, error: accountsError } = useFetchAccounts();

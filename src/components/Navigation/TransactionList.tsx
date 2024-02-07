@@ -12,11 +12,9 @@ export default function TransactionList() {
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [isUploadDialogOpen, setUploadDialogOpen] = useState(false);
     const [initialTransactionType, setInitialTransactionType] = useState<string>(''); // Explicitly specify the type
-    // Inside your handleListItemClick function
-    // Inside your handleListItemClick function
     const handleListItemClick = (type: string) => {
         if (type === 'UploadReceipt') {
-            setUploadDialogOpen(true); // Open the upload dialog
+            setUploadDialogOpen(true);
         } else {
             setInitialTransactionType(type);
             setDialogOpen(true);

@@ -50,6 +50,7 @@ export interface IncomeItem {
     category: string;
     created_at: bigint | undefined;
     updated_at: bigint | undefined;
+    amount_currency: string;
 }
 
 export interface ExpenseItem {
@@ -63,4 +64,5 @@ export interface ExpenseItem {
     category: string;
     created_at: bigint | undefined;
     updated_at: bigint | undefined;
+    amount_currency: string;
 }

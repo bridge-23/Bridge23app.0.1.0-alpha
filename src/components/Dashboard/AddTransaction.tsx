@@ -9,7 +9,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import {AuthContext} from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
-
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
 import { IncomeItem, ExpenseItem } from '../../types';
@@ -45,6 +44,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     //const [selectedAccountId, setSelectedAccountId] = useState('');
     const setIncomes = useSetRecoilState(incomeState);
     const setExpenses = useSetRecoilState(expenseState);
+    
     const renderCategoryOptions = (): JSX.Element[] => {
         let categories: string[] = []; // Explicitly type as string[]
         switch (transactionType) {
@@ -150,112 +150,91 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
 
     const handleAddTransaction = async () => {
         if (!transactionName || !transactionAmount) {
-            alert('Please provide valid expense details.');
+            alert('Please provide valid transaction details.');
             return;
         }
         try {
             if (!user) {
-                console.error('Please sign in to create an account.');
+                console.error('Please sign in to create a transaction.');
                 return;
             }
+            const amountInMinorUnits = Math.round(parseFloat(transactionAmount) * 100);
+    
             const transactionId = nanoid();
             const collectionName = getCollectionName();
             const selectedAccountDoc = accounts.find(account => account.data.accountName === selectedAccount)?.key;
-
+    
             if (!selectedAccountDoc) {
                 console.error('Selected account not found.');
                 alert('Failed to find the selected account. Please try again.');
                 return;
             }
-
-            await updateAccountBalance(selectedAccountKey, parseFloat(transactionAmount), transactionType);
+    
+            await updateAccountBalance(selectedAccountKey, amountInMinorUnits, transactionType);
             
             const newTransaction = {
-                id: transactionId, // Используйте id вместо transactionId
-                userId: user.key,
-                accountId: selectedAccountKey,
-                accountName: selectedAccount,
-                name: transactionName,
-                transactionType: transactionType,
-                amount: parseFloat(transactionAmount),
-                category: transactionCategory,
-                //from,
-                //to,
+                amount: amountInMinorUnits,
+                amount_currency: accounts.find(account => account.key === selectedAccountKey)?.data.currency,
             };
-
-            await setDoc({
-                collection: collectionName,
-                doc: {
-                    key: transactionId,
-                    data: newTransaction,
-                },
-            });
-
-            await reloadTransactions();
-
-            alert(`${transactionType} added successfully!`);
-            // Clear the fields after successful addition
-            setTransactionName('');
-            setTransactionAmount('');
-            setTransactionCategory('');
-            setTransactionType('');
-            setSelectedAccount('');
-            // Close the dialog after adding
-            onClose();
+    
         } catch (error) {
             console.error(`Error adding ${transactionType}:`, error);
             alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
+    
 
-    async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
+    async function updateAccountBalance(accountKey: string, transactionAmountInMinorUnits: number, transactionType: string): Promise<void> {
         try {
-            // Fetch the current account document
+            // Получаем текущие данные счета
             const accountDocResponse = await getDoc({ collection: "Accounts", key: accountKey });
-
-            if (!accountDocResponse) {
+    
+            if (!accountDocResponse || !accountDocResponse.data) {
                 console.error('Account not found.');
                 return;
             }
-
-            // Extracting data from the account document response
+    
+            // Извлекаем данные счета из полученного ответа
             const accountData = accountDocResponse.data as AccountData['data'];
-
-            const currentBalance = accountData.currentBalance;
-            let updatedBalance;
-
-            // Calculate the updated balance
+    
+            // Текущий баланс счета также должен быть представлен в наименьших единицах
+            const currentBalanceInMinorUnits = accountData.currentBalance;
+    
+            let updatedBalanceInMinorUnits: number;
+    
+            // Вычисляем обновленный баланс в зависимости от типа транзакции
             switch (transactionType) {
                 case 'Income':
-                    updatedBalance = currentBalance + transactionAmount;
+                    updatedBalanceInMinorUnits = currentBalanceInMinorUnits + transactionAmountInMinorUnits;
                     break;
                 case 'Expense':
-                    updatedBalance = currentBalance - transactionAmount;
+                    updatedBalanceInMinorUnits = currentBalanceInMinorUnits - transactionAmountInMinorUnits;
                     break;
                 case 'Transfer':
-                    updatedBalance = currentBalance - transactionAmount;
+                    // Предполагая, что при переводе средств сумма вычитается из баланса счета
+                    updatedBalanceInMinorUnits = currentBalanceInMinorUnits - transactionAmountInMinorUnits;
                     break;
                 default:
                     throw new Error(`Unsupported transaction type: ${transactionType}`);
             }
-
-            // Update the account with the new balance
+    
+            // Обновляем счет с новым балансом
             await setDoc({
                 collection: 'Accounts',
                 doc: {
                     key: accountKey,
-                    updated_at: accountDocResponse.updated_at,
                     data: {
                         ...accountData,
-                        currentBalance: updatedBalance,
+                        currentBalance: updatedBalanceInMinorUnits,
                     },
                 },
             });
         } catch (error) {
             console.error("Error updating account balance:", error);
-            throw error;
+            throw error; // Перебрасываем ошибку для дальнейшей обработки, если потребуется
         }
     }
+    
 
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -352,7 +331,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                                 <MenuItem key={account.key} value={account.data.accountName}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                         <span>{account.data.accountName}</span>
-                                        <span>{`${account.data.currentBalance.toFixed(2)} ${account.data.currency}`}</span>
+                                        <span>{`${account.data.currentBalance} ${account.data.currency}`}</span>
                                     </div>
                                 </MenuItem>
                             ))

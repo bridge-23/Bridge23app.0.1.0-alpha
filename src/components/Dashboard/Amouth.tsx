@@ -5,6 +5,7 @@ import IncomeCardComponent from "./Amounth/IncomeCardComponent";
 import ExpenseCardComponent from "./Amounth/ExpenseCardComponent";
 import { fetchTotalIncomes } from '../../lib/Juno/fetchTotalIncomes';
 import { fetchTotalExpenses } from '../../lib/Juno/fetchTotalExpenses';
+
 const Amount: React.FC = () => {
     const [totalExpenses, setTotalExpenses] = useState<number>(0);
     const [totalIncomes, setTotalIncomes] = useState<number>(0);
