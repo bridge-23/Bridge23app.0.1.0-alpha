@@ -19,64 +19,73 @@ const NewAccountComponent: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string>("");
   const [backdropOpen, setBackdropOpen] = useState(false);
   const setAccounts = useSetRecoilState(accountDataState);
-  const handleCreateAccount = async () => {
-    const parsedInitialBalance = parseFloat(initialBalance.toString());
-    setErrorMessage("");
-    if (
-        !accountName ||
-        isNaN(parsedInitialBalance) ||
-        parsedInitialBalance < 0
-    ) {
-      console.error("Please provide a valid account name and initial balance.");
-      setErrorMessage(
-          "Please provide a valid account name and initial balance."
-      );
-      return;
-    }
-    setBackdropOpen(true);
-    try {
-      if (!user) {
-        console.error("Please sign in to create an account.");
 
+const handleCreateAccount = async () => {
+    // Парсинг исходного баланса как числа с плавающей точкой
+    const parsedInitialBalance = parseFloat(initialBalance.toString());
+
+    setErrorMessage("");
+    if (!accountName || isNaN(parsedInitialBalance) || parsedInitialBalance < 0) {
+        console.error("Please provide a valid account name and initial balance.");
+        setErrorMessage("Please provide a valid account name and initial balance.");
         return;
-      }
-      const accountRef = `${user.key}_${nanoid()}`; // This creates a unique reference for the account using the user ID and nanoid
-      await setDoc({
-        collection: "Accounts",
-        doc: {
-          key: accountRef,
-          data: {
-            userId: user.key, // Replace with actual user ID variable
+    }
+
+    // Конвертация исходного баланса в центы (или другую наименьшую валютную единицу)
+    const balanceInCents = Math.round(parsedInitialBalance * 100);
+
+    setBackdropOpen(true);
+
+    try {
+        if (!user) {
+            console.error("Please sign in to create an account.");
+            return;
+        }
+
+        const accountRef = `${user.key}_${nanoid()}`; // Создание уникальной ссылки для аккаунта
+
+        await setDoc({
+            collection: "Accounts",
+            doc: {
+                key: accountRef,
+                data: {
+                    userId: user.key,
+                    accountName,
+                    financialInstitution,
+                    // Сохранение баланса в центах
+                    initialBalance: balanceInCents,
+                    currentBalance: balanceInCents,
+                    currency,
+                    accountType,
+                    created: new Date().toISOString(),
+                },
+            },
+        });
+
+        console.log("Account created successfully!");
+        setSuccessMessage("Account created successfully!");
+
+        setTimeout(() => {
+            setOpen(false);
+            setSuccessMessage("");
+        }, 1500);
+
+        // Обновление локального состояния с новым аккаунтом, также используя баланс в центах
+        setAccounts(prevAccounts => [...prevAccounts, {
             accountName,
             financialInstitution,
-            initialBalance: parsedInitialBalance,
-            currentBalance: parsedInitialBalance,
+            currentBalance: balanceInCents,
             currency,
-            accountType,
-            created: new Date().toISOString(), // Assuming you want to use ISO string for the timestamp
-            // Add other necessary fields
-          },
-        },
-      });
-      console.log("Account created successfully!");
-      setSuccessMessage("Account created successfully!");
-      setTimeout(() => {
-        setOpen(false);
-        setSuccessMessage("");
-      }, 1500);
-      setAccounts(prevAccounts => [...prevAccounts, {
-        accountName,
-        financialInstitution,
-        currentBalance: parsedInitialBalance,
-        currency,
-        id: accountRef,
-      }]);
+            id: accountRef,
+        }]);
     } catch (error) {
-      setErrorMessage("Error creating account. Please try again.");
+        console.error("Error creating account:", error);
+        setErrorMessage("Error creating account. Please try again.");
     } finally {
-      setBackdropOpen(false);
+        setBackdropOpen(false);
     }
-  };
+};
+
 
   return (
     <>

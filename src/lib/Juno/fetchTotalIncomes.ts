@@ -1,18 +1,18 @@
-//..src/lib/Juno/fetchTotalIncomes.ts
-import {listDocs} from "@junobuild/core-peer";
+import { listDocs } from "@junobuild/core-peer";
 
 interface IncomeItem {
-    amount: number;
+    amount_cents: number;
 }
+
 export const fetchTotalIncomes = async () => {
     try {
         const incomesData = await listDocs({ collection: "Incomes" });
         if (incomesData && incomesData.items) {
-            // Directly return the total
-            return incomesData.items.reduce((acc, item) => {
+            const totalInCents = incomesData.items.reduce((acc, item) => {
                 const income = item.data as IncomeItem;
-                return acc + income.amount;
+                return acc + income.amount_cents_usd;
             }, 0);
+            return totalInCents / 100;
         } else {
             console.error("No income records found.");
             return 0;

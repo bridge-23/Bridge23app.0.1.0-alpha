@@ -1,18 +1,20 @@
 //..src/components/Dashboard/AddExpense
-import React, {useState, useEffect, useContext} from 'react';
-import {Button, TextField, Dialog, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
+import React, { useState, useEffect, useContext } from 'react';
+import { Button, TextField, Dialog, Select, MenuItem, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import {AuthContext} from "../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import { setDoc, listDocs, getDoc } from "@junobuild/core-peer";
 import { nanoid } from "nanoid";
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { incomeState, expenseState } from '../../state/atoms';
 import { IncomeItem, ExpenseItem } from '../../types';
 import { fetchIncomesFromAPI, fetchExpensesFromAPI } from '../../components/Transactions/fetchTransactionData';
+import { useExchangeRates } from '../../hooks/useExchangeRates';
+
 
 interface AddTransactionProps {
     open: boolean;
@@ -32,19 +34,21 @@ interface AccountData {
 }
 function AddTransaction({ open, onClose, initialTransactionType }: AddTransactionProps) {
     const { user } = useContext(AuthContext);
+    const { exchangeRates, loading: ratesLoading, error: ratesError } = useExchangeRates();
     const [transactionName, setTransactionName] = useState('');
     const [transactionAmount, setTransactionAmount] = useState('');
+    const [amountInput, setAmountInput] = useState('');
     const [transactionCategory, setTransactionCategory] = useState('');
     const [transactionType, setTransactionType] = useState(initialTransactionType || ''); // Set initial value
     const [accounts, setAccounts] = useState<AccountData[]>([]);
     const [selectedAccount, setSelectedAccount] = useState('');
     const [selectedAccountKey, setSelectedAccountKey] = useState('');
     const incomeCategories = ['Salary', 'Pension', 'Interest Yield', 'Gig', 'Bonus', 'Present', 'Other', 'Add category'];
-    const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category' ];
+    const expenseCategories = ['Clothing', 'Education', 'Electronics', 'Health', 'Home', 'Recreation', 'Restaurant', 'Services', 'Transport', 'Travel', 'Supermarket', 'Other', 'Add category'];
     //const [selectedAccountId, setSelectedAccountId] = useState('');
     const setIncomes = useSetRecoilState(incomeState);
     const setExpenses = useSetRecoilState(expenseState);
-    
+
     const renderCategoryOptions = (): JSX.Element[] => {
         let categories: string[] = []; // Explicitly type as string[]
         switch (transactionType) {
@@ -71,49 +75,49 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     }, [initialTransactionType]);
 
     useEffect(() => {
-    const fetchAccounts = async () => {
-        if (user) {
-            try {
-                const accountsData = await listDocs({
-                    collection: "Accounts",
-                    filter: {
-                        owner: user.key,
-                    },
-                });
-
-                if (accountsData && accountsData.items) {
-                    // Map the fetched data to the AccountData structure
-                    const fetchedAccounts = accountsData.items.map(doc => {
-
-                        const data = doc.data as AccountData['data'];
-
-                        console.log("Account Name:", data.accountName, "| Current Balance:", data.currentBalance);
-
-                        return {
-                            key: doc.key,
-                            data: {
-                                accountName: data.accountName,
-                                financialInstitution: data.financialInstitution,
-                                currentBalance: data.currentBalance,
-                                currency: data.currency,
-                                owner: data.owner,
-                                userId: user.key,
-                            },
-                        };
-
+        const fetchAccounts = async () => {
+            if (user) {
+                try {
+                    const accountsData = await listDocs({
+                        collection: "Accounts",
+                        filter: {
+                            owner: user.key,
+                        },
                     });
 
-                    setAccounts(fetchedAccounts); // Update state with the fetched accounts
-                } else {
-                    console.error("No accounts found for the current user.");
-                    alert('No accounts found. Please try again.');
+                    if (accountsData && accountsData.items) {
+                        // Map the fetched data to the AccountData structure
+                        const fetchedAccounts = accountsData.items.map(doc => {
+
+                            const data = doc.data as AccountData['data'];
+
+                            console.log("Account Name:", data.accountName, "| Current Balance:", data.currentBalance);
+
+                            return {
+                                key: doc.key,
+                                data: {
+                                    accountName: data.accountName,
+                                    financialInstitution: data.financialInstitution,
+                                    currentBalance: data.currentBalance,
+                                    currency: data.currency,
+                                    owner: data.owner,
+                                    userId: user.key,
+                                },
+                            };
+
+                        });
+
+                        setAccounts(fetchedAccounts); // Update state with the fetched accounts
+                    } else {
+                        console.error("No accounts found for the current user.");
+                        alert('No accounts found. Please try again.');
+                    }
+                } catch (error) {
+                    console.error("Error fetching accounts:", error);
+                    alert('Failed to fetch accounts. Please try again.');
                 }
-            } catch (error) {
-                console.error("Error fetching accounts:", error);
-                alert('Failed to fetch accounts. Please try again.');
             }
-        }
-    };
+        };
         fetchAccounts()
             .then(() => {
                 // Handle success if needed
@@ -122,6 +126,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                 console.error('Error fetching accounts:', error);
             });
     }, []);
+
     const getCollectionName = (): string => {
         switch (transactionType) {
             case 'Expense':
@@ -140,7 +145,7 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
         try {
             const updatedIncomes = await fetchIncomesFromAPI();
             setIncomes(updatedIncomes);
-    
+
             const updatedExpenses = await fetchExpensesFromAPI();
             setExpenses(updatedExpenses);
         } catch (error) {
@@ -149,92 +154,129 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     }
 
     const handleAddTransaction = async () => {
-        if (!transactionName || !transactionAmount) {
+        if (!transactionName || !amountInput) {
             alert('Please provide valid transaction details.');
             return;
         }
+        
+        if (!user) {
+            console.error('Please sign in to create an account.');
+            return;
+        }
+    
+        const transactionId = nanoid();
+        const collectionName = getCollectionName(); // Получаем название коллекции на основе типа транзакции
+    
+        const account = accounts.find(account => account.data.accountName === selectedAccount);
+        if (!account) {
+            console.error('Selected account not found.');
+            alert('Failed to find the selected account. Please try again.');
+            return;
+        }
+    
+        const amountCents = Math.round(parseFloat(amountInput) * 100);
+        const accountCurrency = accounts.find(account => account.data.accountName === selectedAccount)?.data.currency;
+
+        let amountCentsUSD = amountCents;
+
+        if (accountCurrency && accountCurrency !== 'USD' && exchangeRates[accountCurrency]) {
+            amountCentsUSD = Math.round(amountCents / exchangeRates[accountCurrency]);
+        }
+        
         try {
-            if (!user) {
-                console.error('Please sign in to create a transaction.');
-                return;
-            }
-            const amountInMinorUnits = Math.round(parseFloat(transactionAmount) * 100);
+            await updateAccountBalance(account.key, amountCents, transactionType);
     
-            const transactionId = nanoid();
-            const collectionName = getCollectionName();
-            const selectedAccountDoc = accounts.find(account => account.data.accountName === selectedAccount)?.key;
-    
-            if (!selectedAccountDoc) {
-                console.error('Selected account not found.');
-                alert('Failed to find the selected account. Please try again.');
-                return;
-            }
-    
-            await updateAccountBalance(selectedAccountKey, amountInMinorUnits, transactionType);
-            
             const newTransaction = {
-                amount: amountInMinorUnits,
-                amount_currency: accounts.find(account => account.key === selectedAccountKey)?.data.currency,
+                id: transactionId,
+                userId: user.key,
+                accountId: account.key,
+                accountName: selectedAccount,
+                name: transactionName,
+                transactionType: transactionType,
+                amount_cents: amountCents,
+                category: transactionCategory,
+                amount_currency: account.data.currency,
+                amount_cents_usd: amountCentsUSD,
             };
     
+            await setDoc({
+                collection: collectionName,
+                doc: {
+                    key: transactionId,
+                    data: newTransaction,
+                },
+            });
+    
+            await reloadTransactions();
+    
+            alert(`${transactionType} added successfully!`);
+            
+            resetForm();
         } catch (error) {
             console.error(`Error adding ${transactionType}:`, error);
             alert(`Failed to add ${transactionType}. Please try again.`);
         }
     };
     
-
-    async function updateAccountBalance(accountKey: string, transactionAmountInMinorUnits: number, transactionType: string): Promise<void> {
-        try {
-            // Получаем текущие данные счета
-            const accountDocResponse = await getDoc({ collection: "Accounts", key: accountKey });
+    const resetForm = () => {
+        setTransactionName('');
+        setAmountInput(''); 
+        setTransactionCategory('');
+        setTransactionType(initialTransactionType || '');
+        setSelectedAccount('');
+        setSelectedAccountKey('');
+        onClose();
+    };
     
-            if (!accountDocResponse || !accountDocResponse.data) {
+
+    async function updateAccountBalance(accountKey: string, transactionAmount: number, transactionType: string): Promise<void> {
+        try {
+            // Fetch the current account document
+            const accountDocResponse = await getDoc({ collection: "Accounts", key: accountKey });
+
+            if (!accountDocResponse) {
                 console.error('Account not found.');
                 return;
             }
-    
-            // Извлекаем данные счета из полученного ответа
+
+            // Extracting data from the account document response
             const accountData = accountDocResponse.data as AccountData['data'];
-    
-            // Текущий баланс счета также должен быть представлен в наименьших единицах
-            const currentBalanceInMinorUnits = accountData.currentBalance;
-    
-            let updatedBalanceInMinorUnits: number;
-    
-            // Вычисляем обновленный баланс в зависимости от типа транзакции
+
+            const currentBalance = accountData.currentBalance;
+            let updatedBalance;
+
+            // Calculate the updated balance
             switch (transactionType) {
                 case 'Income':
-                    updatedBalanceInMinorUnits = currentBalanceInMinorUnits + transactionAmountInMinorUnits;
+                    updatedBalance = currentBalance + transactionAmount;
                     break;
                 case 'Expense':
-                    updatedBalanceInMinorUnits = currentBalanceInMinorUnits - transactionAmountInMinorUnits;
+                    updatedBalance = currentBalance - transactionAmount;
                     break;
                 case 'Transfer':
-                    // Предполагая, что при переводе средств сумма вычитается из баланса счета
-                    updatedBalanceInMinorUnits = currentBalanceInMinorUnits - transactionAmountInMinorUnits;
+                    updatedBalance = currentBalance - transactionAmount;
                     break;
                 default:
                     throw new Error(`Unsupported transaction type: ${transactionType}`);
             }
-    
-            // Обновляем счет с новым балансом
+
+            // Update the account with the new balance
             await setDoc({
                 collection: 'Accounts',
                 doc: {
                     key: accountKey,
+                    updated_at: accountDocResponse.updated_at,
                     data: {
                         ...accountData,
-                        currentBalance: updatedBalanceInMinorUnits,
+                        currentBalance: updatedBalance,
                     },
                 },
             });
         } catch (error) {
             console.error("Error updating account balance:", error);
-            throw error; // Перебрасываем ошибку для дальнейшей обработки, если потребуется
+            throw error;
         }
     }
-    
 
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -298,10 +340,11 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                     <TextField
                         label="Amount"
                         variant="outlined"
-                        value={transactionAmount}
-                        onChange={(e) => setTransactionAmount(e.target.value)}
+                        value={amountInput}
+                        onChange={(e) => setAmountInput(e.target.value)}
                         fullWidth
                         margin="normal"
+                        type="number"
                     />
 
                     <FormControl fullWidth margin="normal">
@@ -318,26 +361,26 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
                     </FormControl>
 
                     <FormControl fullWidth>
-                    <InputLabel id="account-select-label">Account</InputLabel>
-                    <Select
-                        labelId="account-select-label"
-                        id="account-select"
-                        value={selectedAccount}
-                        label="Account"
-                        onChange={handleChange}
-                    >
-                        {
-                            accounts.map((account) => (
-                                <MenuItem key={account.key} value={account.data.accountName}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                        <span>{account.data.accountName}</span>
-                                        <span>{`${account.data.currentBalance} ${account.data.currency}`}</span>
-                                    </div>
-                                </MenuItem>
-                            ))
-                        }
-                    </Select>
-                </FormControl>
+                        <InputLabel id="account-select-label">Account</InputLabel>
+                        <Select
+                            labelId="account-select-label"
+                            id="account-select"
+                            value={selectedAccount}
+                            label="Account"
+                            onChange={handleChange}
+                        >
+                            {
+                                accounts.map((account) => (
+                                    <MenuItem key={account.key} value={account.data.accountName}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                                            <span>{account.data.accountName}</span>
+                                            <span>{`${(account.data.currentBalance / 100).toFixed(2)} ${account.data.currency}`}</span>
+                                        </div>
+                                    </MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
                 </DialogContent>
 
                 <DialogActions>
@@ -357,4 +400,3 @@ function AddTransaction({ open, onClose, initialTransactionType }: AddTransactio
     );
 }
 export default AddTransaction;
-

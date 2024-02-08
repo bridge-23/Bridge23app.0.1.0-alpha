@@ -69,6 +69,7 @@ export default function Transactions () {
     const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [receipts, setReceipts] = useState<Array<ReceiptData>>([]);
+    
     const fetchReceipts = async () => {
         try {
             const receiptsData = await listDocs({

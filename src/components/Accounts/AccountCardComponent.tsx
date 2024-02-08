@@ -16,7 +16,7 @@ interface AccountCardProps {
 
 const AccountCard: React.FC<AccountCardProps> = ({ accountName, financialInstitution, currentBalance, accountCurrency, onEdit, onDelete }) => {
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-    const formattedBalance = currentBalance !== undefined ? `${accountCurrency} ${currentBalance.toLocaleString()}` : `${accountCurrency} `;
+    const formattedBalance = currentBalance !== undefined ? `${accountCurrency} ${((currentBalance / 100).toLocaleString())}` : `${accountCurrency} `;
 
     return (
         <Card

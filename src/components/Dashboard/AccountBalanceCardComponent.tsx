@@ -9,7 +9,6 @@ interface AccountBalanceCardProps {
     currentBalance: string; // Prop for the current balance
 }
 const AccountBalanceCardComponent: React.FC<AccountBalanceCardProps> = ({ currentBalance }) => {
-    console.log("currentBalance", {currentBalance})
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 

@@ -2,20 +2,18 @@
 import {listDocs} from "@junobuild/core-peer";
 
 interface ExpensesItem {
-    amount: number;
+    amount_cents: number;
 }
+
 export const fetchTotalExpenses = async () => {
     try {
         const expensesData = await listDocs({ collection: "Expenses" });
-        const accountsData = await listDocs({ collection: "Accounts" });
-        console.log("accountsData", accountsData);
-        console.log("expensesData", expensesData);
         if (expensesData && expensesData.items) {
-            // Directly return the total
-            return expensesData.items.reduce((acc, item) => {
+            const totalInCents = expensesData.items.reduce((acc, item) => {
                 const expense = item.data as ExpensesItem;
-                return acc + expense.amount;
+                return acc + expense.amount_cents_usd;
             }, 0);
+            return totalInCents / 100;
         } else {
             console.error("No expense records found.");
             return 0;

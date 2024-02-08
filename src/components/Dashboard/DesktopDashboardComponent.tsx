@@ -28,8 +28,8 @@ const DesktopDashboardComponent: React.FC = () => {
         setCurrency(event.target.value as string);
     };
 
-    const totalCurrentBalance = calculateTotalBalance(accounts, exchangeRates, currency);
-    const formattedTotalBalance = totalCurrentBalance.toLocaleString('en-US', { style: 'currency', currency });
+    const totalCurrentBalanceInCents = calculateTotalBalance(accounts, exchangeRates, currency);
+    const formattedTotalBalance = (totalCurrentBalanceInCents / 100).toLocaleString('en-US', { style: 'currency', currency });
 
     if (userLoading || accountsLoading || ratesLoading) {
         return (

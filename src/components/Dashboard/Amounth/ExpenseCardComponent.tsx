@@ -55,7 +55,7 @@ const ExpenseCardComponent: React.FC<ExpenseCardComponentProps> = ({ totalExpens
                         Expense
                     </Typography>
                     <Typography variant="subtitle2" sx={{ color: 'red' }}>
-                        IDR {totalExpenses.toLocaleString()}
+                        USD {totalExpenses.toLocaleString()}
                     </Typography>
                 </Box>
             </CardContent>

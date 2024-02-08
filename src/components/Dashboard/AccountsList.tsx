@@ -1,5 +1,5 @@
 //..src/components/Accounts/AccountList.tsx
-import React from "react";
+import React, { useState } from "react";
 import {Grid, Card, CardContent, Typography, useMediaQuery, MobileStepper, Button} from "@mui/material";
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
@@ -15,6 +15,8 @@ import { useLoading } from '../../contexts/LoadingContext';
 const AccountsList: React.FC = () => {
     const theme = useTheme();
     const { setLoading } = useLoading();
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const [activeStep, setActiveStep] = React.useState(0);
     const [accounts, setAccounts] = useRecoilState(accountDataState);
@@ -38,8 +40,8 @@ const AccountsList: React.FC = () => {
             const currentDoc = await getDoc({ collection: "Accounts", key: accountId });
             if (!currentDoc) {
                 console.error(`Account with ID ${accountId} not found.`);
-                // setSnackbarMessage("Account not found.");
-                // setSnackbarOpen(true);
+                setSnackbarMessage("Account not found.");
+                setSnackbarOpen(true);
                 return;
             }
             await deleteDoc({
@@ -51,12 +53,12 @@ const AccountsList: React.FC = () => {
                 }
             });
             setAccounts((oldAccounts) => oldAccounts.filter(account => account.id !== accountId));
-            // setSnackbarMessage("Account deleted successfully.");
-            // setSnackbarOpen(true);
+            setSnackbarMessage("Account deleted successfully.");
+            setSnackbarOpen(true);
         } catch (error) {
             console.error("Error deleting account:", error);
-            // setSnackbarMessage("Failed to delete account.");
-            // setSnackbarOpen(true);
+            setSnackbarMessage("Failed to delete account.");
+            setSnackbarOpen(true);
         } finally {
             setLoading(false);
         }
