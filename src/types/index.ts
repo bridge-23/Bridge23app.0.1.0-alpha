@@ -47,6 +47,7 @@ export interface IncomeItem {
     name: string;
     transactionType: string;
     amount_cents: number;
+    amount_cents_usd:number;
     category: string;
     created_at: bigint | undefined;
     updated_at: bigint | undefined;
@@ -61,6 +62,7 @@ export interface ExpenseItem {
     name: string;
     transactionType: string;
     amount_cents: number;
+    amount_cents_usd:number;
     category: string;
     created_at: bigint | undefined;
     updated_at: bigint | undefined;
