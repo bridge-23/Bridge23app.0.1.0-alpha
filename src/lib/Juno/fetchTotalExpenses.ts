@@ -2,7 +2,7 @@
 import {listDocs} from "@junobuild/core-peer";
 
 interface ExpensesItem {
-    amount_cents: number;
+    amount_cents_usd: number;
 }
 
 export const fetchTotalExpenses = async () => {

@@ -1,7 +1,7 @@
 import { listDocs } from "@junobuild/core-peer";
 
 interface IncomeItem {
-    amount_cents: number;
+    amount_cents_usd: number;
 }
 
 export const fetchTotalIncomes = async () => {
